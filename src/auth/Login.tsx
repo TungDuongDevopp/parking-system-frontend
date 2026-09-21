@@ -48,7 +48,13 @@ function Login() {
 				return
 			}
 			const accessToken = response.result?.accessToken;
-			 localStorage.setItem("accessToken", accessToken);
+			if (rememberMe) {
+				localStorage.setItem("accessToken", accessToken);
+				sessionStorage.removeItem("accessToken");
+			} else {
+				localStorage.removeItem("accessToken");
+				sessionStorage.setItem("accessToken", accessToken);
+			}
 
 				const payload = jwtDecode<JwtPayload>(accessToken);
 
@@ -75,7 +81,7 @@ function Login() {
 				}
 		} catch (error) {
 			console.error(error)
-			setErrorMessage('Tài khoản không được phép đăng nhập vào hệ thống!')
+			setErrorMessage('Tài khoản hoặc mật khẩu không hợp lệ')
 } finally {
 			setIsSubmitting(false);
 		}

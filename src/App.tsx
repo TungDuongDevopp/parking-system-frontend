@@ -1,4 +1,4 @@
-// import { useState } from 'react'
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './auth/Login';
 import Register from './auth/Register';
@@ -6,14 +6,14 @@ import ChangePassword from './auth/ChangePassword';
 import Dashboard from './admin/Dashboard';
 import CustomerHome from './customer/CustomerHome';
 import StaffHome from './staff/StaffHome';
-import Home from './Home';
 import ProtectedRoute from './auth/ProtectedRoute';
+import AuthRedirect from './auth/AuthRedirect';
 function App() {
   
     return (
         <BrowserRouter>
               <Routes>
-                <Route path = "/" element ={<Home/>}></Route>
+                <Route path = "/" element ={<AuthRedirect/>}></Route>
                 <Route path="/login" element={<Login />} />  
                 <Route path="/register" element={<Register />} />
                 <Route path="/change-password" element={<ChangePassword />} />

@@ -12,7 +12,9 @@ interface Props {
   children,
   allowedRole,
 }: Props)  => {
-  const token = localStorage.getItem("accessToken");
+  const token =
+  localStorage.getItem("accessToken") ??
+  sessionStorage.getItem("accessToken");
 
   // Không có token → đá về login
   if (!token) {
@@ -25,6 +27,7 @@ interface Props {
     // Token hết hạn
     if (payload.exp * 1000 < Date.now()) {
       localStorage.removeItem("accessToken");
+      sessionStorage.removeItem("accessToken");
       return <Navigate to="/login" replace />;
     }
 
@@ -42,6 +45,7 @@ interface Props {
   } catch {
     // Token rác / decode lỗi
     localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
     return <Navigate to="/login" replace />;
   }
 }
