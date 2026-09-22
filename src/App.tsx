@@ -5,6 +5,7 @@ import Register from './auth/Register';
 import ChangePassword from './auth/ChangePassword';
 import Dashboard from './admin/Dashboard';
 import AdminRole from './admin/AdminRole';
+import AdminUser from './admin/AdminUser';
 import CustomerHome from './customer/CustomerHome';
 import StaffHome from './staff/StaffHome';
 import ProtectedRoute from './auth/ProtectedRoute';
@@ -26,6 +27,11 @@ function App() {
                 <Route path="/admin/roles" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminRole />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/users" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminUser />
                   </ProtectedRoute>
                 } />
                 <Route path="/staff" element={

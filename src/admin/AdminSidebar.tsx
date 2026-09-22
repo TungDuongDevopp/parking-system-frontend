@@ -69,7 +69,7 @@ function AdminSidebar({ variant = 'admin', onUsernameLoaded }: { variant?: 'admi
 				</> : <>
 					<NavLink to="/admin" end className={({ isActive }) => isActive ? 'active' : ''}><span className="side-icon"><MenuIcon name="dashboard" /></span><span>Dashboard</span><b>≡</b></NavLink>
 					<NavLink to="/admin/roles" className={({ isActive }) => isActive ? 'active' : ''}><span className="side-icon"><MenuIcon name="roles" /></span><span>Roles</span><b>≡</b></NavLink>
-					<a href="#users"><span className="side-icon"><MenuIcon name="users" /></span><span>Users</span><b>≡</b></a>
+					<NavLink to="/admin/users" className={({ isActive }) => isActive ? 'active' : ''}><span className="side-icon"><MenuIcon name="users" /></span><span>Users</span><b>≡</b></NavLink>
 					<a href="#locations"><span className="side-icon"><MenuIcon name="parking" /></span><span>Parking locations</span><b>≡</b></a>
 					<a href="#reports"><span className="side-icon"><MenuIcon name="reports" /></span><span>Reports</span><b>≡</b></a>
 					<a href="#notifications"><span className="side-icon"><MenuIcon name="notification" /></span><span>Notifications</span><b className="notification-badge">3</b></a>

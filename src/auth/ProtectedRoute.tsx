@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import type { ReactNode } from "react";
-import type { JwtPayload } from "../types/auth";
+import type { JwtPayload } from "../types/Account/auth";
 
 interface Props {
   children: ReactNode;

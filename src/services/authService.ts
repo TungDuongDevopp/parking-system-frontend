@@ -1,71 +1,45 @@
-import type { LoginRequest, LoginResponse } from "../types/login";
-import type { RegisterRequest,RegisterResponse } from "../types/register";
-import type { ChangePassWordRequest,ChangePassWordResponse } from "../types/changePassword";
-const BASE_URL:string ="https://localhost:44337";
+import type { LoginRequest, LoginResponse } from "../types/Account/login";
+import type { RegisterRequest,RegisterResponse } from "../types/Account/register";
+import type { ChangePassWordRequest,ChangePassWordResponse } from "../types/Account/changePassword";
+import { apiClient } from './apiClient';
+
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
-    const res = await fetch(`${BASE_URL}/api/TokenAuth/Authenticate`, {
+    const res = await apiClient('/api/TokenAuth/Authenticate', {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json' 
-        },
         body: JSON.stringify(data)
     });
 
-
-    const result = await res.json() as LoginResponse;
-    return result;
+    return res.json() as Promise<LoginResponse>;
 }
 
 
 export const register = async (data: RegisterRequest):Promise<RegisterResponse> =>{
 
-    const res = await fetch (`${BASE_URL}/api/services/app/Account/Register`,
+    const res = await apiClient('/api/services/app/Account/Register',
 
         {
             method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify(data)
         });
-        const result = await res.json() as RegisterResponse;
-        return result;
+        return res.json() as Promise<RegisterResponse>;
 };
 
 export const changePassword = async (data:ChangePassWordRequest): Promise<ChangePassWordResponse>=>{
-    const accessToken = localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
-
-    if (!accessToken) {
-        throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
-    }
-
-    const res = await fetch(`${BASE_URL}/api/services/app/User/ChangePassword`,
+    const res = await apiClient('/api/services/app/User/ChangePassword',
         {
             method :'POST',
-             headers:{
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
-            },
+            authenticated: true,
             body: JSON.stringify(data)
         });
-    const result = await res.json() as ChangePassWordResponse;
-        return result;
+    return res.json() as Promise<ChangePassWordResponse>;
 };
 
 
 export const getUserName = async() : Promise<string> =>{
-     const accessToken = localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
-
-    if (!accessToken) {
-        throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
-    }
-    const res = await fetch(`${BASE_URL}/api/services/app/Session/GetCurrentLoginInformations`,
+    const res = await apiClient('/api/services/app/Session/GetCurrentLoginInformations',
         {
             method :'GET',
-             headers:{
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
-            },
+            authenticated: true,
         });
         const data = await res.json();
         const user = data.result?.user;

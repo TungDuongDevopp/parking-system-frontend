@@ -1,4 +1,4 @@
-import type { AbpResponse } from "./abp"
+import type { AbpResponse } from "../Apb/abp"
 
 export interface ChangePassWordRequest {
     currentPassword: string,

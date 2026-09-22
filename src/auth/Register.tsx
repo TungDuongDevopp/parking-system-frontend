@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../resources/css/login.css'
 import { register } from '../services/authService'
-import type { RegisterRequest } from '../types/register'
+import type { RegisterRequest } from '../types/Account/register'
 
 function UserIcon() {
 	return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path d="M5.5 19.5c.6-3.1 2.8-5 6.5-5s5.9 1.9 6.5 5" /></svg>

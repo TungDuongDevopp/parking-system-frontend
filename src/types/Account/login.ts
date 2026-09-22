@@ -1,4 +1,4 @@
-import type { AbpResponse } from "./abp";
+import type { AbpResponse } from "../Apb/abp";
 export interface LoginRequest {
     userNameOrEmailAddress: string;
     password: string;

@@ -13,3 +13,15 @@ export interface AbpResponse<T> {
   unAuthorizedRequest: boolean;
   __abp: boolean;
 }
+
+export interface PagedResult<T> {
+    totalCount: number;
+    items: T[];
+}
+
+export interface AbpUserConfiguration {
+    auth: {
+        allPermissions: Record<string, string>;
+        grantedPermissions: Record<string, string>;
+    };
+}

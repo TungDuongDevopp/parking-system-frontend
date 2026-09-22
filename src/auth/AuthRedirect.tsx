@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import type { JwtPayload } from "../types/auth";
+import type { JwtPayload } from "../types/Account/auth";
 
 const AuthRedirect = () => {
   const token =

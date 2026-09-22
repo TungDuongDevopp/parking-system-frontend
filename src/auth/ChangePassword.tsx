@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import '../resources/css/login.css'
 import { changePassword } from '../services/authService'
-import type { ChangePassWordRequest } from '../types/changePassword'
+import type { ChangePassWordRequest } from '../types/Account/changePassword'
 function LockIcon() {
 	return <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="10" width="13" height="10" rx="2" /><path d="M8 10V7.5a4 4 0 0 1 8 0V10" /></svg>
 }
