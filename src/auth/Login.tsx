@@ -20,10 +20,17 @@ function ArrowIcon() {
 	return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
 }
 
+function EyeIcon({ visible }: { visible: boolean }) {
+	return visible
+		? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></svg>
+		: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.2A10.8 10.8 0 0 1 12 6c6 0 9.5 6 9.5 6a17.3 17.3 0 0 1-3.1 3.8M6.3 6.3C3.8 8 2.5 12 2.5 12s3.5 6 9.5 6c1.4 0 2.6-.3 3.7-.8" /></svg>
+}
+
 function Login() {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [rememberMe, setRememberMe] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -81,7 +88,7 @@ function Login() {
 				}
 		} catch (error) {
 			console.error(error)
-			setErrorMessage('Tài khoản hoặc mật khẩu không hợp lệ')
+			setErrorMessage(error instanceof Error ? error.message : 'Tài khoản hoặc mật khẩu không hợp lệ')
 } finally {
 			setIsSubmitting(false);
 		}
@@ -102,7 +109,7 @@ function Login() {
 						<label className="field-label" htmlFor="username">Username or email</label>
 						<div className="input-wrap"><span className="input-icon"><UserIcon /></span><input id="username" name="username" type="text" autoComplete="username" placeholder="you@example.com" value={username} onChange={(event) => setUsername(event.target.value)} required /></div>
 						<div className="password-label-row"><label className="field-label" htmlFor="password">Password</label><a href="#forgot-password">Forgot password?</a></div>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="password" name="password" type="password" autoComplete="current-password" placeholder="Enter your password" value={password} onChange={(event) => setPassword(event.target.value)} required /></div>
+						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="password" name="password" type={isPasswordVisible ? 'text' : 'password'} autoComplete="current-password" placeholder="Enter your password" value={password} onChange={(event) => setPassword(event.target.value)} required /><button className="password-toggle" type="button" aria-label={isPasswordVisible ? 'Hide password' : 'Show password'} title={isPasswordVisible ? 'Hide password' : 'Show password'} onClick={() => setIsPasswordVisible((visible) => !visible)}><EyeIcon visible={isPasswordVisible} /></button></div>
 						<div className="form-options"><label className="remember-option"><input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} /><span className="checkmark" />Remember me</label></div>
 						<button className="login-button" type="submit" disabled={isSubmitting}>
 							<span>{isSubmitting ? 'Signing in...' : 'Sign in'}</span>

@@ -1,74 +1,17 @@
+import { useState } from 'react';
 import "../resources/css/dashboard.css";
+import AdminSidebar from './AdminSidebar';
 
 const Dashboard = () =>{
-   const handleSignOut = () => {
-        localStorage.removeItem('accessToken')
-        sessionStorage.clear()
-        window.location.href = '/login'
-    }
+    const [username, setUsername] = useState('Admin')
 
     return (
   <div className="workspace">
-    <aside className="sidebar">
-      <a className="workspace-brand" href="/">
-        <span className="brand-square">P</span>
-        <span>
-          Park<span>ing</span>System
-        </span>
-      </a>
-      <p className="sidebar-label">Workspace</p>
-      <nav className="side-nav" aria-label="Admin navigation">
-        <a className="active" href="/admin">
-          <span className="side-icon">⌂</span>
-          <span>Overview</span>
-        </a>
-        <a href="#locations">
-          <span className="side-icon">▦</span>
-          <span>Parking locations</span>
-        </a>
-        <a href="#staff">
-          <span className="side-icon">♙</span>
-          <span>Staff members</span>
-        </a>
-        <a href="#reports">
-          <span className="side-icon">▥</span>
-          <span>Reports</span>
-        </a>
-      </nav>
-      <div className="sidebar-spacer" />
-      <div className="help-box">
-        <strong>Need a hand?</strong>
-        <small>Our support team is ready to help.</small>
-        <a href="#support">Contact support</a>
-      </div>
-      <details className="account-dropdown sidebar-account">
-        <summary className="profile">
-          <span className="avatar">AD</span>
-          <div>
-            <strong>Admin account</strong>
-            <small>Administrator</small>
-          </div>
-          <span className="account-chevron"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg></span>
-        </summary>
-        <div className="account-menu">
-          <button type="button" onClick={() => { window.location.href = '/change-password' }}><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5.2 5.2L4 16v3h3v-2h2v-2h2.2l2.1-2.1a4 4 0 0 0 1.2-7.4ZM17 4l3 3m-1.5-1.5 1.5-1.5" /></svg></span>Change password</button>
-          <button type="button" onClick={handleSignOut}><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H5.5A1.5 1.5 0 0 0 4 6.5v11A1.5 1.5 0 0 0 5.5 19H10M14 8l4 4-4 4M18 12H9" /></svg></span>Logout</button>
-        </div>
-      </details>
-    </aside>
+    <AdminSidebar onUsernameLoaded={setUsername} />
     <main className="main-content">
-      <header className="topbar">
-        <span className="crumb">
-          Workspace / <strong>Overview</strong>
-        </span>
-        <div className="topbar-actions">
-          <span className="notification">♧</span>
-          <span className="avatar">AD</span>
-        </div>
-      </header>
       <section className="welcome">
         <div>
-          <h1>Good morning, Admin</h1>
+          <h1>Good morning, {username}</h1>
           <p>Here is what is happening across your parking network today.</p>
         </div>
         <span className="date-pill">▣ September 21, 2026</span>

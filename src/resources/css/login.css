@@ -56,10 +56,13 @@ button, input { font: inherit; }
 .input-wrap { position: relative; margin-bottom: 20px; }
 .input-icon { position: absolute; top: 50%; left: 15px; display: grid; color: #91a5bb; transform: translateY(-50%); }
 .input-icon svg { width: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
-.input-wrap input { width: 100%; height: 51px; padding: 0 15px 0 47px; border: 1px solid #d5e2ef; border-radius: 9px; outline: none; color: #18375c; background: #fbfdff; transition: border-color .2s, box-shadow .2s, background .2s; }
+.input-wrap input { width: 100%; height: 51px; padding: 0 47px 0 47px; border: 1px solid #d5e2ef; border-radius: 9px; outline: none; color: #18375c; background: #fbfdff; transition: border-color .2s, box-shadow .2s, background .2s; }
 .input-wrap input::placeholder { color: #a2b2c2; }
 .input-wrap input:focus { border-color: #087cf4; background: white; box-shadow: 0 0 0 4px rgba(8, 124, 244, .1); }
 .input-wrap:focus-within .input-icon { color: #087cf4; }
+.password-toggle { position: absolute; top: 50%; right: 7px; display: grid; width: 36px; height: 36px; place-items: center; border: 0; border-radius: 7px; color: #91a5bb; background: transparent; cursor: pointer; transform: translateY(-50%); transition: color .2s, background .2s; }
+.password-toggle:hover, .password-toggle:focus-visible { color: #087cf4; background: #eef6ff; outline: none; }
+.password-toggle svg { width: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
 .password-label-row { display: flex; align-items: baseline; justify-content: space-between; }
 .password-label-row a, .register-prompt a { color: #087cf4; font-weight: 700; text-decoration: none; }
 .password-label-row a { font-size: 12px; }
@@ -78,6 +81,8 @@ button, input { font: inherit; }
 .login-button:active { transform: translateY(0); }
 .login-button:disabled { cursor: wait; opacity: .72; transform: none; }
 .login-button svg { width: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.cancel-button { display: flex; width: 100%; height: 46px; align-items: center; justify-content: center; margin-top: 11px; border: 1px solid #d5e2ef; border-radius: 9px; color: #536983; background: white; font-size: 14px; font-weight: 700; text-decoration: none; transition: border-color .2s, color .2s, background .2s; }
+.cancel-button:hover { border-color: #087cf4; color: #087cf4; background: #f7fbff; }
 .form-message { margin: 13px 0 0; color: #0e8c78; font-size: 12px; text-align: center; }
 .form-error { color: #d34b5f; }
 .register-prompt { margin: 27px 0 0; color: #8193a8; font-size: 13px; text-align: center; }

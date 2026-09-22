@@ -1,74 +1,17 @@
+import { useState } from 'react';
 import "../resources/css/dashboard.css";
+import AdminSidebar from '../admin/AdminSidebar';
 
 const StaffHome = () =>{
-    const handleSignOut = () => {
-        localStorage.removeItem('accessToken')
-        sessionStorage.clear()
-        window.location.href = '/login'
-    }
-   
+    const [username, setUsername] = useState('Minh Nguyen')
+
     return (
   <div className="workspace">
-    <aside className="sidebar">
-      <a className="workspace-brand" href="/">
-        <span className="brand-square">P</span>
-        <span>
-          Park<span>ing</span>System
-        </span>
-      </a>
-      <p className="sidebar-label">Staff desk</p>
-      <nav className="side-nav" aria-label="Staff navigation">
-        <a className="active" href="/staff">
-          <span className="side-icon">⌂</span>
-          <span>My dashboard</span>
-        </a>
-        <a href="#check-in">
-          <span className="side-icon">↗</span>
-          <span>Check in vehicle</span>
-        </a>
-        <a href="#tickets">
-          <span className="side-icon">▤</span>
-          <span>Tickets</span>
-        </a>
-        <a href="#incidents">
-          <span className="side-icon">!</span>
-          <span>Incidents</span>
-        </a>
-      </nav>
-      <div className="sidebar-spacer" />
-      <div className="help-box">
-        <strong>Shift support</strong>
-        <small>Ask the supervisor if you need assistance.</small>
-        <a href="#support">Open help desk</a>
-      </div>
-      <details className="account-dropdown sidebar-account">
-        <summary className="profile">
-          <span className="avatar">MN</span>
-          <div>
-            <strong>Minh Nguyen</strong>
-            <small>Parking attendant</small>
-          </div>
-          <span className="account-chevron"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg></span>
-        </summary>
-        <div className="account-menu">
-          <button type="button" onClick={() => { window.location.href = '/change-password' }}><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5.2 5.2L4 16v3h3v-2h2v-2h2.2l2.1-2.1a4 4 0 0 0 1.2-7.4ZM17 4l3 3m-1.5-1.5 1.5-1.5" /></svg></span>Change password</button>
-          <button type="button" onClick={handleSignOut}><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H5.5A1.5 1.5 0 0 0 4 6.5v11A1.5 1.5 0 0 0 5.5 19H10M14 8l4 4-4 4M18 12H9" /></svg></span>Logout</button>
-        </div>
-      </details>
-    </aside>
+    <AdminSidebar variant="staff" onUsernameLoaded={setUsername} />
     <main className="main-content">
-      <header className="topbar">
-        <span className="crumb">
-          Staff desk / <strong>My dashboard</strong>
-        </span>
-        <div className="topbar-actions">
-          <span className="notification">♧</span>
-          <span className="avatar">MN</span>
-        </div>
-      </header>
       <section className="welcome">
         <div>
-          <h1>Good morning, Minh</h1>
+          <h1>Good morning, {username}</h1>
           <p>Your shift is active at Central Plaza. Keep the flow moving.</p>
         </div>
         <span className="date-pill">● On shift · 08:00 - 16:00</span>

@@ -60,3 +60,119 @@ button { font: inherit; }
 @media (max-width: 900px) { .sidebar { width: 204px; flex-basis: 204px; }.main-content { padding: 0 22px 30px; }.metric-grid { grid-template-columns: repeat(2, 1fr); }.customer-nav { padding: 0 4%; }.customer-hero, .customer-content { padding-right: 6%; padding-left: 6%; } }
 @media (max-width: 650px) { .sidebar { width: 67px; flex-basis: 67px; padding: 22px 9px; }.workspace-brand { justify-content: center; padding: 0 0 28px; }.workspace-brand > span:not(.brand-square), .sidebar-label, .side-nav a > span:not(.side-icon), .help-box, .profile > div, .account-chevron { display: none; }.side-nav a { justify-content: center; padding: 12px 8px; }.profile { justify-content: center; padding-right: 0; padding-left: 0; }.sidebar-account .account-menu { right: -112px; bottom: 48px; }.main-content { padding: 0 15px 25px; }.welcome { display: block; }.date-pill { display: inline-block; margin-top: 15px; }.content-grid, .customer-hero { grid-template-columns: 1fr; }.parking-illustration { min-height: 165px; margin: 30px 0 0; }.customer-nav { height: auto; flex-wrap: wrap; gap: 16px; padding: 18px 5%; }.customer-nav .main-links { order: 3; width: 100%; justify-content: space-between; margin: 0; }.customer-cards { grid-template-columns: 1fr; }.customer-hero h1 { font-size: 31px; }.occupancy { grid-template-columns: 1fr; justify-items: center; }.occupancy-list { width: 100%; } }
 @media (max-width: 430px) { .metric-grid { gap: 9px; }.metric-card { padding: 13px; }.metric-card h2 { font-size: 21px; }.bar-chart { gap: 6px; }.parking-table { font-size: 10px; }.parking-table th, .parking-table td { padding-right: 4px; padding-left: 4px; }.customer-actions span { display: none; } }
+
+/* Admin navigation and role management */
+.workspace { background: #f4f6f9; }
+.sidebar { width: 250px; flex-basis: 250px; padding: 20px 14px 17px; border-right: 1px solid #e4e8ee; color: #747e8c; background: #fff; }
+.sidebar-profile { position: relative; display: flex; align-items: center; gap: 10px; padding: 4px 7px 21px; border-bottom: 1px solid #edf0f3; }
+.sidebar-profile > div:nth-child(2) { min-width: 0; flex: 1; }
+.profile-avatar { display: grid; width: 43px; height: 43px; flex: 0 0 43px; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(145deg, #f8c27d, #e98c5c); font-size: 12px; font-weight: 800; }
+.sidebar-profile span { display: block; color: #8a929d; font-size: 11px; }
+.sidebar-profile strong { display: block; margin-top: 2px; color: #525d6c; font-size: 17px; font-weight: 700; }
+.settings-button { display: grid; width: 39px; height: 39px; place-items: center; border: 1px solid #e2e6eb; border-radius: 8px; color: #7c8793; background: #fff; cursor: pointer; font-size: 18px; }
+.settings-button:hover { color: #4169e8; border-color: #bfcfff; background: #f5f7ff; }
+.settings-menu { position: absolute; z-index: 5; top: 54px; right: 7px; min-width: 178px; padding: 6px; border: 1px solid #dce4ed; border-radius: 9px; background: #fff; box-shadow: 0 14px 30px rgba(27, 46, 73, .15); }
+.settings-menu a { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 6px; color: #536579; font-size: 12px; font-weight: 600; }
+.settings-menu a:hover { color: #4169e8; background: #f1f4ff; }
+.settings-menu .side-icon { color: currentColor; }
+.sidebar-search { display: flex; align-items: center; gap: 12px; margin: 20px 9px 17px; color: #5178e9; }
+.sidebar-search span { font-size: 25px; line-height: 1; }
+.sidebar-search input { width: 100%; border: 0; outline: 0; color: #526071; background: transparent; font-size: 13px; }
+.sidebar-search input::placeholder { color: #9099a5; }
+.side-nav { gap: 7px; }
+.side-nav a, .side-nav button { display: flex; width: 100%; align-items: center; gap: 13px; padding: 12px 14px; border: 0; border-radius: 10px; color: #7c8591; background: transparent; cursor: pointer; font-size: 13px; font-weight: 600; text-align: left; }
+.side-nav a:hover, .side-nav a.active { color: #fff; background: #4b6fed; box-shadow: 0 7px 15px rgba(75, 111, 237, .2); }
+.side-nav a b { margin-left: auto; color: currentColor; font-size: 17px; font-weight: 400; opacity: .75; }
+.side-nav a b.notification-badge { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; color: #fff; background: #ed4b62; font-size: 10px; opacity: 1; }
+.side-icon { width: 18px; color: currentColor; font-size: 17px; }
+.side-icon svg { display: block; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+.sidebar-bottom-nav { gap: 3px; }
+.sidebar-bottom-nav button { font-weight: 600; }
+.sidebar-bottom-nav button:hover { color: #e35e68; background: #fff2f3; }
+.theme-toggle:hover { color: #4169e8 !important; background: #f1f4ff !important; }
+.roles-content { padding: 0 30px 38px; }
+.roles-header { display: flex; min-height: 104px; align-items: center; justify-content: space-between; }
+.eyebrow-label { display: block; margin-bottom: 6px; color: #8d98a5; font-size: 10px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; }
+.roles-header h1 { margin: 0; color: #202c3e; font-family: Manrope, sans-serif; font-size: 29px; letter-spacing: -.7px; }
+.primary-action { display: inline-flex; align-items: center; gap: 7px; padding: 12px 17px; border: 0; border-radius: 7px; color: #fff; background: #087cf4; box-shadow: 0 7px 15px rgba(8, 124, 244, .19); cursor: pointer; font-size: 13px; font-weight: 700; }
+.primary-action:hover { background: #076fe0; transform: translateY(-1px); }
+.primary-action span { font-size: 19px; line-height: 1; }
+.roles-card { overflow: hidden; border: 1px solid #dfe4ea; border-radius: 9px; background: #fff; box-shadow: 0 8px 24px rgba(34, 48, 67, .04); }
+.roles-toolbar { display: flex; justify-content: flex-end; padding: 15px 25px; border-bottom: 1px solid #e1e5ea; }
+.roles-search { display: flex; width: min(100%, 520px); height: 47px; align-items: center; border: 1px solid #cbd4df; border-radius: 5px; overflow: hidden; }
+.roles-search span { display: grid; width: 51px; height: 100%; place-items: center; color: #fff; background: #087cf4; font-size: 28px; line-height: 1; }
+.roles-search input { min-width: 0; flex: 1; height: 100%; padding: 0 14px; border: 0; outline: 0; color: #27384d; font-size: 13px; }
+.roles-table-wrap { padding: 25px 25px 0; }
+.roles-table { width: 100%; border-collapse: collapse; color: #172b43; font-size: 15px; }
+.roles-table th { padding: 0 16px 17px; border-bottom: 1px solid #d5dce5; color: #142238; font-size: 14px; font-weight: 700; text-align: left; }
+.roles-table th span { float: right; color: #d9dde2; font-size: 19px; }
+.roles-table td { height: 95px; padding: 14px 16px; border-bottom: 1px solid #d8dfe7; }
+.roles-table tbody tr:nth-child(odd) { background: #f5f5f5; }
+.roles-table td:first-child { width: 40%; }
+.roles-table td:nth-child(2) { width: 50%; }
+.role-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.role-actions button { min-width: 72px; padding: 9px 11px; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-size: 13px; }
+.edit-action { background: #687580; }
+.edit-action:hover { background: #52616e; }
+.delete-action { background: #ec3048; }
+.delete-action:hover { background: #ce1f37; }
+.empty-roles { padding: 35px; color: #7b8795; text-align: center; }
+.roles-footer { display: flex; min-height: 83px; align-items: center; gap: 30px; padding: 10px 25px; color: #162a43; font-size: 14px; }
+.refresh-action { display: grid; width: 51px; height: 47px; place-items: center; border: 0; border-radius: 5px; color: #fff; background: #697783; cursor: pointer; font-size: 26px; }
+.roles-footer label { display: flex; align-items: center; gap: 9px; margin-left: auto; }
+.roles-footer select { width: 70px; padding: 8px; border: 1px solid #cbd4df; border-radius: 5px; color: #536275; background: #fff; }
+.pagination { display: flex; margin-left: auto; }
+.pagination button { width: 44px; height: 47px; border: 1px solid #d6dfe8; border-right: 0; color: #66809d; background: #fff; cursor: pointer; font-size: 20px; }
+.pagination button:first-child { border-radius: 5px 0 0 5px; }.pagination button:last-child { border-right: 1px solid #d6dfe8; border-radius: 0 5px 5px 0; }
+.pagination button:hover, .pagination .current-page { color: #fff; background: #087cf4; }
+.roles-note { margin: 18px 3px; color: #087cf4; font-size: 13px; font-weight: 700; }
+.roles-note a:hover { text-decoration: underline; }
+
+@media (max-width: 700px) {
+	.sidebar { width: 74px; flex-basis: 74px; padding: 16px 9px; }
+	.sidebar-profile { justify-content: center; padding: 4px 0 18px; }
+	.sidebar-profile > div:nth-child(2), .settings-button, .sidebar-search, .side-nav a > span:not(.side-icon), .side-nav button > span:not(.side-icon), .side-nav a b { display: none; }
+	.side-nav a, .side-nav button { justify-content: center; padding: 13px 8px; }
+	.sidebar-bottom-nav { margin-bottom: 5px; }
+	.roles-content { padding: 0 14px 25px; }
+	.roles-header { min-height: 88px; }
+	.roles-header h1 { font-size: 24px; }
+	.roles-toolbar, .roles-table-wrap { padding-right: 14px; padding-left: 14px; }
+	.roles-table { min-width: 620px; }
+	.roles-table-wrap { overflow-x: auto; }
+	.roles-footer { flex-wrap: wrap; gap: 12px; padding: 14px; }
+	.roles-footer label { margin-left: 0; }
+	.pagination { margin-left: auto; }
+}
+
+@media (max-width: 480px) {
+	.roles-footer > span { order: 3; width: 100%; }
+	.pagination { margin-left: 0; }
+}
+
+.dashboard-dark .workspace { color: #d9e2ef; background: #151b27; }
+.dashboard-dark .sidebar { border-color: #283243; color: #9aa9bc; background: #1c2432; }
+.dashboard-dark .sidebar-profile { border-color: #2c3748; }
+.dashboard-dark .sidebar-profile span, .dashboard-dark .sidebar-search input::placeholder { color: #8997aa; }
+.dashboard-dark .sidebar-profile strong { color: #f1f5fb; }
+.dashboard-dark .settings-button { border-color: #344155; color: #b5c2d2; background: #252f40; }
+.dashboard-dark .settings-menu { border-color: #3a475c; background: #202a39; box-shadow: 0 14px 30px rgba(0, 0, 0, .3); }
+.dashboard-dark .settings-menu a { color: #c4d0df; }.dashboard-dark .settings-menu a:hover { color: #aebeff; background: #293550; }
+.dashboard-dark .sidebar-search input { color: #e6edf7; }
+.dashboard-dark .side-nav a, .dashboard-dark .side-nav button { color: #aab7c9; }
+.dashboard-dark .side-nav a:hover, .dashboard-dark .side-nav a.active { color: #fff; background: #4b6fed; }
+.dashboard-dark .theme-toggle:hover { color: #9db4ff !important; background: #293550 !important; }
+.dashboard-dark .topbar { border-color: #2b3545; }
+.dashboard-dark .crumb { color: #7f90a6; }.dashboard-dark .crumb strong { color: #c9d6e6; }
+.dashboard-dark .welcome h1, .dashboard-dark .roles-header h1 { color: #edf3fb; }
+.dashboard-dark .welcome p, .dashboard-dark .eyebrow-label { color: #91a0b4; }
+.dashboard-dark .date-pill, .dashboard-dark .metric-card, .dashboard-dark .panel, .dashboard-dark .roles-card { border-color: #303c4f; color: #dbe5f1; background: #202a39; }
+.dashboard-dark .metric-head, .dashboard-dark .panel-title h2, .dashboard-dark .occupancy-list div, .dashboard-dark .parking-table { color: #aab8c9; }
+.dashboard-dark .metric-card h2, .dashboard-dark .occupancy-list strong, .dashboard-dark .parking-table td:first-child { color: #edf3fb; }
+.dashboard-dark .roles-toolbar { border-color: #303c4f; }.dashboard-dark .roles-search { border-color: #405067; }
+.dashboard-dark .roles-search input, .dashboard-dark .roles-footer select { color: #e2eaf5; background: #202a39; }
+.dashboard-dark .roles-table { color: #e2eaf5; }.dashboard-dark .roles-table th { border-color: #405067; color: #f0f5fb; }.dashboard-dark .roles-table td { border-color: #344154; }
+.dashboard-dark .roles-table tbody tr:nth-child(odd) { background: #263142; }
+.dashboard-dark .roles-footer { color: #dbe5f1; }.dashboard-dark .pagination button { border-color: #405067; color: #aebdd0; background: #202a39; }
+.dashboard-dark .pagination button:hover, .dashboard-dark .pagination .current-page { color: #fff; background: #087cf4; }
+.dashboard-dark .roles-note { color: #66a3ff; }

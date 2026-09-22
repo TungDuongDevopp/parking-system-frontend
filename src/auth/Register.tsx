@@ -20,18 +20,26 @@ function ArrowIcon() {
 	return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
 }
 
+function EyeIcon({ visible }: { visible: boolean }) {
+	return visible
+		? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></svg>
+		: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.2A10.8 10.8 0 0 1 12 6c6 0 9.5 6 9.5 6a17.3 17.3 0 0 1-3.1 3.8M6.3 6.3C3.8 8 2.5 12 2.5 12s3.5 6 9.5 6c1.4 0 2.6-.3 3.7-.8" /></svg>
+}
+
 function Register() {
 	const navigate = useNavigate();
 	const [errorMessage, setErrorMessage] = useState('');
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [username,setUserName] = useState('');
 	const [password, setPassword] = useState('');
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [firstName,setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 
 	const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault()
+		setErrorMessage('')
 		setIsSubmitted(true)
 		const account : RegisterRequest ={
 			userName : username,
@@ -43,7 +51,7 @@ function Register() {
 		try {
 				const response = await register(account);
 				if(!response.success){
-					setErrorMessage(response.result?.canLogin ? 'Đăng ký thành công' : 'Đăng ký thất bại');
+					setErrorMessage(response.error?.message || 'Đăng ký thất bại');
 					return;
 				}
 				navigate("/login");
@@ -51,7 +59,7 @@ function Register() {
 		}
 		catch(error){
 			console.error(error);
-			setErrorMessage('Đăng ký thất bại')
+			setErrorMessage(error instanceof Error ? error.message : 'Đăng ký thất bại')
 		}
 		finally{
 			setIsSubmitted(false);
@@ -79,9 +87,8 @@ function Register() {
 						<label className="field-label" htmlFor="register-username">Username</label>
 						<div className="input-wrap"><span className="input-icon"><UserIcon /></span><input id="register-username" name="username" type="text" autoComplete="username" value={username} onChange={(event) => setUserName(event.target.value)} placeholder="Choose a username" required /></div>
 						<label className="field-label" htmlFor="register-password">Password</label>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="register-password" name="password" type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Create a password" minLength={8} required /></div>
-						<button className="login-button" type="submit"><span>Register</span><ArrowIcon /></button>
-						{isSubmitted && <p className="form-message" role="status">Your account details are ready to be submitted.</p>}
+						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="register-password" name="password" type={isPasswordVisible ? 'text' : 'password'} autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Create a password" minLength={8} required /><button className="password-toggle" type="button" aria-label={isPasswordVisible ? 'Hide password' : 'Show password'} title={isPasswordVisible ? 'Hide password' : 'Show password'} onClick={() => setIsPasswordVisible((visible) => !visible)}><EyeIcon visible={isPasswordVisible} /></button></div>
+						<button className="login-button" type="submit" disabled={isSubmitted}><span>{isSubmitted ? 'Creating account...' : 'Register'}</span>{!isSubmitted && <ArrowIcon />}</button>
 						{errorMessage && <p className="form-message form-error" role="alert">{errorMessage}</p>}
 					</form>
 					<p className="register-prompt">Already have an account? <a href="/login">Sign in</a></p>

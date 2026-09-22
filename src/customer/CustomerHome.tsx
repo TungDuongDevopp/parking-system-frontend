@@ -1,6 +1,18 @@
+import { useEffect, useState } from 'react'
 import '../resources/css/dashboard.css'
+import { getUserName } from '../services/authService'
 
 const CustomerHome = () => {
+    const [displayName, setDisplayName] = useState('Customer')
+
+    useEffect(() => {
+        let isMounted = true
+        getUserName().then((name) => {
+            if (isMounted && name) setDisplayName(name)
+        }).catch(() => undefined)
+        return () => { isMounted = false }
+    }, [])
+
     const handleSignOut = () => {
         localStorage.removeItem('accessToken')
         sessionStorage.clear()
@@ -24,7 +36,7 @@ const CustomerHome = () => {
             </div>
 
             <div className="customer-actions">
-                <span>Hi, Alex</span>
+                <span>Hi, {displayName}</span>
                 <details className="account-dropdown customer-account">
                     <summary className="customer-account-trigger">
                         <span className="customer-menu-button">
