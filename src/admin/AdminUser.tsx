@@ -4,6 +4,7 @@ import '../resources/css/dashboard.css'
 import { createUser, deleteUser, getUsers, updateUser } from '../services/userService'
 import { getRoleNames } from '../services/roleService'
 import type { UserDto } from '../types/User/user'
+import type { SubmitEvent } from 'react'
 
 type SortField = 'userName' | 'emailAddress'
 type SortDirection = 'asc' | 'desc' | null
@@ -152,7 +153,7 @@ const AdminUser = () => {
 	const isRoleSelected = (role: string) =>
 		roleNames.some((selectedRole) => selectedRole.toLowerCase() === role.toLowerCase())
 
-	const handleUserSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+	const handleUserSubmit = async (event: SubmitEvent) => {
 		event.preventDefault()
 		if (!userName.trim() || !name.trim() || !surname.trim() || !emailAddress.trim() || (!editingUser && !password)) {
 			setUserFormError('Please fill in all required fields.')

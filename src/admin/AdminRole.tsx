@@ -3,6 +3,7 @@ import AdminSidebar from './AdminSidebar'
 import '../resources/css/dashboard.css'
 import { createRole, deleteRole, getPermission, getRoles, updateRole } from '../services/roleService'
 import type { Role } from '../types/Role/role'
+import type { SubmitEvent } from 'react'
 
 type SortField = 'name' | 'displayName'
 type SortDirection = 'asc' | 'desc' | null
@@ -161,7 +162,7 @@ function AdminRole() {
 		)
 	}
 
-	const handleCreateSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+	const handleCreateSubmit = async (event: SubmitEvent) => {
 		event.preventDefault()
 		if (!roleName.trim() || !displayName.trim()) {
 			setFormError('Role Name and Display Name are required.')

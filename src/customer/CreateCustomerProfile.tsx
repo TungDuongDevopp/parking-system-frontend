@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import type { SubmitEvent } from 'react'
 import '../resources/css/dashboard.css'
 import '../resources/css/customer-profile.css'
 import { createCustomer } from '../services/customerService'
@@ -12,7 +13,7 @@ const CreateCustomerProfile = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: SubmitEvent) => {
         event.preventDefault()
         setIsSubmitting(true)
         setErrorMessage('')
