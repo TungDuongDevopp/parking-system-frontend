@@ -161,7 +161,7 @@ function AdminRole() {
 		)
 	}
 
-	const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+	const handleCreateSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		if (!roleName.trim() || !displayName.trim()) {
 			setFormError('Role Name and Display Name are required.')

@@ -118,6 +118,10 @@ button { font: inherit; }
 .users-table th:nth-child(3), .users-table td:nth-child(3) { width: 31%; }
 .users-table th:nth-child(4), .users-table td:nth-child(4) { width: 13%; }
 .users-table th:nth-child(5), .users-table td:nth-child(5) { width: 13%; }
+.customers-table th:nth-child(1), .customers-table td:nth-child(1) { width: 28%; }
+.customers-table th:nth-child(2), .customers-table td:nth-child(2) { width: 28%; text-align: right; }
+.customers-table th:nth-child(3), .customers-table td:nth-child(3) { width: 38%; }
+.customers-table th:nth-child(4), .customers-table td:nth-child(4) { width: 15%; }
 .users-table td:nth-child(4) input { width: 16px; height: 16px; accent-color: #4b6fed; }
 .role-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
 .role-actions button { display: inline-flex; min-width: 72px; align-items: center; gap: 5px; padding: 8px 11px; border: 1px solid rgba(255, 255, 255, .75); border-radius: 6px; color: #fff; cursor: pointer; font-size: 13px; font-weight: 600; box-shadow: 0 5px 11px rgba(50, 75, 105, .16), inset 0 1px rgba(255, 255, 255, .45); transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }

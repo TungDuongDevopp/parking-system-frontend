@@ -6,7 +6,10 @@ import ChangePassword from './auth/ChangePassword';
 import Dashboard from './admin/Dashboard';
 import AdminRole from './admin/AdminRole';
 import AdminUser from './admin/AdminUser';
+import AdminCustomer from './admin/AdminCustomer';
 import CustomerHome from './customer/CustomerHome';
+import CustomerProfile from './customer/CustomerProfile';
+import CreateCustomerProfile from './customer/CreateCustomerProfile';
 import StaffHome from './staff/StaffHome';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
@@ -34,6 +37,11 @@ function App() {
                     <AdminUser />
                   </ProtectedRoute>
                 } />
+                <Route path="/admin/customers" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminCustomer />
+                  </ProtectedRoute>
+                } />
                 <Route path="/staff" element={
                   <ProtectedRoute allowedRole='Staff'>
                      <StaffHome/>
@@ -45,6 +53,16 @@ function App() {
                        <CustomerHome />
                   </ProtectedRoute>
                   } />
+                <Route path="/customer/profile" element={
+                  <ProtectedRoute allowedRole='Customer'>
+                    <CustomerProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/customer/profile/create" element={
+                  <ProtectedRoute allowedRole='Customer'>
+                    <CreateCustomerProfile />
+                  </ProtectedRoute>
+                } />
                 </Routes>
                                                         
         </BrowserRouter>

@@ -21,8 +21,7 @@ function ActionIcon({ type }: { type: 'create' | 'edit' | 'delete' }) {
 		</svg>
 	)
 }
-
-function AdminUser() {
+const AdminUser = () => {
 	const [users, setUsers] = useState<UserDto[]>([])
 	const [totalCount, setTotalCount] = useState(0)
 	const [query, setQuery] = useState('')
@@ -153,7 +152,7 @@ function AdminUser() {
 	const isRoleSelected = (role: string) =>
 		roleNames.some((selectedRole) => selectedRole.toLowerCase() === role.toLowerCase())
 
-	const handleUserSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+	const handleUserSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		if (!userName.trim() || !name.trim() || !surname.trim() || !emailAddress.trim() || (!editingUser && !password)) {
 			setUserFormError('Please fill in all required fields.')
