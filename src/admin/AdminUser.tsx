@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
-import '../resources/css/dashboard.css'
+import '../resources/css/dashboard.scss'
 import { createUser, deleteUser, getUsers, updateUser } from '../services/userService'
 import { getRoleNames } from '../services/roleService'
+import { getAbpErrorMessage } from '../services/abpError'
 import type { UserDto } from '../types/User/user'
 import type { SubmitEvent } from 'react'
 
@@ -69,7 +70,7 @@ const AdminUser = () => {
 			})
 
 			if (!response.success || !response.result) {
-				setErrorMessage(response.error?.message || 'Không thể tải danh sách user.')
+				setErrorMessage(getAbpErrorMessage(response.error, 'Không thể tải danh sách user.'))
 				setUsers([])
 				setTotalCount(0)
 				return
@@ -185,7 +186,7 @@ const AdminUser = () => {
 				})
 
 			if (!response.success) {
-				setUserFormError(response.error?.message || `Unable to ${editingUser ? 'update' : 'create'} user.`)
+				setUserFormError(getAbpErrorMessage(response.error, `Unable to ${editingUser ? 'update' : 'create'} user.`))
 				return
 			}
 

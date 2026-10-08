@@ -2,6 +2,7 @@
 import type { UserRequestCreate, UserRequestUpdate, UserResponse } from '../types/User/user'
 import { apiClient } from './apiClient'
 import type { AbpResponse } from '../types/Apb/abp'
+import { getAbpErrorMessage } from './abpError'
 import type { UserQuery } from '../types/User/userQuery'
 
 export const getUsers = async (params: UserQuery): Promise<UserResponse> => {
@@ -50,7 +51,7 @@ export const deleteUser = async (id: number): Promise<void> => {
     const data = await response.json() as AbpResponse<null>
 
     if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể xóa user.')
+        throw new Error(getAbpErrorMessage(data.error, 'Không thể xóa user.'))
     }
 }
 
@@ -63,4 +64,3 @@ export const updateUser = async (data: UserRequestUpdate): Promise<UserResponse>
 
     return response.json() as Promise<UserResponse>
 }
-

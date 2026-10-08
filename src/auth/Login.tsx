@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from "jwt-decode";
 
 
-import '../resources/css/login.css';
+import '../resources/css/login.scss';
 import { login } from '../services/authService';
+import { getAbpErrorMessage } from '../services/abpError'
 import type { LoginRequest } from '../types/Account/login'
 import type { JwtPayload } from "../types/Account/auth";
 
@@ -51,7 +52,7 @@ function Login() {
 			
 
 			if (!response.success || !response.result?.accessToken) {
-				setErrorMessage(response.error?.message || 'Username or password is incorrect.');
+				setErrorMessage(getAbpErrorMessage(response.error, 'Username or password is incorrect.'));
 				return
 			}
 			const accessToken = response.result?.accessToken;

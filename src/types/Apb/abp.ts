@@ -2,7 +2,12 @@ export interface AbpError {
   code: number;
   message: string;
   details: string | null;
-  validationErrors: unknown[] | null;
+  validationErrors: AbpValidationError[] | null;
+}
+
+export interface AbpValidationError {
+  message: string;
+  members: string[];
 }
 
 export interface AbpResponse<T> {

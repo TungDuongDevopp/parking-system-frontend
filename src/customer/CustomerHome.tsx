@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import '../resources/css/dashboard.css'
-import '../resources/css/customer-profile.css'
+import '../resources/css/dashboard.scss'
+import '../resources/css/customer-profile.scss'
 import { getUserName } from '../services/authService'
 
 const CustomerHome = () => {

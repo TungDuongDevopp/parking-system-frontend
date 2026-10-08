@@ -1,6 +1,7 @@
 import type { CustomerResponse, CustomerDto, CustomerRequestCreate, CustomerRequestUpdate } from "../types/Customer/customer";
 import { apiClient } from "./apiClient";
 import type { AbpResponse } from "../types/Apb/abp";
+import { getAbpErrorMessage } from './abpError'
 import type { CustomerQuery } from "../types/Customer/customerQuery";
 
 export const getCustomers = async(params: CustomerQuery) : Promise<CustomerResponse>=>{
@@ -46,7 +47,7 @@ export const deleteCustomer = async (id: number): Promise<void> => {
     const data = await response.json() as AbpResponse<null>
 
     if (!response.ok || !data.success) {
-        throw new Error(data.error?.message || 'Không thể xóa customer.')
+        throw new Error(getAbpErrorMessage(data.error, 'Không thể xóa customer.'))
     }
 }
 

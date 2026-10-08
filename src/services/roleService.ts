@@ -1,6 +1,7 @@
 import type { Role, RoleRequest, RoleResponse } from '../types/Role/role'
 import { apiClient } from './apiClient'
 import type { AbpResponse, AbpUserConfiguration } from '../types/Apb/abp'
+import { getAbpErrorMessage } from './abpError'
 
 export const getRoles = async (): Promise<RoleResponse> => {
 	const response = await apiClient('/api/services/app/Role/GetAll', {
@@ -38,7 +39,7 @@ export const deleteRole = async (id: number): Promise<void> => {
 	const data = await response.json() as AbpResponse<null>
 
 	if (!response.ok || !data.success) {
-		throw new Error(data.error?.message || 'Không thể xóa role.')
+		throw new Error(getAbpErrorMessage(data.error, 'Không thể xóa role.'))
 	}
 }
 export const updateRole = async (data: Role): Promise<RoleResponse> => {

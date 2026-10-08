@@ -13,7 +13,7 @@ import CreateCustomerProfile from './customer/CreateCustomerProfile';
 import StaffHome from './staff/StaffHome';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
-function App() {
+const App = () => {
   
     return (
         <BrowserRouter>

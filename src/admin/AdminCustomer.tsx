@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
-import '../resources/css/dashboard.css'
+import '../resources/css/dashboard.scss'
 import type { CustomerDto } from '../types/Customer/customer'
 import { deleteCustomer,updateCustomer,getCustomers } from '../services/customerService'
+import { getAbpErrorMessage } from '../services/abpError'
 type SortField = 'name' | 'phoneNumber' | 'email'
 type SortDirection = 'asc' | 'desc' | null
 
@@ -63,7 +64,7 @@ const AdminCustomer = () => {
 				maxResultCount: rowsPerPage,
 			})
 			if (!response.success || !response.result) {
-				setErrorMessage(response.error?.message || 'Unable to load customers.')
+				setErrorMessage(getAbpErrorMessage(response.error, 'Unable to load customers.'))
 				setCustomers([])
 				setTotalCount(0)
 				return
@@ -135,7 +136,7 @@ const AdminCustomer = () => {
 				name: name.trim()
 			})
 			if (!response.success) {
-				setCustomerFormError(response.error?.message || 'Unable to update customer.')
+				setCustomerFormError(getAbpErrorMessage(response.error, 'Unable to update customer.'))
 				return
 			}
 			closeCustomerModal()

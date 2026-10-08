@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import '../resources/css/dashboard.css'
-import '../resources/css/customer-profile.css'
+import '../resources/css/dashboard.scss'
+import '../resources/css/customer-profile.scss'
 import type { CustomerDto } from '../types/Customer/customer'
 import { getMyProfile } from '../services/customerService'
+import { getAbpErrorMessage } from '../services/abpError'
 
 const CustomerProfile = () => {
     const navigate = useNavigate()
@@ -17,7 +18,7 @@ const CustomerProfile = () => {
         getMyProfile().then((response) => {
             if (!isMounted) return
             if (!response.success) {
-                setErrorMessage(response.error?.message || 'Unable to load your profile.')
+                setErrorMessage(getAbpErrorMessage(response.error, 'Unable to load your profile.'))
                 return
             }
             if (!response.result) {

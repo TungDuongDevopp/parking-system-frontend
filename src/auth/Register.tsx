@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../resources/css/login.css'
+import '../resources/css/login.scss'
 import { register } from '../services/authService'
+import { getAbpErrorMessage } from '../services/abpError'
 import type { RegisterRequest } from '../types/Account/register'
 
 function UserIcon() {
@@ -51,7 +52,7 @@ function Register() {
 		try {
 				const response = await register(account);
 				if(!response.success){
-					setErrorMessage(response.error?.message || 'Đăng ký thất bại');
+					setErrorMessage(getAbpErrorMessage(response.error, 'Đăng ký thất bại'));
 					return;
 				}
 				navigate("/login");

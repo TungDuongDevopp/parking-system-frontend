@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
-import '../resources/css/dashboard.css'
+import '../resources/css/dashboard.scss'
 import { createRole, deleteRole, getPermission, getRoles, updateRole } from '../services/roleService'
+import { getAbpErrorMessage } from '../services/abpError'
 import type { Role } from '../types/Role/role'
 import type { SubmitEvent } from 'react'
 
@@ -50,7 +51,7 @@ function AdminRole() {
 		try {
 			const response = await getRoles()
 			if (!response.success || !response.result) {
-				setErrorMessage(response.error?.message || 'Không thể tải danh sách role.')
+				setErrorMessage(getAbpErrorMessage(response.error, 'Không thể tải danh sách role.'))
 				setRoles([])
 				return
 			}
@@ -185,7 +186,7 @@ function AdminRole() {
 				: await createRole(roleData)
 
 			if (!response.success) {
-				setFormError(response.error?.message || `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`)
+				setFormError(getAbpErrorMessage(response.error, `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`))
 				return
 			}
 

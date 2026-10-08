@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import type { SubmitEvent } from 'react'
-import '../resources/css/dashboard.css'
-import '../resources/css/customer-profile.css'
+import '../resources/css/dashboard.scss'
+import '../resources/css/customer-profile.scss'
 import { createCustomer } from '../services/customerService'
+import { getAbpErrorMessage } from '../services/abpError'
 
 const CreateCustomerProfile = () => {
     const navigate = useNavigate()
@@ -25,7 +26,7 @@ const CreateCustomerProfile = () => {
                 email: email.trim(),
             })
             if (!response.success) {
-                setErrorMessage(response.error?.message || 'Unable to create your profile.')
+                setErrorMessage(getAbpErrorMessage(response.error, 'Unable to create your profile.'))
                 return
             }
             navigate('/customer/profile', { replace: true })
