@@ -19,7 +19,7 @@ const App = () => {
         <BrowserRouter>
               <Routes>
                 <Route path = "/" element ={<AuthRedirect/>}></Route>
-                <Route path="/login" element={<Login />} />  
+                <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/change-password" element={<ChangePassword />} />
                 <Route path="/admin" element={
