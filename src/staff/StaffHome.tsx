@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import "../resources/css/dashboard.scss";
-import AdminSidebar from '../admin/AdminSidebar';
+import Sidebar from '../components/sidebar/Sidebar';
 
 const StaffHome = () =>{
     const [username, setUsername] = useState('Minh Nguyen')
 
     return (
   <div className="workspace">
-    <AdminSidebar variant="staff" onUsernameLoaded={setUsername} />
+    <Sidebar onUsernameLoaded={setUsername} />
     <main className="main-content">
       <section className="welcome">
         <div>

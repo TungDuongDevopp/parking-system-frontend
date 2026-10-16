@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import AdminSidebar from './AdminSidebar'
+import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
 import type { CustomerDto } from '../types/Customer/customer'
 import { deleteCustomer,updateCustomer,getCustomers } from '../services/customerService'
@@ -164,7 +164,7 @@ const AdminCustomer = () => {
 
 	return (
 		<div className="workspace roles-workspace">
-			<AdminSidebar />
+			<Sidebar />
 			<main className="main-content roles-content">
 				<header className="roles-header"><div><span className="eyebrow-label">Administration</span><h1>Customers</h1></div></header>
 				<section className="roles-card" aria-label="Customers list">
