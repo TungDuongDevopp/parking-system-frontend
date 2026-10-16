@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import AdminSidebar from './AdminSidebar'
+import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
 import { createRole, deleteRole, getPermission, getRoles, updateRole } from '../services/roleService'
 import { getAbpErrorMessage } from '../services/abpError'
@@ -219,7 +219,7 @@ function AdminRole() {
 
 	return (
 		<div className="workspace roles-workspace">
-			<AdminSidebar />
+			<Sidebar />
 			<main className="main-content roles-content">
 				<header className="roles-header">
 					<div>

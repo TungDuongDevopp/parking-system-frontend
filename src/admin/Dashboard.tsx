@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import "../resources/css/dashboard.scss";
-import AdminSidebar from './AdminSidebar';
+import Sidebar from '../components/sidebar/Sidebar';
 
 const Dashboard = () =>{
     const [username, setUsername] = useState('Admin')
 
     return (
   <div className="workspace">
-    <AdminSidebar onUsernameLoaded={setUsername} />
+    <Sidebar onUsernameLoaded={setUsername} />
     <main className="main-content">
       <section className="welcome">
         <div>

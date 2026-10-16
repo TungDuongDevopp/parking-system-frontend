@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import AdminSidebar from './AdminSidebar'
+import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
 import { createUser, deleteUser, getUsers, updateUser } from '../services/userService'
 import { getRoleNames } from '../services/roleService'
@@ -217,7 +217,7 @@ const AdminUser = () => {
 
 	return (
 		<div className="workspace roles-workspace">
-			<AdminSidebar />
+			<Sidebar />
 			<main className="main-content roles-content">
 				<header className="roles-header">
 					<div>

@@ -13,6 +13,7 @@ import CreateCustomerProfile from './customer/CreateCustomerProfile';
 import StaffHome from './staff/StaffHome';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
+import Sidebar from './components/sidebar/Sidebar';
 const App = () => {
   
     return (
@@ -22,6 +23,7 @@ const App = () => {
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/change-password" element={<ChangePassword />} />
+                <Route path="side-bar" element={<Sidebar/>}/>
                 <Route path="/admin" element={
                   <ProtectedRoute allowedRole='Admin'>
                 <Dashboard />

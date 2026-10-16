@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.49.0",
     "bootstrap": "^5.3.8",
     "jwt-decode": "^4.0.0",
     "react": "^19.2.8",
