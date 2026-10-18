@@ -14,6 +14,7 @@ import StaffHome from './staff/StaffHome';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
 import Sidebar from './components/sidebar/Sidebar';
+import AdminStaff from './admin/AdminStaff';
 const App = () => {
   
     return (
@@ -42,6 +43,11 @@ const App = () => {
                 <Route path="/admin/customers" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminCustomer />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/staffs" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminStaff/>
                   </ProtectedRoute>
                 } />
                 <Route path="/staff" element={
