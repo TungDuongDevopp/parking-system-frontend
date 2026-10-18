@@ -47,7 +47,7 @@ export const SideBarMenus: Item[] = [
     },
     {
         label: "Staff",
-        path: "/staff",
+        path: "/admin/staffs",
         icon: IconUsersGroup,
         roles: ["Admin"],
     },
