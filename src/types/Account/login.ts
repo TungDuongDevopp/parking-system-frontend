@@ -6,10 +6,9 @@ export interface LoginRequest {
 }
 
 export interface LoginResult {
-    accessToken: string;
-    encryptedAccessToken: string;
-    expireInSeconds: number;
     userId: number;
+    expireInSeconds: number;
+    xsrfToken: string;
 }
 
 export type LoginResponse = AbpResponse<LoginResult>;

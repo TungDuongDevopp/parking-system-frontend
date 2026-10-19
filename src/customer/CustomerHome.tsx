@@ -1,24 +1,27 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
-import { getUserName } from '../services/authService'
+import { useAuth } from '../auth/AuthContext'
 
 const CustomerHome = () => {
-    const [displayName, setDisplayName] = useState('Customer')
+    const navigate = useNavigate()
+    const { user, logout } = useAuth()
+    const [logoutError, setLogoutError] = useState('')
+    const [isSigningOut, setIsSigningOut] = useState(false)
+    const displayName = user?.name || user?.userName || 'Customer'
 
-    useEffect(() => {
-        let isMounted = true
-        getUserName().then((name) => {
-            if (isMounted && name) setDisplayName(name)
-        }).catch(() => undefined)
-        return () => { isMounted = false }
-    }, [])
-
-    const handleSignOut = () => {
-        localStorage.removeItem('accessToken')
-        sessionStorage.clear()
-        window.location.href = '/login'
+    const handleSignOut = async () => {
+        setLogoutError('')
+        setIsSigningOut(true)
+        try {
+            await logout()
+            navigate('/login', { replace: true })
+        } catch (error) {
+            setLogoutError(error instanceof Error ? error.message : 'Unable to log out from the server.')
+        } finally {
+            setIsSigningOut(false)
+        }
     }
 
     return (
@@ -49,13 +52,14 @@ const CustomerHome = () => {
                         </span>
                     </summary>
                     <div className="account-menu">
+                        {logoutError && <p role="alert">{logoutError}</p>}
                         <Link to="/customer/profile"><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path d="M5.5 19.5c.6-3.1 2.8-5 6.5-5s5.9 1.9 6.5 5" /></svg></span>Profile</Link>
                         <button type="button"><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></svg></span><span className="account-menu-label">Notifications</span><b className="menu-badge">2</b></button>
                         <button type="button"><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-2.6V20a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6v-.2H15V5a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v2.6H21a1.7 1.7 0 0 0-1.6 1.4Z" /></svg></span>Account settings</button>
                         <button type="button"><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M9.7 9a2.4 2.4 0 1 1 4.1 1.7c-1.2 1.1-1.8 1.4-1.8 2.8M12 17h.01" /></svg></span>Help Center</button>
                         <div className="account-menu-divider" />
                         <button type="button" onClick={() => { window.location.href = '/change-password' }}><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5.2 5.2L4 16v3h3v-2h2v-2h2.2l2.1-2.1a4 4 0 0 0 1.2-7.4ZM17 4l3 3m-1.5-1.5 1.5-1.5" /></svg></span>Change password</button>
-                        <button type="button" onClick={handleSignOut}><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H5.5A1.5 1.5 0 0 0 4 6.5v11A1.5 1.5 0 0 0 5.5 19H10M14 8l4 4-4 4M18 12H9" /></svg></span>Logout</button>
+                        <button type="button" onClick={handleSignOut} disabled={isSigningOut}><span className="account-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H5.5A1.5 1.5 0 0 0 4 6.5v11A1.5 1.5 0 0 0 5.5 19H10M14 8l4 4-4 4M18 12H9" /></svg></span>{isSigningOut ? 'Logging out...' : 'Logout'}</button>
                     </div>
                 </details>
             </div>

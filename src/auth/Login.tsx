@@ -1,16 +1,17 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import loginImage from '../assets/image_login.png';
 import logoImage from '../assets/logo.png';
 import { login } from '../services/authService';
 import { getAbpErrorMessage } from '../services/abpError';
 import type { LoginRequest } from '../types/Account/login';
-import type { JwtPayload } from '../types/Account/auth';
+import { useAuth } from './AuthContext';
+import { getRoleHomePath } from './roles';
 import '../resources/css/login2.scss';
 
 const Login = () => {
     const navigate = useNavigate();
+    const { refreshSession } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -32,36 +33,18 @@ const Login = () => {
         try {
             const response = await login(credentials);
 
-            if (!response.success || !response.result?.accessToken) {
+            if (!response.success || !response.result) {
                 setErrorMessage(getAbpErrorMessage(response.error, 'Username or password is incorrect.'));
                 return;
             }
 
-            const accessToken = response.result.accessToken;
-            if (rememberMe) {
-                localStorage.setItem('accessToken', accessToken);
-                sessionStorage.removeItem('accessToken');
-            } else {
-                localStorage.removeItem('accessToken');
-                sessionStorage.setItem('accessToken', accessToken);
+            const user = await refreshSession();
+            const homePath = user ? getRoleHomePath(user.roles) : null;
+            if (!homePath) {
+                setErrorMessage('Không thể xác minh vai trò tài khoản sau khi đăng nhập.');
+                return;
             }
-
-            const payload = jwtDecode<JwtPayload>(accessToken);
-            const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-
-            switch (role) {
-                case 'Admin':
-                    navigate('/admin');
-                    break;
-                case 'Staff':
-                    navigate('/staff');
-                    break;
-                case 'Customer':
-                    navigate('/customer');
-                    break;
-                default:
-                    throw new Error('Role không hợp lệ');
-            }
+            navigate(homePath, { replace: true });
         } catch (error) {
             console.error(error);
             setErrorMessage(error instanceof Error ? error.message : 'Tài khoản hoặc mật khẩu không hợp lệ');

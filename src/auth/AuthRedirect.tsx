@@ -1,43 +1,16 @@
-import { Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import type { JwtPayload } from "../types/Account/auth";
+import { Navigate } from 'react-router-dom'
+import { AuthStatusMessage, useAuth } from './AuthContext'
+import { getRoleHomePath } from './roles'
 
 const AuthRedirect = () => {
-  const token =
-    localStorage.getItem("accessToken") ??
-    sessionStorage.getItem("accessToken");
+  const { status, user } = useAuth()
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  if (status === 'loading' || status === 'error') {
+    return <AuthStatusMessage />
   }
 
-  try {
-    const payload = jwtDecode<JwtPayload>(token);
-
-    if (payload.exp * 1000 < Date.now()) {
-      localStorage.removeItem("accessToken");
-      sessionStorage.removeItem("accessToken");
-      return <Navigate to="/login" replace />;
-    }
-
-    const role =
-      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-
-    switch (role) {
-      case "Admin":
-        return <Navigate to="/admin" replace />;
-      case "Staff":
-        return <Navigate to="/staff" replace />;
-      case "Customer":
-        return <Navigate to="/customer" replace />;
-      default:
-        return <Navigate to="/login" replace />;
-    }
-  } catch {
-    localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accessToken");
-    return <Navigate to="/login" replace />;
-  }
+  if (!user) return <Navigate to="/login" replace />
+  return <Navigate to={getRoleHomePath(user.roles) ?? '/login'} replace />
 }
 
-export default AuthRedirect;
+export default AuthRedirect
