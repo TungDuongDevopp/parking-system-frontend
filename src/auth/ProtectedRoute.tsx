@@ -1,52 +1,28 @@
-import { Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import type { ReactNode } from "react";
-import type { JwtPayload } from "../types/Account/auth";
+import { Navigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
+import type { UserRole } from '../types/Account/session'
+import { AuthStatusMessage, useAuth } from './AuthContext'
+import { getRoleHomePath } from './roles'
 
 interface Props {
-  children: ReactNode;
-  allowedRole: "Admin" | "Staff" | "Customer";
+  children: ReactNode
+  allowedRole: UserRole
 }
 
- const  ProtectedRoute = ({
-  children,
-  allowedRole,
-}: Props)  => {
-  const token =
-  localStorage.getItem("accessToken") ??
-  sessionStorage.getItem("accessToken");
+const ProtectedRoute = ({ children, allowedRole }: Props) => {
+  const { status, user } = useAuth()
 
-  // Không có token → đá về login
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  if (status === 'loading' || status === 'error') {
+    return <AuthStatusMessage />
   }
 
-  try {
-    const payload = jwtDecode<JwtPayload>(token);
+  if (!user) return <Navigate to="/login" replace />
 
-    // Token hết hạn
-    if (payload.exp * 1000 < Date.now()) {
-      localStorage.removeItem("accessToken");
-      sessionStorage.removeItem("accessToken");
-      return <Navigate to="/login" replace />;
-    }
-
-    const role =
-      payload[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-      ];
-
-    // Có token nhưng đi sai khu vực
-    if (role !== allowedRole) {
-      return <Navigate to={`/${role.toLowerCase()}`} replace />;
-    }
-
-    return children;
-  } catch {
-    // Token rác / decode lỗi
-    localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accessToken");
-    return <Navigate to="/login" replace />;
+  if (!user.roles.includes(allowedRole)) {
+    return <Navigate to={getRoleHomePath(user.roles) ?? '/login'} replace />
   }
+
+  return children
 }
-export default ProtectedRoute;
+
+export default ProtectedRoute

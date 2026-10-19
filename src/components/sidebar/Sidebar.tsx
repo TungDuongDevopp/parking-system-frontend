@@ -10,37 +10,9 @@ import {
   IconUserCircle,
   IconSettings,
 } from '@tabler/icons-react';
-import { jwtDecode } from 'jwt-decode';
-import type { JwtPayload } from '../../types/Account/auth';
-import { getUserName } from '../../services/authService';
 import { SideBarMenus } from './sidebarConfig';
-
-const getCurrentIdentity = () => {
-  const token =
-    localStorage.getItem('accessToken') ??
-    sessionStorage.getItem('accessToken');
-
-  if (!token) {
-    return { role: null, email: '' };
-  }
-
-  try {
-    const payload = jwtDecode<JwtPayload>(token);
-    if (payload.exp * 1000 <= Date.now()) {
-      return { role: null, email: '' };
-    }
-
-    const tokenRole =
-      payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-    const role = tokenRole === 'Admin' || tokenRole === 'Staff' ? tokenRole : null;
-    return {
-      role,
-      email: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-    };
-  } catch {
-    return { role: null, email: '' };
-  }
-};
+import { useAuth } from '../../auth/AuthContext';
+import type { UserRole } from '../../types/Account/session';
 
 interface SidebarProps {
   onUsernameLoaded?: (username: string) => void;
@@ -48,17 +20,24 @@ interface SidebarProps {
 
 const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const accountMenuRef = useRef<HTMLDivElement>(null);
-  const { role, email } = getCurrentIdentity();
-  const visibleMenus = role
-    ? SideBarMenus.filter((menu) => menu.roles.includes(role))
-    : [];
-  const [username, setUsername] = useState(role ?? 'User');
+  const sidebarRoles = user?.roles.filter(
+    (role): role is Extract<UserRole, 'Admin' | 'Staff'> => role === 'Admin' || role === 'Staff',
+  ) ?? [];
+  const sidebarRole = sidebarRoles[0] ?? null;
+  const visibleMenus = SideBarMenus.filter((menu) =>
+    menu.roles.some((role) => sidebarRoles.includes(role)),
+  );
+  const [username, setUsername] = useState('User');
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const [logoutError, setLogoutError] = useState('');
   const [isDark, setIsDark] = useState(
     () => localStorage.getItem('sidebar-theme') === 'dark',
   );
+  const email = user?.emailAddress ?? '';
 
   useEffect(() => {
     const handlePointerDown = (event: PointerEvent) => {
@@ -83,20 +62,10 @@ const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-    getUserName().then((name) => {
-      if (isMounted && name) {
-        setUsername(name);
-        onUsernameLoaded?.(name);
-      }
-    }).catch((error: unknown) => {
-      console.error('Unable to load sidebar username.', error);
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [onUsernameLoaded]);
+    const name = user?.name || user?.userName || sidebarRole || 'User';
+    setUsername(name);
+    onUsernameLoaded?.(name);
+  }, [onUsernameLoaded, sidebarRole, user?.name, user?.userName]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dashboard-dark', isDark);
@@ -107,11 +76,18 @@ const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
     setIsDark((dark) => !dark);
   };
 
-  const handleSignOut = () => {
-    localStorage.removeItem('accessToken');
-    sessionStorage.removeItem('accessToken');
-    setIsAccountMenuOpen(false);
-    navigate('/login', { replace: true });
+  const handleSignOut = async () => {
+    setLogoutError('');
+    setIsSigningOut(true);
+    try {
+      await logout();
+      setIsAccountMenuOpen(false);
+      navigate('/login', { replace: true });
+    } catch (error) {
+      setLogoutError(error instanceof Error ? error.message : 'Không thể đăng xuất khỏi máy chủ.');
+    } finally {
+      setIsSigningOut(false);
+    }
   };
 
   return (
@@ -130,6 +106,7 @@ const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
         </button>
         {isAccountMenuOpen && (
           <div className="account-menu" aria-label="Account menu">
+            {logoutError && <p role="alert">{logoutError}</p>}
             <div className="account-menu-identity">
               <span className="account-menu-avatar" aria-hidden="true">
                 {username.slice(0, 2).toUpperCase()}
@@ -173,9 +150,9 @@ const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
               </Link>
             )}
             <div className="account-menu-divider" />
-            <button className="account-menu-item account-menu-signout" type="button" onClick={handleSignOut}>
+            <button className="account-menu-item account-menu-signout" type="button" onClick={handleSignOut} disabled={isSigningOut}>
               <IconLogout2 size={20} stroke={1.75} aria-hidden="true" />
-              Đăng xuất
+              {isSigningOut ? 'Đang đăng xuất...' : 'Đăng xuất'}
             </button>
           </div>
         )}
@@ -196,7 +173,7 @@ const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
         {visibleMenus.map(({ label, icon: Icon, path: menuPath }) => {
           const path = typeof menuPath === 'string'
             ? menuPath
-            : role ? menuPath[role] : undefined;
+            : sidebarRoles.map((role) => menuPath[role]).find(Boolean);
 
           return path ? (
           <NavLink className="nav-item layout-block" key={path} to={path} end>

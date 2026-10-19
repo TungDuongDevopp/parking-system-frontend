@@ -15,10 +15,12 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
 import Sidebar from './components/sidebar/Sidebar';
 import AdminStaff from './admin/AdminStaff';
+import { AuthProvider } from './auth/AuthContext';
 const App = () => {
   
     return (
         <BrowserRouter>
+          <AuthProvider>
               <Routes>
                 <Route path = "/" element ={<AuthRedirect/>}></Route>
                 <Route path="/login" element={<Login/>} />
@@ -71,7 +73,8 @@ const App = () => {
                     <CreateCustomerProfile />
                   </ProtectedRoute>
                 } />
-                </Routes>
+              </Routes>
+          </AuthProvider>
                                                         
         </BrowserRouter>
           );                                                       

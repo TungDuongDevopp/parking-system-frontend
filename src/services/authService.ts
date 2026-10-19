@@ -1,54 +1,92 @@
-import type { LoginRequest, LoginResponse } from "../types/Account/login";
-import type { RegisterRequest,RegisterResponse } from "../types/Account/register";
-import type { ChangePassWordRequest,ChangePassWordResponse } from "../types/Account/changePassword";
-import { apiClient } from './apiClient';
+import type { ChangePassWordRequest, ChangePassWordResponse } from '../types/Account/changePassword'
+import type { LoginRequest, LoginResponse } from '../types/Account/login'
+import type { RegisterRequest, RegisterResponse } from '../types/Account/register'
+import type { CurrentSessionResponse, SessionUser, UserRole } from '../types/Account/session'
+import { getAbpErrorMessage } from './abpError'
+import { apiClient, clearXsrfToken, refreshXsrfToken, setXsrfToken } from './apiClient'
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
-    const res = await apiClient('/api/TokenAuth/Authenticate', {
-        method: 'POST',
-        body: JSON.stringify(data)
-    });
+  const response = await apiClient('/api/TokenAuth/BrowserAuthenticate', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+  const result = await response.json() as LoginResponse
 
-    return res.json() as Promise<LoginResponse>;
+  if (response.ok && result.success && result.result) {
+    const token = response.headers.get('X-XSRF-TOKEN') || result.result.xsrfToken
+    if (token?.trim()) {
+      setXsrfToken(token)
+    } else {
+      await refreshXsrfToken()
+    }
+  }
+
+  return result
 }
 
+export const getCurrentSessionUser = async (): Promise<SessionUser | null> => {
+  const response = await apiClient('/api/services/app/Session/GetCurrentLoginInformations')
+  if (!response.ok) {
+    throw new Error(`Không thể kiểm tra phiên đăng nhập (HTTP ${response.status}).`)
+  }
 
-export const register = async (data: RegisterRequest):Promise<RegisterResponse> =>{
+  const result = await response.json() as CurrentSessionResponse
+  if (!result.success) {
+    throw new Error(getAbpErrorMessage(result.error, 'Không thể kiểm tra phiên đăng nhập.'))
+  }
 
-    const res = await apiClient('/api/services/app/Account/Register',
+  const user = result.result?.user
+  if (!user) {
+    clearXsrfToken()
+    return null
+  }
 
-        {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
-        return res.json() as Promise<RegisterResponse>;
-};
+  if (!Array.isArray(user.roles)) {
+    throw new Error('Current session response does not include user roles.')
+  }
 
-export const changePassword = async (data:ChangePassWordRequest): Promise<ChangePassWordResponse>=>{
-    const res = await apiClient('/api/services/app/User/ChangePassword',
-        {
-            method :'POST',
-            authenticated: true,
-            body: JSON.stringify(data)
-        });
-    return res.json() as Promise<ChangePassWordResponse>;
-};
+  const supportedRoles = user.roles.filter((role): role is UserRole =>
+    role === 'Admin' || role === 'Staff' || role === 'Customer',
+  )
+  if (supportedRoles.length === 0) {
+    throw new Error('Current user does not have a supported ParkingSystem role.')
+  }
 
+  await refreshXsrfToken()
+  return { ...user, roles: supportedRoles }
+}
 
-export const getUserName = async() : Promise<string> =>{
-    const res = await apiClient('/api/services/app/Session/GetCurrentLoginInformations',
-        {
-            method :'GET',
-            authenticated: true,
-        });
-        const data = await res.json();
-        const user = data.result?.user;
-        const username = user?.name ?? user?.userName;
+export const browserLogout = async (): Promise<void> => {
+  const response = await apiClient('/api/TokenAuth/BrowserLogout', {
+    method: 'POST',
+    authenticated: true,
+    body: JSON.stringify({}),
+  })
+  const result = await response.json() as {
+    success: boolean
+    error: import('../types/Apb/abp').AbpError | null
+  }
 
-        if (!username) {
-            throw new Error("Không lấy được username người dùng.");
-        }
+  if (!response.ok || !result.success) {
+    throw new Error(getAbpErrorMessage(result.error, 'Không thể đăng xuất khỏi máy chủ.'))
+  }
+}
 
-        return username;
+export const register = async (data: RegisterRequest): Promise<RegisterResponse> => {
+  const response = await apiClient('/api/services/app/Account/Register', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+  return response.json() as Promise<RegisterResponse>
+}
 
+export const changePassword = async (
+  data: ChangePassWordRequest,
+): Promise<ChangePassWordResponse> => {
+  const response = await apiClient('/api/services/app/User/ChangePassword', {
+    method: 'POST',
+    authenticated: true,
+    body: JSON.stringify(data),
+  })
+  return response.json() as Promise<ChangePassWordResponse>
 }
