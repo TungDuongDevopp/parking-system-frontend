@@ -117,10 +117,21 @@ const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
               </span>
             </div>
             <div className="account-menu-divider" />
-            <button className="account-menu-item" type="button" disabled title="Sắp ra mắt">
-              <IconUserCircle size={20} stroke={1.75} aria-hidden="true" />
-              Hồ sơ cá nhân
-            </button>
+            {sidebarRoles.includes('Staff') ? (
+              <Link
+                className="account-menu-item"
+                to="/staff/profile"
+                onClick={() => setIsAccountMenuOpen(false)}
+              >
+                <IconUserCircle size={20} stroke={1.75} aria-hidden="true" />
+                Hồ sơ cá nhân
+              </Link>
+            ) : (
+              <button className="account-menu-item" type="button" disabled title="Sắp ra mắt">
+                <IconUserCircle size={20} stroke={1.75} aria-hidden="true" />
+                Hồ sơ cá nhân
+              </button>
+            )}
            
             <button
               className="account-menu-item"

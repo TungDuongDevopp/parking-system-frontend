@@ -11,6 +11,7 @@ import CustomerHome from './customer/CustomerHome';
 import CustomerProfile from './customer/CustomerProfile';
 import CreateCustomerProfile from './customer/CreateCustomerProfile';
 import StaffHome from './staff/StaffHome';
+import StaffProfile from './staff/StaffProfile';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
 import Sidebar from './components/sidebar/Sidebar';
@@ -58,6 +59,11 @@ const App = () => {
                   </ProtectedRoute>
 
                   } />
+                <Route path="/staff/profile" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <StaffProfile />
+                  </ProtectedRoute>
+                } />
                 <Route path="/customer" element={
                   <ProtectedRoute allowedRole='Customer'>
                        <CustomerHome />
