@@ -10,9 +10,7 @@ export interface CustomerDto{
     id: number,
     name: string,
     phoneNumber: string,
-    email: string,
-    creationTime: string,
-    isDeleted: boolean
+    email: string
 }
 
 export interface CustomerRequestUpdate{

@@ -6,22 +6,32 @@ import { getRoleNames } from '../services/roleService'
 import { getAbpErrorMessage } from '../services/abpError'
 import type { UserDto } from '../types/User/user'
 import type { SubmitEvent } from 'react'
+import {
+	IconArrowsSort,
+	IconChevronLeft,
+	IconChevronRight,
+	IconChevronsLeft,
+	IconChevronsRight,
+	IconPencil,
+	IconPlus,
+	IconSearch,
+	IconSortAscending,
+	IconSortDescending,
+	IconTrash,
+	IconX,
+} from '@tabler/icons-react'
 
 type SortField = 'userName' | 'emailAddress'
 type SortDirection = 'asc' | 'desc' | null
 
 function ActionIcon({ type }: { type: 'create' | 'edit' | 'delete' }) {
-	const paths = {
-		create: <path d="M12 5v14M5 12h14" />,
-		edit: <><path d="m4 16-.8 4.8L8 20l11.2-11.2a2.8 2.8 0 0 1 4-4L4 16Z" /><path d="m13.8 6.2 4 4" /></>,
-		delete: <><path d="M5 7h14M10 11v5M14 11v5M9 7V4h6v3M7 7l.8 13h8.4L17 7" /></>,
+	const icons = {
+		create: IconPlus,
+		edit: IconPencil,
+		delete: IconTrash,
 	}
-
-	return (
-		<svg className="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-			{paths[type]}
-		</svg>
-	)
+	const Icon = icons[type]
+	return <Icon className="action-icon" aria-hidden="true" />
 }
 const AdminUser = () => {
 	const [users, setUsers] = useState<UserDto[]>([])
@@ -110,9 +120,13 @@ const AdminUser = () => {
 		}
 	}
 
-	const sortIcon = (field: SortField) => sortField === field && sortDirection
-		? sortDirection === 'asc' ? '↑' : '↓'
-		: '↕'
+	const sortIcon = (field: SortField) => {
+		if (sortField !== field || !sortDirection) {
+			return <IconArrowsSort className="action-icon" aria-hidden="true" />
+		}
+		const Icon = sortDirection === 'asc' ? IconSortAscending : IconSortDescending
+		return <Icon className="action-icon" aria-hidden="true" />
+	}
 
 	const closeUserModal = () => {
 		setIsUserModalOpen(false)
@@ -232,7 +246,7 @@ const AdminUser = () => {
 				<section className="roles-card" aria-label="Users list">
 					<div className="roles-toolbar">
 						<label className="roles-search">
-							<span aria-hidden="true">⌕</span>
+							<span aria-hidden="true"><IconSearch className="action-icon" /></span>
 							<input
 								type="search"
 								value={query}
@@ -324,11 +338,11 @@ const AdminUser = () => {
 							entries
 						</label>
 						<div className="pagination">
-							<button type="button" aria-label="First page" onClick={() => setCurrentPage(1)} disabled={isLoading || safeCurrentPage === 1}>«</button>
-							<button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={isLoading || safeCurrentPage === 1}>‹</button>
+							<button type="button" aria-label="First page" onClick={() => setCurrentPage(1)} disabled={isLoading || safeCurrentPage === 1}><IconChevronsLeft className="action-icon" aria-hidden="true" /></button>
+							<button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={isLoading || safeCurrentPage === 1}><IconChevronLeft className="action-icon" aria-hidden="true" /></button>
 							<button className="current-page" type="button" aria-current="page">{safeCurrentPage}</button>
-							<button type="button" aria-label="Next page" onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))} disabled={isLoading || safeCurrentPage === pageCount}>›</button>
-							<button type="button" aria-label="Last page" onClick={() => setCurrentPage(pageCount)} disabled={isLoading || safeCurrentPage === pageCount}>»</button>
+							<button type="button" aria-label="Next page" onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))} disabled={isLoading || safeCurrentPage === pageCount}><IconChevronRight className="action-icon" aria-hidden="true" /></button>
+							<button type="button" aria-label="Last page" onClick={() => setCurrentPage(pageCount)} disabled={isLoading || safeCurrentPage === pageCount}><IconChevronsRight className="action-icon" aria-hidden="true" /></button>
 						</div>
 					</footer>
 				</section>
@@ -346,7 +360,7 @@ const AdminUser = () => {
 								<span className="eyebrow-label">Administration</span>
 								<h2 id="user-modal-title">{editingUser ? 'Edit user' : 'Create new user'}</h2>
 							</div>
-							<button className="modal-close" type="button" aria-label="Close user dialog" onClick={closeUserModal}>×</button>
+							<button className="modal-close" type="button" aria-label="Close user dialog" onClick={closeUserModal}><IconX className="action-icon" aria-hidden="true" /></button>
 						</header>
 						<form onSubmit={handleUserSubmit}>
 							<div className="role-form-body">

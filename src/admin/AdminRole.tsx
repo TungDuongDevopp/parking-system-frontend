@@ -5,23 +5,34 @@ import { createRole, deleteRole, getPermission, getRoles, updateRole } from '../
 import { getAbpErrorMessage } from '../services/abpError'
 import type { Role } from '../types/Role/role'
 import type { SubmitEvent } from 'react'
+import {
+	IconArrowsSort,
+	IconChevronLeft,
+	IconChevronRight,
+	IconChevronsLeft,
+	IconChevronsRight,
+	IconPencil,
+	IconPlus,
+	IconRefresh,
+	IconSearch,
+	IconSortAscending,
+	IconSortDescending,
+	IconTrash,
+	IconX,
+} from '@tabler/icons-react'
 
 type SortField = 'name' | 'displayName'
 type SortDirection = 'asc' | 'desc' | null
 
 function ActionIcon({ type }: { type: 'create' | 'edit' | 'delete' | 'refresh' }) {
-	const paths = {
-		create: <><path d="M12 5v14M5 12h14" /></>,
-		edit: <><path d="m4 16-.8 4.8L8 20l11.2-11.2a2.8 2.8 0 0 1 4-4L4 16Z" /><path d="m13.8 6.2 4 4" /></>,
-		delete: <><path d="M5 7h14M10 11v5M14 11v5M9 7V4h6v3M7 7l.8 13h8.4L17 7" /></>,
-		refresh: <path d="M20 11a8 8 0 1 0 1 4M20 5v6h-6" />,
+	const icons = {
+		create: IconPlus,
+		edit: IconPencil,
+		delete: IconTrash,
+		refresh: IconRefresh,
 	}
-
-	return (
-		<svg className="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-			{paths[type]}
-		</svg>
-	)
+	const Icon = icons[type]
+	return <Icon className="action-icon" aria-hidden="true" />
 }
 
 function AdminRole() {
@@ -125,8 +136,11 @@ function AdminRole() {
 	}
 
 	const getSortIcon = (field: SortField) => {
-		if (sortField !== field || !sortDirection) return '↕'
-		return sortDirection === 'asc' ? '↑' : '↓'
+		if (sortField !== field || !sortDirection) {
+			return <IconArrowsSort className="action-icon" aria-hidden="true" />
+		}
+		const Icon = sortDirection === 'asc' ? IconSortAscending : IconSortDescending
+		return <Icon className="action-icon" aria-hidden="true" />
 	}
 
 	const closeCreateModal = () => {
@@ -234,7 +248,7 @@ function AdminRole() {
 				<section className="roles-card" aria-label="Roles list">
 					<div className="roles-toolbar">
 						<label className="roles-search">
-							<span aria-hidden="true">⌕</span>
+							<span aria-hidden="true"><IconSearch className="action-icon" /></span>
 							<input
 								type="search"
 								value={query}
@@ -338,11 +352,11 @@ function AdminRole() {
 							entries
 						</label>
 						<div className="pagination">
-							<button type="button" aria-label="First page">«</button>
-							<button type="button" aria-label="Previous page">‹</button>
+							<button type="button" aria-label="First page"><IconChevronsLeft className="action-icon" aria-hidden="true" /></button>
+							<button type="button" aria-label="Previous page"><IconChevronLeft className="action-icon" aria-hidden="true" /></button>
 							<button className="current-page" type="button">1</button>
-							<button type="button" aria-label="Next page">›</button>
-							<button type="button" aria-label="Last page">»</button>
+							<button type="button" aria-label="Next page"><IconChevronRight className="action-icon" aria-hidden="true" /></button>
+							<button type="button" aria-label="Last page"><IconChevronsRight className="action-icon" aria-hidden="true" /></button>
 						</div>
 					</footer>
 				</section>
@@ -366,7 +380,7 @@ function AdminRole() {
 								aria-label="Close create role dialog"
 								onClick={closeCreateModal}
 							>
-								×
+								<IconX className="action-icon" aria-hidden="true" />
 							</button>
 						</header>
 

@@ -4,6 +4,20 @@ import '../resources/css/dashboard.scss'
 import type { CustomerDto } from '../types/Customer/customer'
 import { deleteCustomer,updateCustomer,getCustomers } from '../services/customerService'
 import { getAbpErrorMessage } from '../services/abpError'
+import {
+  IconSearch,
+  IconPencil,
+  IconTrash,
+  IconRefresh,
+  IconArrowsSort,
+  IconSortAscending,
+  IconSortDescending,
+  IconChevronsLeft,
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronsRight,
+  IconX,
+} from '@tabler/icons-react'
 type SortField = 'name' | 'phoneNumber' | 'email'
 type SortDirection = 'asc' | 'desc' | null
 
@@ -12,19 +26,15 @@ const backendSortField: Record<SortField, string> = {
     phoneNumber: 'PhoneNumber',
     email: 'Email',
 }
-function ActionIcon({ type }: { type: 'create' | 'edit' | 'delete' | 'refresh' }) {
-	const paths = {
-		create: <path d="M12 5v14M5 12h14" />,
-		edit: <><path d="m4 16-.8 4.8L8 20l11.2-11.2a2.8 2.8 0 0 1 4-4L4 16Z" /><path d="m13.8 6.2 4 4" /></>,
-		delete: <><path d="M5 7h14M10 11v5M14 11v5M9 7V4h6v3M7 7l.8 13h8.4L17 7" /></>,
-		refresh: <path d="M20 11a8 8 0 0 0-14.7-4L3 10m0-5v5h5M4 13a8 8 0 0 0 14.7 4L21 14m0 5v-5h-5" />,
+function ActionIcon({ type }: { type: 'edit' | 'delete' | 'refresh' }) {
+	const icons = {
+		edit: IconPencil,
+		delete: IconTrash,
+		refresh: IconRefresh,
 	}
+	const Icon = icons[type]
 
-	return (
-		<svg className="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-			{paths[type]}
-		</svg>
-	)
+	return <Icon className="action-icon" aria-hidden="true" />
 }
 
 const AdminCustomer = () => {
@@ -96,9 +106,14 @@ const AdminCustomer = () => {
 			setSortDirection(null)
 		}
 	}
-	const sortIcon = (field: SortField) => sortField === field && sortDirection
-		? sortDirection === 'asc' ? '↑' : '↓'
-		: '↕'
+	const sortIcon = (field: SortField) => {
+		if (sortField !== field || !sortDirection) {
+			return <IconArrowsSort className="action-icon" aria-hidden="true" />
+		}
+
+		const Icon = sortDirection === 'asc' ? IconSortAscending : IconSortDescending
+		return <Icon className="action-icon" aria-hidden="true" />
+	}
 	const closeCustomerModal = () => {
 		setIsCustomerModalOpen(false)
 		setEditingCustomer(null)
@@ -166,9 +181,22 @@ const AdminCustomer = () => {
 		<div className="workspace roles-workspace">
 			<Sidebar />
 			<main className="main-content roles-content">
-				<header className="roles-header"><div><span className="eyebrow-label">Administration</span><h1>Customers</h1></div></header>
+				<header className="roles-header">
+					<div>
+						<span className="eyebrow-label">Administration</span>
+						<h1>Customers</h1>
+					</div>
+				</header>
 				<section className="roles-card" aria-label="Customers list">
-					<div className="roles-toolbar"><label className="roles-search"><span aria-hidden="true">⌕</span><input type="search" value={query} onChange={(event) => { setQuery(event.target.value); setCurrentPage(1) }} placeholder="Search customers" aria-label="Search customers" /></label></div>
+					<div className="roles-toolbar">
+						<label className="roles-search">
+							<span aria-hidden="true">
+								<IconSearch className="action-icon" />
+							</span>
+							<input type="search" value={query} onChange={(event) => { setQuery(event.target.value); setCurrentPage(1) }} placeholder="Search customers" aria-label="Search customers" />
+						</label>
+					</div>
+					
 					<div className="roles-table-wrap">
 						{isLoading && <p className="roles-status" role="status">Loading customers...</p>}{errorMessage && <p className="roles-status form-error" role="alert">{errorMessage}</p>}
 						<table className="roles-table customers-table"><thead><tr>
@@ -178,9 +206,9 @@ const AdminCustomer = () => {
 							</tbody></table>
 						{!isLoading && !errorMessage && customers.length === 0 && <p className="empty-roles">No customers found.</p>}
 					</div>
-					<footer className="roles-footer"><button className="refresh-action" type="button" aria-label="Refresh customers" onClick={() => void loadCustomers()} disabled={isLoading}><ActionIcon type="refresh" /></button><span>{totalCount ? `${firstItem}-${lastItem} of ${totalCount} items` : '0 items'}</span><label>Show <select value={rowsPerPage} onChange={(event) => { setRowsPerPage(Number(event.target.value)); setCurrentPage(1) }} aria-label="Rows per page"><option value="10">10</option><option value="25">25</option><option value="50">50</option></select> entries</label><div className="pagination"><button type="button" aria-label="First page" onClick={() => setCurrentPage(1)} disabled={isLoading || safeCurrentPage === 1}>«</button><button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={isLoading || safeCurrentPage === 1}>‹</button><button className="current-page" type="button" aria-current="page">{safeCurrentPage}</button><button type="button" aria-label="Next page" onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))} disabled={isLoading || safeCurrentPage === pageCount}>›</button><button type="button" aria-label="Last page" onClick={() => setCurrentPage(pageCount)} disabled={isLoading || safeCurrentPage === pageCount}>»</button></div></footer>
+					<footer className="roles-footer"><button className="refresh-action" type="button" aria-label="Refresh customers" onClick={() => void loadCustomers()} disabled={isLoading}><ActionIcon type="refresh" /></button><span>{totalCount ? `${firstItem}-${lastItem} of ${totalCount} items` : '0 items'}</span><label>Show <select value={rowsPerPage} onChange={(event) => { setRowsPerPage(Number(event.target.value)); setCurrentPage(1) }} aria-label="Rows per page"><option value="10">10</option><option value="25">25</option><option value="50">50</option></select> entries</label><div className="pagination"><button type="button" aria-label="First page" onClick={() => setCurrentPage(1)} disabled={isLoading || safeCurrentPage === 1}><IconChevronsLeft className="action-icon" aria-hidden="true" /></button><button type="button" aria-label="Previous page" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={isLoading || safeCurrentPage === 1}><IconChevronLeft className="action-icon" aria-hidden="true" /></button><button className="current-page" type="button" aria-current="page">{safeCurrentPage}</button><button type="button" aria-label="Next page" onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))} disabled={isLoading || safeCurrentPage === pageCount}><IconChevronRight className="action-icon" aria-hidden="true" /></button><button type="button" aria-label="Last page" onClick={() => setCurrentPage(pageCount)} disabled={isLoading || safeCurrentPage === pageCount}><IconChevronsRight className="action-icon" aria-hidden="true" /></button></div></footer>
 				</section>
-				{isCustomerModalOpen && <div className="role-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeCustomerModal() }}><section className="role-modal customer-modal" role="dialog" aria-modal="true" aria-labelledby="customer-modal-title"><header className="role-modal-header"><div><span className="eyebrow-label">Administration</span><h2 id="customer-modal-title">Edit customer</h2></div><button className="modal-close" type="button" aria-label="Close customer dialog" onClick={closeCustomerModal}>×</button></header><form onSubmit={handleCustomerSubmit}><div className="role-form-body"><label className="role-field"><span>Name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} autoFocus required /></label><label className="role-field"><span>Phone number <b>*</b></span><input value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} required /></label><label className="role-field"><span>Email address <b>*</b></span><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>{customerFormError && <p className="role-form-error" role="alert">{customerFormError}</p>}</div><footer className="role-modal-footer"><button className="modal-cancel" type="button" onClick={closeCustomerModal} disabled={isSubmitting}>Cancel</button><button className="primary-action" type="submit" disabled={isSubmitting}><ActionIcon type="edit" /><span>{isSubmitting ? 'Saving...' : 'Save'}</span></button></footer></form></section></div>}
+				{isCustomerModalOpen && <div className="role-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeCustomerModal() }}><section className="role-modal customer-modal" role="dialog" aria-modal="true" aria-labelledby="customer-modal-title"><header className="role-modal-header"><div><span className="eyebrow-label">Administration</span><h2 id="customer-modal-title">Edit customer</h2></div><button className="modal-close" type="button" aria-label="Close customer dialog" onClick={closeCustomerModal}><IconX className="action-icon" aria-hidden="true" /></button></header><form onSubmit={handleCustomerSubmit}><div className="role-form-body"><label className="role-field"><span>Name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} autoFocus required /></label><label className="role-field"><span>Phone number <b>*</b></span><input value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} required /></label><label className="role-field"><span>Email address <b>*</b></span><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>{customerFormError && <p className="role-form-error" role="alert">{customerFormError}</p>}</div><footer className="role-modal-footer"><button className="modal-cancel" type="button" onClick={closeCustomerModal} disabled={isSubmitting}>Cancel</button><button className="primary-action" type="submit" disabled={isSubmitting}><ActionIcon type="edit" /><span>{isSubmitting ? 'Saving...' : 'Save'}</span></button></footer></form></section></div>}
 			</main>
 		</div>
 	)

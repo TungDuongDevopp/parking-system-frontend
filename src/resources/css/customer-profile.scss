@@ -208,6 +208,10 @@
     }
 }
 
+.staff-profile-details > div {
+    grid-template-columns: minmax(0, 1fr);
+}
+
 .customer-profile-field-icon {
     display: grid;
     width: 38px;
@@ -241,7 +245,8 @@
         font-weight: 600;
     }
 
-    input {
+    input,
+    select {
         width: 100%;
         min-height: 44px;
         padding: 10px 12px;
@@ -273,6 +278,34 @@
 
     &:hover {
         background: #117675;
+    }
+
+    &:disabled {
+        cursor: wait;
+        opacity: .65;
+    }
+}
+
+.customer-profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.customer-profile-cancel {
+    min-height: 44px;
+    justify-self: start;
+    padding: 0 20px;
+    border: 1px solid #cbd9de;
+    border-radius: 5px;
+    color: #45636e;
+    background: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+
+    &:hover {
+        background: #f2f7f7;
     }
 
     &:disabled {
