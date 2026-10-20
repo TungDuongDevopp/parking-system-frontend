@@ -4,8 +4,8 @@ import type { SubmitEvent } from 'react'
 import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
 import { createCustomer } from '../services/customerService'
-import { getAbpErrorMessage } from '../services/abpError'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 
 type CustomerProfileField = 'name' | 'phoneNumber' | 'email'
 
@@ -30,7 +30,6 @@ const CreateCustomerProfile = () => {
         if (!name.trim()) nextErrors.name = 'Name is required.'
         if (!phoneNumber.trim()) nextErrors.phoneNumber = 'Phone number is required.'
         if (!email.trim()) nextErrors.email = 'Email is required.'
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) nextErrors.email = 'Enter a valid email address.'
         setFieldErrors(nextErrors)
         setFormError('')
         if (Object.keys(nextErrors).length) return
@@ -38,21 +37,18 @@ const CreateCustomerProfile = () => {
         setIsSubmitting(true)
 
         try {
-            const response = await createCustomer({
+            await createCustomer({
                 name: name.trim(),
                 phoneNumber: phoneNumber.trim(),
                 email: email.trim(),
             })
-            if (!response.success) {
-                const serverErrors = mapAbpFieldErrors(response.error, customerFieldAliases)
-                if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
-                else setFormError(getAbpErrorMessage(response.error, 'Unable to create your profile.'))
-                return
-            }
             navigate('/customer/profile', { replace: true })
         } catch (error) {
             const message = error instanceof Error ? error.message : 'Unable to create your profile.'
-            const serverErrors = mapMessageToFieldErrors(message, customerFieldAliases)
+            const abpError = getAbpErrorFromException(error)
+            const serverErrors = abpError
+                ? mapAbpFieldErrors(abpError, customerFieldAliases)
+                : mapMessageToFieldErrors(message, customerFieldAliases)
             if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
             else setFormError(message)
         } finally {

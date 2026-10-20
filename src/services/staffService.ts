@@ -3,16 +3,15 @@ import type {
   StaffChangeProfileRequest,
   StaffChangeStatusRequest,
   StaffRequestCreate,
-  StaffResponse,
   StaffRequestUpdate,
   AvailableUser,
 } from '../types/Staff/staff'
+import type { PagedResult } from '../types/Apb/abp'
 import { apiClient } from './apiClient'
-import type { AbpResponse } from '../types/Apb/abp'
-import { getAbpErrorMessage } from './abpError'
+import { readAbpResult, readAbpVoid } from './serviceResponse'
 import type { StaffQuery } from '../types/Staff/staffQuery'
 
-export const getStaffs = async (params: StaffQuery): Promise<StaffResponse> => {
+export const getStaffs = async (params: StaffQuery): Promise<PagedResult<StaffDto>> => {
   const query = new URLSearchParams()
 
   if (params.keyword) query.set('Keyword', params.keyword)
@@ -29,33 +28,26 @@ export const getStaffs = async (params: StaffQuery): Promise<StaffResponse> => {
   const endpoint = queryString
     ? `/api/services/app/Staff/GetAll?${queryString}`
     : '/api/services/app/Staff/GetAll'
-
-  const response = await apiClient(endpoint, {
-    method: 'GET',
-    authenticated: true,
-  })
-
-  return response.json() as Promise<StaffResponse>
+  const response = await apiClient(endpoint, { method: 'GET', authenticated: true })
+  return readAbpResult(response, 'Unable to load staff.')
 }
 
-export const createStaff = async (data: StaffRequestCreate): Promise<AbpResponse<StaffDto | null>> => {
+export const createStaff = async (data: StaffRequestCreate): Promise<StaffDto> => {
   const response = await apiClient('/api/services/app/Staff/Create', {
     method: 'POST',
     authenticated: true,
     body: JSON.stringify(data),
   })
-
-  return response.json() as Promise<AbpResponse<StaffDto | null>>
+  return readAbpResult(response, 'Không thể tạo nhân viên.')
 }
 
-export const updateStaff = async (data: StaffRequestUpdate): Promise<AbpResponse<StaffDto | null>> => {
+export const updateStaff = async (data: StaffRequestUpdate): Promise<StaffDto> => {
   const response = await apiClient('/api/services/app/Staff/Update', {
     method: 'PUT',
     authenticated: true,
     body: JSON.stringify(data),
   })
-
-  return response.json() as Promise<AbpResponse<StaffDto | null>>
+  return readAbpResult(response, 'Không thể cập nhật nhân viên.')
 }
 
 export const deleteStaff = async (id: number): Promise<void> => {
@@ -63,76 +55,47 @@ export const deleteStaff = async (id: number): Promise<void> => {
     method: 'DELETE',
     authenticated: true,
   })
-
-  const data = (await response.json()) as AbpResponse<null>
-
-  if (!response.ok || !data.success) {
-    throw new Error(getAbpErrorMessage(data.error, 'Không thể xóa nhân viên.'))
-  }
+  await readAbpVoid(response, 'Không thể xóa nhân viên.')
 }
 
-export const getAvailableUsers = async (): Promise<AbpResponse<AvailableUser[]>> => {
+export const getAvailableUsers = async (): Promise<AvailableUser[]> => {
   const response = await apiClient('/api/services/app/Staff/GetAvailableUsers', {
     method: 'GET',
     authenticated: true,
   })
-
-  return response.json() as Promise<AbpResponse<AvailableUser[]>>
+  return readAbpResult(response, 'Không thể tải danh sách user khả dụng.')
 }
 
-export const changeStaffStatus = async (data: StaffChangeStatusRequest): Promise<AbpResponse<StaffDto | null>> => {
+export const changeStaffStatus = async (data: StaffChangeStatusRequest): Promise<StaffDto> => {
   const response = await apiClient('/api/services/app/Staff/ChangeStatus', {
     method: 'POST',
     authenticated: true,
     body: JSON.stringify(data),
   })
-
-  const result = (await response.json()) as AbpResponse<StaffDto | null>
-
-  if (!response.ok || !result.success) {
-    throw new Error(getAbpErrorMessage(result.error, 'Không thể thay đổi trạng thái nhân viên.'))
-  }
-
-  return result
+  return readAbpResult(response, 'Không thể thay đổi trạng thái nhân viên.')
 }
 
-export const changeStaffProfile = async (data: StaffChangeProfileRequest): Promise<AbpResponse<StaffDto | null> | null> => {
+export const changeStaffProfile = async (data: StaffChangeProfileRequest): Promise<StaffDto> => {
   const response = await apiClient('/api/services/app/Staff/ChangeProfile', {
     method: 'POST',
     authenticated: true,
     body: JSON.stringify(data),
   })
-
-  const body = await response.text()
-  if (!body.trim()) {
-    if (!response.ok) {
-      throw new Error(`Không thể cập nhật hồ sơ nhân viên (HTTP ${response.status}).`)
-    }
-    return null
-  }
-
-  const result = JSON.parse(body) as AbpResponse<StaffDto | null>
-  if (!response.ok || !result.success) {
-    throw new Error(getAbpErrorMessage(result.error, 'Không thể cập nhật hồ sơ nhân viên.'))
-  }
-
-  return result
+  return readAbpResult(response, 'Không thể cập nhật hồ sơ nhân viên.')
 }
 
-export const getStaffById = async (id: number): Promise<AbpResponse<StaffDto | null>> => {
+export const getStaffById = async (id: number): Promise<StaffDto> => {
   const response = await apiClient(`/api/services/app/Staff/Get/${id}`, {
     method: 'GET',
     authenticated: true,
   })
-
-  return response.json() as Promise<AbpResponse<StaffDto>>
+  return readAbpResult(response, 'Không thể tải hồ sơ nhân viên.')
 }
 
-export const getMyStaffProfile = async (): Promise<AbpResponse<StaffDto | null>> => {
+export const getMyStaffProfile = async (): Promise<StaffDto> => {
   const response = await apiClient('/api/services/app/Staff/GetMyProfile', {
     method: 'GET',
     authenticated: true,
   })
-
-  return response.json() as Promise<AbpResponse<StaffDto | null>>
+  return readAbpResult(response, 'Không thể tải hồ sơ nhân viên.')
 }

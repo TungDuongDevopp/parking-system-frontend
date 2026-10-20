@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import loginImage from '../assets/image_login.png';
 import logoImage from '../assets/logo.png';
 import { register } from '../services/authService';
-import { getAbpErrorMessage } from '../services/abpError';
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation';
+import { getAbpErrorFromException } from '../services/serviceResponse';
 import type { RegisterRequest } from '../types/Account/register';
 import '../resources/css/login2.scss';
 
@@ -41,7 +41,6 @@ const Register = () => {
         if (!firstName.trim()) nextErrors.firstName = 'First name is required.';
         if (!lastName.trim()) nextErrors.lastName = 'Last name is required.';
         if (!email.trim()) nextErrors.email = 'Email is required.';
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) nextErrors.email = 'Enter a valid email address.';
         if (!username.trim()) nextErrors.username = 'Username is required.';
         if (password.length < 8) nextErrors.password = 'Password must be at least 8 characters.';
 
@@ -65,19 +64,15 @@ const Register = () => {
         };
 
         try {
-            const response = await register(account);
-            if (!response.success) {
-                const serverErrors = mapAbpFieldErrors(response.error, registerFieldAliases);
-                if (Object.keys(serverErrors).length) setFieldErrors(serverErrors);
-                else setFormError(getAbpErrorMessage(response.error, 'Registration failed.'));
-                return;
-            }
-
+            await register(account);
             navigate('/login');
         } catch (error) {
             console.error(error);
             const message = error instanceof Error ? error.message : 'Registration failed.';
-            const serverErrors = mapMessageToFieldErrors(message, registerFieldAliases);
+            const abpError = getAbpErrorFromException(error);
+            const serverErrors = abpError
+                ? mapAbpFieldErrors(abpError, registerFieldAliases)
+                : mapMessageToFieldErrors(message, registerFieldAliases);
             if (Object.keys(serverErrors).length) setFieldErrors(serverErrors);
             else setFormError(message);
         } finally {

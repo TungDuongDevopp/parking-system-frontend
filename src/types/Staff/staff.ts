@@ -1,4 +1,3 @@
-import type { AbpResponse, PagedResult } from "../Apb/abp";
 
 export interface StaffChangeProfileRequest{
   phoneNumber?: string
@@ -56,5 +55,3 @@ export interface StaffChangeStatusRequest {
   id: number
   status: number
 }
-
-export type StaffResponse = AbpResponse<PagedResult<StaffDto>>

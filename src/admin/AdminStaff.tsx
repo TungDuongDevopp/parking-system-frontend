@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { SubmitEvent } from 'react'
 import { createPortal } from 'react-dom'
 import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
@@ -11,8 +11,8 @@ import {
   getStaffs,
   updateStaff,
 } from '../services/staffService'
-import { getAbpErrorMessage } from '../services/abpError'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 import type { AvailableUser, StaffDto } from '../types/Staff/staff'
 import type { StaffQuery } from '../types/Staff/staffQuery'
 import {
@@ -37,7 +37,7 @@ type StaffFilters = Pick<
 
 type FilterDraft = Omit<StaffFilters, 'status'> & { status: string }
 type StaffFormField = keyof StaffFormValues
-type StaffFilterField = 'status' | 'dateOfBirthTo' | 'hiredDateTo'
+type StaffFilterField = 'dateOfBirthTo' | 'hiredDateTo'
 
 const staffFieldAliases = {
   userId: ['userId', 'user'],
@@ -125,22 +125,15 @@ const AdminStaff = () => {
     setErrorMessage('')
 
     try {
-      const response = await getStaffs({
+      const result = await getStaffs({
         keyword: keyword.trim() || undefined,
         skipCount: (safeCurrentPage - 1) * rowsPerPage,
         maxResultCount: rowsPerPage,
         ...filters,
       })
 
-      if (!response.success || !response.result) {
-        setErrorMessage(getAbpErrorMessage(response.error, 'Không thể tải danh sách nhân viên.'))
-        setStaffs([])
-        setTotalCount(0)
-        return
-      }
-
-      setStaffs(response.result.items)
-      setTotalCount(response.result.totalCount)
+      setStaffs(result.items)
+      setTotalCount(result.totalCount)
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Không thể tải danh sách nhân viên.')
       setStaffs([])
@@ -199,12 +192,8 @@ const AdminStaff = () => {
     setIsAvailableUsersLoading(true)
 
     try {
-      const response = await getAvailableUsers()
-      if (!response.success || !response.result) {
-        setAvailableUsersError(getAbpErrorMessage(response.error, 'Không thể tải danh sách user khả dụng.'))
-        return
-      }
-      setAvailableUsers(response.result)
+      const users = await getAvailableUsers()
+      setAvailableUsers(users)
     } catch (error) {
       setAvailableUsersError(error instanceof Error ? error.message : 'Không thể tải danh sách user khả dụng.')
     } finally {
@@ -229,15 +218,13 @@ const AdminStaff = () => {
     setIsStaffModalOpen(true)
   }
 
-  const handleStaffSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleStaffSubmit = async (event: SubmitEvent) => {
     event.preventDefault()
     setStaffFormError('')
     const validationErrors: FieldErrors<StaffFormField> = {}
     if (!editingStaff && !staffForm.userId) validationErrors.userId = 'Please select a user.'
     if (!staffForm.name.trim()) validationErrors.name = 'Name is required.'
     if (!staffForm.phoneNumber.trim()) validationErrors.phoneNumber = 'Phone number is required.'
-    else if (!/^0[35789]\d{8}$/.test(staffForm.phoneNumber.trim())) validationErrors.phoneNumber = 'Enter a valid phone number.'
-    if (staffForm.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(staffForm.email.trim())) validationErrors.email = 'Enter a valid email address.'
     if (!staffForm.hiredDate) validationErrors.hiredDate = 'Hired date is required.'
     const today = new Date().toISOString().slice(0, 10)
     if (staffForm.dateOfBirth && staffForm.dateOfBirth > today) validationErrors.dateOfBirth = 'Date of birth cannot be in the future.'
@@ -256,15 +243,10 @@ const AdminStaff = () => {
         dateOfBirth: staffForm.dateOfBirth || null,
         address: staffForm.address.trim() || null,
       }
-      const response = editingStaff
-        ? await updateStaff({ id: editingStaff.id, ...data })
-        : await createStaff({ userId: Number(staffForm.userId), ...data })
-
-      if (!response.success) {
-        const serverErrors = mapAbpFieldErrors(response.error, staffFieldAliases)
-        if (Object.keys(serverErrors).length) setStaffFieldErrors(serverErrors)
-        else setStaffFormError(getAbpErrorMessage(response.error, `Không thể ${editingStaff ? 'cập nhật' : 'tạo'} nhân viên.`))
-        return
+      if (editingStaff) {
+        await updateStaff({ id: editingStaff.id, ...data })
+      } else {
+        await createStaff({ userId: Number(staffForm.userId), ...data })
       }
 
       closeStaffModal()
@@ -273,7 +255,10 @@ const AdminStaff = () => {
       const message = error instanceof Error
         ? error.message
         : `Không thể ${editingStaff ? 'cập nhật' : 'tạo'} nhân viên.`
-      const serverErrors = mapMessageToFieldErrors(message, staffFieldAliases)
+      const abpError = getAbpErrorFromException(error)
+      const serverErrors = abpError
+        ? mapAbpFieldErrors(abpError, staffFieldAliases)
+        : mapMessageToFieldErrors(message, staffFieldAliases)
       if (Object.keys(serverErrors).length) setStaffFieldErrors(serverErrors)
       else setStaffFormError(message)
     } finally {
@@ -304,11 +289,7 @@ const AdminStaff = () => {
     setUpdatingStatusId(staff.id)
     setErrorMessage('')
     try {
-      const response = await changeStaffStatus({ id: staff.id, status })
-      if (!response.success) {
-        setErrorMessage(getAbpErrorMessage(response.error, 'Không thể thay đổi trạng thái nhân viên.'))
-        return
-      }
+      await changeStaffStatus({ id: staff.id, status })
 
       setStatusDrafts((drafts) => {
         const nextDrafts = { ...drafts }
@@ -349,10 +330,7 @@ const AdminStaff = () => {
       validationErrors.hiredDateTo = 'End date must be on or after the start date.'
     }
 
-    const status = filterDraft.status.trim() === '' ? undefined : Number(filterDraft.status)
-    if (status !== undefined && (!Number.isInteger(status) || status < 0)) {
-      validationErrors.status = 'Status code must be a non-negative integer.'
-    }
+    const status = filterDraft.status === '' ? undefined : Number(filterDraft.status)
     setFilterErrors(validationErrors)
     if (Object.keys(validationErrors).length) {
       return
@@ -442,21 +420,20 @@ const AdminStaff = () => {
                 </button>
               </div>
               <label className="staff-filter-field">
-                <span>Status code</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
+                <span>Status</span>
+                <select
                   value={filterDraft.status}
                   onChange={(event) => {
                     setFilterDraft((draft) => ({ ...draft, status: event.target.value }))
-                    setFilterErrors((errors) => ({ ...errors, status: undefined }))
                   }}
-                  placeholder="Any status"
-                  aria-invalid={Boolean(filterErrors.status)}
-                  className={filterErrors.status ? 'has-error' : undefined}
-                />
-                {filterErrors.status && <span className="staff-filter-field-error" role="alert">{filterErrors.status}</span>}
+                >
+                  <option value="">All statuses</option>
+                  {staffStatuses.map((statusOption) => (
+                    <option key={statusOption.value} value={statusOption.value}>
+                      {statusOption.label}
+                    </option>
+                  ))}
+                </select>
               </label>
               <fieldset className="staff-filter-group">
                 <legend>Date of birth</legend>

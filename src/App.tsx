@@ -16,6 +16,7 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
 import Sidebar from './components/sidebar/Sidebar';
 import AdminStaff from './admin/AdminStaff';
+import AdminParkingArea from './admin/AdminParkingArea';
 import { AuthProvider } from './auth/AuthContext';
 const App = () => {
   
@@ -46,6 +47,11 @@ const App = () => {
                 <Route path="/admin/customers" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminCustomer />
+                  </ProtectedRoute>
+                } />
+                 <Route path="/admin/parkingAreas" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminParkingArea/>
                   </ProtectedRoute>
                 } />
                 <Route path="/admin/staffs" element={

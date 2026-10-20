@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import loginImage from '../assets/image_login.png';
 import logoImage from '../assets/logo.png';
 import { login } from '../services/authService';
-import { getAbpErrorMessage } from '../services/abpError';
 import type { LoginRequest } from '../types/Account/login';
 import { useAuth } from './AuthContext';
 import { getRoleHomePath } from './roles';
 import { mapAbpFieldErrors, type FieldErrors } from '../services/fieldValidation';
+import { getAbpErrorFromException } from '../services/serviceResponse';
 import '../resources/css/login2.scss';
 
 type LoginField = 'username' | 'password'
@@ -45,14 +45,7 @@ const Login = () => {
         };
 
         try {
-            const response = await login(credentials);
-
-            if (!response.success || !response.result) {
-                const serverErrors = mapAbpFieldErrors(response.error, loginFieldAliases);
-                if (Object.keys(serverErrors).length) setFieldErrors(serverErrors);
-                else setFieldErrors({ password: getAbpErrorMessage(response.error, 'Username or password is incorrect.') });
-                return;
-            }
+            await login(credentials);
 
             const user = await refreshSession();
             const homePath = user ? getRoleHomePath(user.roles) : null;
@@ -63,7 +56,13 @@ const Login = () => {
             navigate(homePath, { replace: true });
         } catch (error) {
             console.error(error);
-            setFieldErrors({ password: error instanceof Error ? error.message : 'Tài khoản hoặc mật khẩu không hợp lệ' });
+            const message = error instanceof Error ? error.message : 'Tài khoản hoặc mật khẩu không hợp lệ';
+            const abpError = getAbpErrorFromException(error);
+            const serverErrors = abpError
+                ? mapAbpFieldErrors(abpError, loginFieldAliases)
+                : {};
+            if (Object.keys(serverErrors).length) setFieldErrors(serverErrors);
+            else setFieldErrors({ password: message });
         } finally {
             setIsSubmitting(false);
         }

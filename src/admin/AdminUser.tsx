@@ -3,8 +3,8 @@ import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
 import { createUser, deleteUser, getUsers, updateUser } from '../services/userService'
 import { getRoleNames } from '../services/roleService'
-import { getAbpErrorMessage } from '../services/abpError'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 import type { UserDto } from '../types/User/user'
 import type { SubmitEvent } from 'react'
 import {
@@ -83,22 +83,15 @@ const AdminUser = () => {
 			const sorting = sortField && sortDirection
 				? `${sortField === 'userName' ? 'UserName' : 'EmailAddress'} ${sortDirection === 'asc' ? 'asc' : 'desc'}`
 				: undefined
-			const response = await getUsers({
+			const result = await getUsers({
 				keyword: query.trim() || undefined,
 				sorting,
 				skipCount: (safeCurrentPage - 1) * rowsPerPage,
 				maxResultCount: rowsPerPage,
 			})
 
-			if (!response.success || !response.result) {
-				setErrorMessage(getAbpErrorMessage(response.error, 'Không thể tải danh sách user.'))
-				setUsers([])
-				setTotalCount(0)
-				return
-			}
-
-			setUsers(response.result.items)
-			setTotalCount(response.result.totalCount)
+			setUsers(result.items)
+			setTotalCount(result.totalCount)
 		} catch (error) {
 			setErrorMessage(error instanceof Error ? error.message : 'Không thể tải danh sách user.')
 			setUsers([])
@@ -188,7 +181,6 @@ const AdminUser = () => {
 		if (!name.trim()) validationErrors.name = 'First name is required.'
 		if (!surname.trim()) validationErrors.surname = 'Last name is required.'
 		if (!emailAddress.trim()) validationErrors.emailAddress = 'Email is required.'
-		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress.trim())) validationErrors.emailAddress = 'Enter a valid email address.'
 		if (!editingUser && !password) validationErrors.password = 'Password is required.'
 		setUserFieldErrors(validationErrors)
 		setUserFormError('')
@@ -199,8 +191,8 @@ const AdminUser = () => {
 		setIsUserSubmitting(true)
 
 		try {
-			const response = editingUser
-				? await updateUser({
+			if (editingUser) {
+				await updateUser({
 					id: editingUser.id,
 					userName: userName.trim(),
 					name: name.trim(),
@@ -209,7 +201,8 @@ const AdminUser = () => {
 					isActive,
 					roleNames,
 				})
-				: await createUser({
+			} else {
+				await createUser({
 					userName: userName.trim(),
 					name: name.trim(),
 					surname: surname.trim(),
@@ -218,19 +211,16 @@ const AdminUser = () => {
 					isActive,
 					roleNames,
 				})
-
-			if (!response.success) {
-				const serverErrors = mapAbpFieldErrors(response.error, userFieldAliases)
-				if (Object.keys(serverErrors).length) setUserFieldErrors(serverErrors)
-				else setUserFormError(getAbpErrorMessage(response.error, `Unable to ${editingUser ? 'update' : 'create'} user.`))
-				return
 			}
 
 			closeUserModal()
 			await loadUsers()
 		} catch (error) {
 			const message = error instanceof Error ? error.message : `Unable to ${editingUser ? 'update' : 'create'} user.`
-			const serverErrors = mapMessageToFieldErrors(message, userFieldAliases)
+			const abpError = getAbpErrorFromException(error)
+			const serverErrors = abpError
+				? mapAbpFieldErrors(abpError, userFieldAliases)
+				: mapMessageToFieldErrors(message, userFieldAliases)
 			if (Object.keys(serverErrors).length) setUserFieldErrors(serverErrors)
 			else setUserFormError(message)
 		} finally {

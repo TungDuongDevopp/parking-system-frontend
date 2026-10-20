@@ -1,5 +1,3 @@
-import type { AbpResponse } from "../Apb/abp";
-import type { PagedResult } from "../Apb/abp";
 
 export interface CustomerRequestCreate{
     name: string,
@@ -19,5 +17,3 @@ export interface CustomerRequestUpdate{
     phoneNumber?: string,
     email?: string
 }
-
-export type CustomerResponse = AbpResponse<PagedResult<CustomerDto>>
