@@ -7,7 +7,15 @@ import { getAbpErrorMessage } from '../services/abpError';
 import type { LoginRequest } from '../types/Account/login';
 import { useAuth } from './AuthContext';
 import { getRoleHomePath } from './roles';
+import { mapAbpFieldErrors, type FieldErrors } from '../services/fieldValidation';
 import '../resources/css/login2.scss';
+
+type LoginField = 'username' | 'password'
+
+const loginFieldAliases = {
+    username: ['username', 'userNameOrEmailAddress', 'email'],
+    password: ['password'],
+} as const
 
 const Login = () => {
     const navigate = useNavigate();
@@ -17,11 +25,17 @@ const Login = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors<LoginField>>({});
+    const [formError, setFormError] = useState('');
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setErrorMessage('');
+        const nextErrors: FieldErrors<LoginField> = {};
+        if (!username.trim()) nextErrors.username = 'Email or username is required.';
+        if (!password) nextErrors.password = 'Password is required.';
+        setFieldErrors(nextErrors);
+        setFormError('');
+        if (Object.keys(nextErrors).length) return;
         setIsSubmitting(true);
 
         const credentials: LoginRequest = {
@@ -34,20 +48,22 @@ const Login = () => {
             const response = await login(credentials);
 
             if (!response.success || !response.result) {
-                setErrorMessage(getAbpErrorMessage(response.error, 'Username or password is incorrect.'));
+                const serverErrors = mapAbpFieldErrors(response.error, loginFieldAliases);
+                if (Object.keys(serverErrors).length) setFieldErrors(serverErrors);
+                else setFieldErrors({ password: getAbpErrorMessage(response.error, 'Username or password is incorrect.') });
                 return;
             }
 
             const user = await refreshSession();
             const homePath = user ? getRoleHomePath(user.roles) : null;
             if (!homePath) {
-                setErrorMessage('Không thể xác minh vai trò tài khoản sau khi đăng nhập.');
+                setFormError('Không thể xác minh vai trò tài khoản sau khi đăng nhập.');
                 return;
             }
             navigate(homePath, { replace: true });
         } catch (error) {
             console.error(error);
-            setErrorMessage(error instanceof Error ? error.message : 'Tài khoản hoặc mật khẩu không hợp lệ');
+            setFieldErrors({ password: error instanceof Error ? error.message : 'Tài khoản hoặc mật khẩu không hợp lệ' });
         } finally {
             setIsSubmitting(false);
         }
@@ -77,7 +93,7 @@ const Login = () => {
                         <p>Welcome back! Your parking is just a moment away.</p>
                     </div>
 
-                    <form className="login-form" onSubmit={handleSubmit}>
+                    <form className="login-form" onSubmit={handleSubmit} noValidate>
                         <label htmlFor="login-username">Email or username</label>
                         <input
                             id="login-username"
@@ -86,9 +102,15 @@ const Login = () => {
                             autoComplete="username"
                             placeholder="you@example.com"
                             value={username}
-                            onChange={(event) => setUsername(event.target.value)}
-                            required
+                            onChange={(event) => {
+                                setUsername(event.target.value);
+                                setFieldErrors((errors) => ({ ...errors, username: undefined }));
+                            }}
+                            aria-invalid={Boolean(fieldErrors.username)}
+                            aria-describedby={fieldErrors.username ? 'login-username-error' : undefined}
+                            className={fieldErrors.username ? 'has-error' : undefined}
                         />
+                        {fieldErrors.username && <p id="login-username-error" className="field-error" role="alert">{fieldErrors.username}</p>}
 
                         <label htmlFor="login-password">Password</label>
                         <div className="password-field">
@@ -99,8 +121,13 @@ const Login = () => {
                                 autoComplete="current-password"
                                 placeholder="Enter your password"
                                 value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                                required
+                                onChange={(event) => {
+                                    setPassword(event.target.value);
+                                    setFieldErrors((errors) => ({ ...errors, password: undefined }));
+                                }}
+                                aria-invalid={Boolean(fieldErrors.password)}
+                                aria-describedby={fieldErrors.password ? 'login-password-error' : undefined}
+                                className={fieldErrors.password ? 'has-error' : undefined}
                             />
                             <button
                                 className="password-toggle"
@@ -122,6 +149,7 @@ const Login = () => {
                                 )}
                             </button>
                         </div>
+                        {fieldErrors.password && <p id="login-password-error" className="field-error" role="alert">{fieldErrors.password}</p>}
 
                         <div className="form-options">
                             <label className="remember-option">
@@ -144,7 +172,7 @@ const Login = () => {
                                 </svg>
                             )}
                         </button>
-                        {errorMessage && <p className="form-error" role="alert">{errorMessage}</p>}
+                        {formError && <p className="form-error" role="alert">{formError}</p>}
 
                         <p className="register-prompt">
                             Don't have an account? <a href="/register">Sign up</a>

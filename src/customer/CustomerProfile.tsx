@@ -5,15 +5,41 @@ import '../resources/css/customer-profile.scss'
 import type { CustomerDto, CustomerRequestUpdate } from '../types/Customer/customer'
 import { getMyProfile, updateCustomer } from '../services/customerService'
 import { getAbpErrorMessage } from '../services/abpError'
+import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+
+type CustomerProfileDraft = {
+    name: string
+    phoneNumber: string
+    email: string
+}
+
+type CustomerProfileField = keyof CustomerProfileDraft
+type CustomerProfileFieldErrors = FieldErrors<CustomerProfileField>
+
+const matchesSubmittedProfile = (profile: CustomerDto, changes: CustomerRequestUpdate) =>
+    (changes.name === undefined || profile.name.trim() === changes.name) &&
+    (changes.phoneNumber === undefined || profile.phoneNumber.trim() === changes.phoneNumber) &&
+    (changes.email === undefined || (profile.email ?? '').trim() === changes.email)
+
+const customerFieldAliases = {
+    name: ['name'],
+    phoneNumber: ['phone', 'phoneNumber'],
+    email: ['email'],
+} as const
+
+const mapServerErrorsToFields = (error: Parameters<typeof mapAbpFieldErrors>[0]) =>
+    mapAbpFieldErrors(error, customerFieldAliases)
 
 const CustomerProfile = () => {
     const navigate = useNavigate()
     const [profile, setProfile] = useState<CustomerDto | null>(null)
-    const [draft, setDraft] = useState<CustomerRequestUpdate | null>(null)
+    const [draft, setDraft] = useState<CustomerProfileDraft | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isEditing, setIsEditing] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [fieldErrors, setFieldErrors] = useState<CustomerProfileFieldErrors>({})
+    const [formError, setFormError] = useState('')
 
     useEffect(() => {
         let isMounted = true
@@ -43,45 +69,89 @@ const CustomerProfile = () => {
     const startEditing = () => {
         if (!profile) return
         setDraft({
-            id: profile.id,
             name: profile.name,
             phoneNumber: profile.phoneNumber,
-            email: profile.email,
+            email: profile.email ?? '',
         })
-        setErrorMessage('')
+        setFieldErrors({})
+        setFormError('')
         setIsEditing(true)
     }
 
     const cancelEditing = () => {
         setDraft(null)
-        setErrorMessage('')
+        setFieldErrors({})
+        setFormError('')
         setIsEditing(false)
     }
 
     const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        if (!draft) return
-        setIsSubmitting(true)
-        setErrorMessage('')
+        if (!draft || !profile) return
+        setFieldErrors({})
+        setFormError('')
 
         try {
-            const updatedProfile = {
-                ...draft,
-                name: draft.name.trim(),
-                phoneNumber: draft.phoneNumber.trim(),
-                email: draft.email.trim(),
+            const name = draft.name.trim()
+            const phoneNumber = draft.phoneNumber.trim()
+            const email = draft.email.trim()
+
+            const validationErrors: CustomerProfileFieldErrors = {}
+            if (!name) validationErrors.name = 'Name is required.'
+            if (!phoneNumber) validationErrors.phoneNumber = 'Phone number is required.'
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                validationErrors.email = 'Enter a valid email address.'
             }
-            const response = await updateCustomer(updatedProfile)
-            if (!response.success) {
-                setErrorMessage(getAbpErrorMessage(response.error, 'Unable to update your profile.'))
+            if (Object.keys(validationErrors).length) {
+                setFieldErrors(validationErrors)
                 return
             }
 
-            setProfile((current) => current ? { ...current, ...updatedProfile } : current)
+            if (profile.email?.trim() && !email) {
+                setFieldErrors({
+                    email: 'The profile service cannot clear an existing email address. Enter a replacement email or keep the current one.',
+                })
+                return
+            }
+
+            const changes: CustomerRequestUpdate = { id: profile.id }
+            if (name !== profile.name.trim()) changes.name = name
+            if (phoneNumber !== profile.phoneNumber.trim()) changes.phoneNumber = phoneNumber
+            if (email && email !== (profile.email ?? '').trim()) changes.email = email
+
+            if (Object.keys(changes).length === 1) {
+                setDraft(null)
+                setIsEditing(false)
+                return
+            }
+
+            setIsSubmitting(true)
+            const response = await updateCustomer(changes)
+            if (!response.success) {
+                const serverFieldErrors = mapServerErrorsToFields(response.error)
+                if (Object.keys(serverFieldErrors).length) setFieldErrors(serverFieldErrors)
+                else setFormError(getAbpErrorMessage(response.error, 'Unable to update your profile.'))
+                return
+            }
+
+            if (!response.result) {
+                setFormError('The server did not return the updated profile. Please reload the page to confirm your changes.')
+                return
+            }
+
+            setProfile(response.result)
+            if (!matchesSubmittedProfile(response.result, changes)) {
+                setFormError('The server did not save all profile changes. Please try again or contact an administrator.')
+                return
+            }
+
             setDraft(null)
             setIsEditing(false)
         } catch (error) {
-            setErrorMessage(error instanceof Error ? error.message : 'Unable to update your profile.')
+            const message = error instanceof Error ? error.message : 'Unable to update your profile.'
+            const fieldErrorsByMessage = mapMessageToFieldErrors(message, customerFieldAliases)
+            if (Object.keys(fieldErrorsByMessage).length) setFieldErrors(fieldErrorsByMessage)
+            else setFormError(message)
         } finally {
             setIsSubmitting(false)
         }
@@ -119,35 +189,56 @@ const CustomerProfile = () => {
                                 <h2>{isEditing ? 'Edit profile' : 'Contact details'}</h2>
                             </div>
                             {isEditing && draft ? (
-                                <form className="customer-profile-form" onSubmit={handleUpdate}>
+                                <form className="customer-profile-form" onSubmit={handleUpdate} noValidate>
                                     <label>
                                         <span>Name</span>
                                         <input
+                                            id="customer-profile-name"
                                             autoComplete="name"
                                             value={draft.name}
-                                            onChange={(event) => setDraft({ ...draft, name: event.target.value })}
-                                            required
+                                            onChange={(event) => {
+                                                setDraft({ ...draft, name: event.target.value })
+                                                setFieldErrors((current) => ({ ...current, name: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.name)}
+                                            aria-describedby={fieldErrors.name ? 'customer-profile-name-error' : undefined}
+                                            className={fieldErrors.name ? 'has-error' : undefined}
                                         />
+                                        {fieldErrors.name && <span id="customer-profile-name-error" className="customer-profile-field-error" role="alert">{fieldErrors.name}</span>}
                                     </label>
                                     <label>
                                         <span>Phone number</span>
                                         <input
+                                            id="customer-profile-phone-number"
                                             type="tel"
                                             autoComplete="tel"
                                             value={draft.phoneNumber}
-                                            onChange={(event) => setDraft({ ...draft, phoneNumber: event.target.value })}
-                                            required
+                                            onChange={(event) => {
+                                                setDraft({ ...draft, phoneNumber: event.target.value })
+                                                setFieldErrors((current) => ({ ...current, phoneNumber: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.phoneNumber)}
+                                            aria-describedby={fieldErrors.phoneNumber ? 'customer-profile-phone-number-error' : undefined}
+                                            className={fieldErrors.phoneNumber ? 'has-error' : undefined}
                                         />
+                                        {fieldErrors.phoneNumber && <span id="customer-profile-phone-number-error" className="customer-profile-field-error" role="alert">{fieldErrors.phoneNumber}</span>}
                                     </label>
                                     <label>
                                         <span>Email</span>
                                         <input
+                                            id="customer-profile-email"
                                             type="email"
                                             autoComplete="email"
-                                            value={draft.email}
-                                            onChange={(event) => setDraft({ ...draft, email: event.target.value })}
-                                            required
+                                            value={draft.email ?? ''}
+                                            onChange={(event) => {
+                                                setDraft({ ...draft, email: event.target.value })
+                                                setFieldErrors((current) => ({ ...current, email: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.email)}
+                                            aria-describedby={fieldErrors.email ? 'customer-profile-email-error' : undefined}
+                                            className={fieldErrors.email ? 'has-error' : undefined}
                                         />
+                                        {fieldErrors.email && <span id="customer-profile-email-error" className="customer-profile-field-error" role="alert">{fieldErrors.email}</span>}
                                     </label>
                                     <div className="customer-profile-actions">
                                         <button className="customer-profile-submit" type="submit" disabled={isSubmitting}>
@@ -157,6 +248,7 @@ const CustomerProfile = () => {
                                             Cancel
                                         </button>
                                     </div>
+                                    {formError && <p className="customer-profile-error" role="alert">{formError}</p>}
                                 </form>
                             ) : (
                                 <>

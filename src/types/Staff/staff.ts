@@ -1,11 +1,11 @@
 import type { AbpResponse, PagedResult } from "../Apb/abp";
 
 export interface StaffChangeProfileRequest{
-  phoneNumber: string
-  email: string
-  gender: boolean | null
-  dateOfBirth: string | null
-  address: string | null
+  phoneNumber?: string
+  email?: string
+  gender?: boolean
+  dateOfBirth?: string
+  address?: string
 }
 
 export interface StaffDto{
@@ -26,22 +26,22 @@ export interface StaffRequestCreate {
   userId: number
   name: string
   phoneNumber: string
-  email: string | null
-  gender: boolean | null
+  email?: string | null
+  gender?: boolean | null
   hiredDate: string
-  dateOfBirth: string | null
-  address: string | null
+  dateOfBirth?: string | null
+  address?: string | null
 }
 
 export interface StaffRequestUpdate {
   id: number
-  name: string
-  phoneNumber: string
-  email: string | null
-  gender: boolean | null
-  hiredDate: string
-  dateOfBirth: string | null
-  address: string | null
+  name?: string | null
+  phoneNumber?: string | null
+  email?: string | null
+  gender?: boolean | null
+  hiredDate?: string | null
+  dateOfBirth?: string | null
+  address?: string | null
 }
 
 export interface AvailableUser {

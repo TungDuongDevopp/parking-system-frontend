@@ -12,6 +12,7 @@ import {
   updateStaff,
 } from '../services/staffService'
 import { getAbpErrorMessage } from '../services/abpError'
+import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
 import type { AvailableUser, StaffDto } from '../types/Staff/staff'
 import type { StaffQuery } from '../types/Staff/staffQuery'
 import {
@@ -35,6 +36,19 @@ type StaffFilters = Pick<
 >
 
 type FilterDraft = Omit<StaffFilters, 'status'> & { status: string }
+type StaffFormField = keyof StaffFormValues
+type StaffFilterField = 'status' | 'dateOfBirthTo' | 'hiredDateTo'
+
+const staffFieldAliases = {
+  userId: ['userId', 'user'],
+  name: ['name'],
+  phoneNumber: ['phone', 'phoneNumber'],
+  email: ['email'],
+  gender: ['gender'],
+  dateOfBirth: ['dateOfBirth', 'birthDate'],
+  hiredDate: ['hiredDate'],
+  address: ['address'],
+} as const
 
 const emptyFilterDraft: FilterDraft = {
   status: '',
@@ -80,7 +94,7 @@ const AdminStaff = () => {
   const [filters, setFilters] = useState<StaffFilters>({})
   const [filterDraft, setFilterDraft] = useState<FilterDraft>(emptyFilterDraft)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [filterError, setFilterError] = useState('')
+  const [filterErrors, setFilterErrors] = useState<FieldErrors<StaffFilterField>>({})
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [isLoading, setIsLoading] = useState(true)
@@ -94,6 +108,7 @@ const AdminStaff = () => {
   const [isAvailableUsersLoading, setIsAvailableUsersLoading] = useState(false)
   const [availableUsersError, setAvailableUsersError] = useState('')
   const [staffFormError, setStaffFormError] = useState('')
+  const [staffFieldErrors, setStaffFieldErrors] = useState<FieldErrors<StaffFormField>>({})
   const [isStaffSubmitting, setIsStaffSubmitting] = useState(false)
   const [deletingStaffId, setDeletingStaffId] = useState<number | null>(null)
   const [statusDrafts, setStatusDrafts] = useState<Record<number, number>>({})
@@ -168,6 +183,7 @@ const AdminStaff = () => {
     setEditingStaff(null)
     setStaffForm(emptyStaffForm)
     setStaffFormError('')
+    setStaffFieldErrors({})
     setAvailableUsersError('')
     setIsStaffSubmitting(false)
   }
@@ -176,6 +192,7 @@ const AdminStaff = () => {
     setEditingStaff(null)
     setStaffForm(emptyStaffForm)
     setStaffFormError('')
+    setStaffFieldErrors({})
     setAvailableUsersError('')
     setAvailableUsers([])
     setIsStaffModalOpen(true)
@@ -208,22 +225,25 @@ const AdminStaff = () => {
       address: staff.address ?? '',
     })
     setStaffFormError('')
+    setStaffFieldErrors({})
     setIsStaffModalOpen(true)
   }
 
   const handleStaffSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setStaffFormError('')
-
-    if (!staffForm.name.trim() || !staffForm.phoneNumber.trim() || !staffForm.hiredDate) {
-      setStaffFormError('Vui lòng nhập họ tên, số điện thoại và ngày vào làm.')
-      return
-    }
-
-    if (!editingStaff && !staffForm.userId) {
-      setStaffFormError('Vui lòng chọn user để tạo hồ sơ nhân viên.')
-      return
-    }
+    const validationErrors: FieldErrors<StaffFormField> = {}
+    if (!editingStaff && !staffForm.userId) validationErrors.userId = 'Please select a user.'
+    if (!staffForm.name.trim()) validationErrors.name = 'Name is required.'
+    if (!staffForm.phoneNumber.trim()) validationErrors.phoneNumber = 'Phone number is required.'
+    else if (!/^0[35789]\d{8}$/.test(staffForm.phoneNumber.trim())) validationErrors.phoneNumber = 'Enter a valid phone number.'
+    if (staffForm.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(staffForm.email.trim())) validationErrors.email = 'Enter a valid email address.'
+    if (!staffForm.hiredDate) validationErrors.hiredDate = 'Hired date is required.'
+    const today = new Date().toISOString().slice(0, 10)
+    if (staffForm.dateOfBirth && staffForm.dateOfBirth > today) validationErrors.dateOfBirth = 'Date of birth cannot be in the future.'
+    if (staffForm.hiredDate && staffForm.hiredDate > today) validationErrors.hiredDate = 'Hired date cannot be in the future.'
+    setStaffFieldErrors(validationErrors)
+    if (Object.keys(validationErrors).length) return
 
     setIsStaffSubmitting(true)
     try {
@@ -241,16 +261,21 @@ const AdminStaff = () => {
         : await createStaff({ userId: Number(staffForm.userId), ...data })
 
       if (!response.success) {
-        setStaffFormError(getAbpErrorMessage(response.error, `Không thể ${editingStaff ? 'cập nhật' : 'tạo'} nhân viên.`))
+        const serverErrors = mapAbpFieldErrors(response.error, staffFieldAliases)
+        if (Object.keys(serverErrors).length) setStaffFieldErrors(serverErrors)
+        else setStaffFormError(getAbpErrorMessage(response.error, `Không thể ${editingStaff ? 'cập nhật' : 'tạo'} nhân viên.`))
         return
       }
 
       closeStaffModal()
       await loadStaffs()
     } catch (error) {
-      setStaffFormError(error instanceof Error
+      const message = error instanceof Error
         ? error.message
-        : `Không thể ${editingStaff ? 'cập nhật' : 'tạo'} nhân viên.`)
+        : `Không thể ${editingStaff ? 'cập nhật' : 'tạo'} nhân viên.`
+      const serverErrors = mapMessageToFieldErrors(message, staffFieldAliases)
+      if (Object.keys(serverErrors).length) setStaffFieldErrors(serverErrors)
+      else setStaffFormError(message)
     } finally {
       setIsStaffSubmitting(false)
     }
@@ -306,29 +331,30 @@ const AdminStaff = () => {
       hiredDateFrom: filters.hiredDateFrom ?? '',
       hiredDateTo: filters.hiredDateTo ?? '',
     })
-    setFilterError('')
+    setFilterErrors({})
     setIsFilterOpen((open) => !open)
   }
 
   const applyFilters = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setFilterError('')
+    const validationErrors: FieldErrors<StaffFilterField> = {}
 
     if (filterDraft.dateOfBirthFrom && filterDraft.dateOfBirthTo &&
       filterDraft.dateOfBirthFrom > filterDraft.dateOfBirthTo) {
-      setFilterError('Ngày sinh bắt đầu không được sau ngày kết thúc.')
-      return
+      validationErrors.dateOfBirthTo = 'End date must be on or after the start date.'
     }
 
     if (filterDraft.hiredDateFrom && filterDraft.hiredDateTo &&
       filterDraft.hiredDateFrom > filterDraft.hiredDateTo) {
-      setFilterError('Ngày vào làm bắt đầu không được sau ngày kết thúc.')
-      return
+      validationErrors.hiredDateTo = 'End date must be on or after the start date.'
     }
 
     const status = filterDraft.status.trim() === '' ? undefined : Number(filterDraft.status)
     if (status !== undefined && (!Number.isInteger(status) || status < 0)) {
-      setFilterError('Mã trạng thái phải là số nguyên không âm.')
+      validationErrors.status = 'Status code must be a non-negative integer.'
+    }
+    setFilterErrors(validationErrors)
+    if (Object.keys(validationErrors).length) {
       return
     }
 
@@ -346,7 +372,7 @@ const AdminStaff = () => {
   const clearFilters = () => {
     setFilterDraft(emptyFilterDraft)
     setFilters({})
-    setFilterError('')
+    setFilterErrors({})
     setCurrentPage(1)
     setIsFilterOpen(false)
   }
@@ -422,9 +448,15 @@ const AdminStaff = () => {
                   min="0"
                   step="1"
                   value={filterDraft.status}
-                  onChange={(event) => setFilterDraft((draft) => ({ ...draft, status: event.target.value }))}
+                  onChange={(event) => {
+                    setFilterDraft((draft) => ({ ...draft, status: event.target.value }))
+                    setFilterErrors((errors) => ({ ...errors, status: undefined }))
+                  }}
                   placeholder="Any status"
+                  aria-invalid={Boolean(filterErrors.status)}
+                  className={filterErrors.status ? 'has-error' : undefined}
                 />
+                {filterErrors.status && <span className="staff-filter-field-error" role="alert">{filterErrors.status}</span>}
               </label>
               <fieldset className="staff-filter-group">
                 <legend>Date of birth</legend>
@@ -443,8 +475,14 @@ const AdminStaff = () => {
                     type="date"
                     value={filterDraft.dateOfBirthTo}
                     min={filterDraft.dateOfBirthFrom || undefined}
-                    onChange={(event) => setFilterDraft((draft) => ({ ...draft, dateOfBirthTo: event.target.value }))}
+                    onChange={(event) => {
+                      setFilterDraft((draft) => ({ ...draft, dateOfBirthTo: event.target.value }))
+                      setFilterErrors((errors) => ({ ...errors, dateOfBirthTo: undefined }))
+                    }}
+                    aria-invalid={Boolean(filterErrors.dateOfBirthTo)}
+                    className={filterErrors.dateOfBirthTo ? 'has-error' : undefined}
                   />
+                  {filterErrors.dateOfBirthTo && <span className="staff-filter-field-error" role="alert">{filterErrors.dateOfBirthTo}</span>}
                 </label>
               </fieldset>
               <fieldset className="staff-filter-group">
@@ -464,11 +502,16 @@ const AdminStaff = () => {
                     type="date"
                     value={filterDraft.hiredDateTo}
                     min={filterDraft.hiredDateFrom || undefined}
-                    onChange={(event) => setFilterDraft((draft) => ({ ...draft, hiredDateTo: event.target.value }))}
+                    onChange={(event) => {
+                      setFilterDraft((draft) => ({ ...draft, hiredDateTo: event.target.value }))
+                      setFilterErrors((errors) => ({ ...errors, hiredDateTo: undefined }))
+                    }}
+                    aria-invalid={Boolean(filterErrors.hiredDateTo)}
+                    className={filterErrors.hiredDateTo ? 'has-error' : undefined}
                   />
+                  {filterErrors.hiredDateTo && <span className="staff-filter-field-error" role="alert">{filterErrors.hiredDateTo}</span>}
                 </label>
               </fieldset>
-              {filterError && <p className="staff-filter-error" role="alert">{filterError}</p>}
               <div className="staff-filter-actions">
                 <button className="staff-filter-reset" type="button" onClick={clearFilters}>Clear</button>
                 <button className="primary-action" type="submit">Apply filters</button>
@@ -619,16 +662,20 @@ const AdminStaff = () => {
                   <IconX className="action-icon" aria-hidden="true" />
                 </button>
               </header>
-              <form onSubmit={handleStaffSubmit}>
+              <form onSubmit={handleStaffSubmit} noValidate>
                 <div className="role-form-body staff-form-grid">
                   {!editingStaff && (
                     <label className="role-field staff-form-wide">
                       <span>Staff user <b>*</b></span>
                       <select
                         value={staffForm.userId}
-                        onChange={(event) => setStaffForm((form) => ({ ...form, userId: event.target.value }))}
-                        required
+                        onChange={(event) => {
+                          setStaffForm((form) => ({ ...form, userId: event.target.value }))
+                          setStaffFieldErrors((errors) => ({ ...errors, userId: undefined }))
+                        }}
                         disabled={isAvailableUsersLoading || Boolean(availableUsersError)}
+                        aria-invalid={Boolean(staffFieldErrors.userId)}
+                        className={staffFieldErrors.userId ? 'has-error' : undefined}
                       >
                         <option value="">
                           {isAvailableUsersLoading ? 'Loading users...' : 'Select a user'}
@@ -639,6 +686,7 @@ const AdminStaff = () => {
                           </option>
                         ))}
                       </select>
+                      {staffFieldErrors.userId && <span className="role-field-error" role="alert">{staffFieldErrors.userId}</span>}
                       {availableUsersError && <span className="role-form-error" role="alert">{availableUsersError}</span>}
                       {!isAvailableUsersLoading && !availableUsersError && availableUsers.length === 0 && (
                         <span className="staff-form-hint">No eligible users available.</span>
@@ -649,36 +697,58 @@ const AdminStaff = () => {
                     <span>Name <b>*</b></span>
                     <input
                       value={staffForm.name}
-                      onChange={(event) => setStaffForm((form) => ({ ...form, name: event.target.value }))}
-                      required
+                      onChange={(event) => {
+                        setStaffForm((form) => ({ ...form, name: event.target.value }))
+                        setStaffFieldErrors((errors) => ({ ...errors, name: undefined }))
+                      }}
+                      aria-invalid={Boolean(staffFieldErrors.name)}
+                      className={staffFieldErrors.name ? 'has-error' : undefined}
                     />
+                    {staffFieldErrors.name && <span className="role-field-error" role="alert">{staffFieldErrors.name}</span>}
                   </label>
                   <label className="role-field">
                     <span>Phone number <b>*</b></span>
                     <input
                       value={staffForm.phoneNumber}
-                      onChange={(event) => setStaffForm((form) => ({ ...form, phoneNumber: event.target.value }))}
-                      required
+                      onChange={(event) => {
+                        setStaffForm((form) => ({ ...form, phoneNumber: event.target.value }))
+                        setStaffFieldErrors((errors) => ({ ...errors, phoneNumber: undefined }))
+                      }}
+                      aria-invalid={Boolean(staffFieldErrors.phoneNumber)}
+                      className={staffFieldErrors.phoneNumber ? 'has-error' : undefined}
                     />
+                    {staffFieldErrors.phoneNumber && <span className="role-field-error" role="alert">{staffFieldErrors.phoneNumber}</span>}
                   </label>
                   <label className="role-field">
                     <span>Email</span>
                     <input
                       type="email"
                       value={staffForm.email}
-                      onChange={(event) => setStaffForm((form) => ({ ...form, email: event.target.value }))}
+                      onChange={(event) => {
+                        setStaffForm((form) => ({ ...form, email: event.target.value }))
+                        setStaffFieldErrors((errors) => ({ ...errors, email: undefined }))
+                      }}
+                      aria-invalid={Boolean(staffFieldErrors.email)}
+                      className={staffFieldErrors.email ? 'has-error' : undefined}
                     />
+                    {staffFieldErrors.email && <span className="role-field-error" role="alert">{staffFieldErrors.email}</span>}
                   </label>
                   <label className="role-field">
                     <span>Gender</span>
                     <select
                       value={staffForm.gender}
-                      onChange={(event) => setStaffForm((form) => ({ ...form, gender: event.target.value }))}
+                      onChange={(event) => {
+                        setStaffForm((form) => ({ ...form, gender: event.target.value }))
+                        setStaffFieldErrors((errors) => ({ ...errors, gender: undefined }))
+                      }}
+                      aria-invalid={Boolean(staffFieldErrors.gender)}
+                      className={staffFieldErrors.gender ? 'has-error' : undefined}
                     >
                       <option value="">Unspecified</option>
                       <option value="true">Male</option>
                       <option value="false">Female</option>
                     </select>
+                    {staffFieldErrors.gender && <span className="role-field-error" role="alert">{staffFieldErrors.gender}</span>}
                   </label>
                   <label className="role-field">
                     <span>Date of birth</span>
@@ -686,8 +756,14 @@ const AdminStaff = () => {
                       type="date"
                       max={new Date().toISOString().slice(0, 10)}
                       value={staffForm.dateOfBirth}
-                      onChange={(event) => setStaffForm((form) => ({ ...form, dateOfBirth: event.target.value }))}
+                      onChange={(event) => {
+                        setStaffForm((form) => ({ ...form, dateOfBirth: event.target.value }))
+                        setStaffFieldErrors((errors) => ({ ...errors, dateOfBirth: undefined }))
+                      }}
+                      aria-invalid={Boolean(staffFieldErrors.dateOfBirth)}
+                      className={staffFieldErrors.dateOfBirth ? 'has-error' : undefined}
                     />
+                    {staffFieldErrors.dateOfBirth && <span className="role-field-error" role="alert">{staffFieldErrors.dateOfBirth}</span>}
                   </label>
                   <label className="role-field">
                     <span>Hired date <b>*</b></span>
@@ -695,16 +771,27 @@ const AdminStaff = () => {
                       type="date"
                       max={new Date().toISOString().slice(0, 10)}
                       value={staffForm.hiredDate}
-                      onChange={(event) => setStaffForm((form) => ({ ...form, hiredDate: event.target.value }))}
-                      required
+                      onChange={(event) => {
+                        setStaffForm((form) => ({ ...form, hiredDate: event.target.value }))
+                        setStaffFieldErrors((errors) => ({ ...errors, hiredDate: undefined }))
+                      }}
+                      aria-invalid={Boolean(staffFieldErrors.hiredDate)}
+                      className={staffFieldErrors.hiredDate ? 'has-error' : undefined}
                     />
+                    {staffFieldErrors.hiredDate && <span className="role-field-error" role="alert">{staffFieldErrors.hiredDate}</span>}
                   </label>
                   <label className="role-field staff-form-wide">
                     <span>Address</span>
                     <input
                       value={staffForm.address}
-                      onChange={(event) => setStaffForm((form) => ({ ...form, address: event.target.value }))}
+                      onChange={(event) => {
+                        setStaffForm((form) => ({ ...form, address: event.target.value }))
+                        setStaffFieldErrors((errors) => ({ ...errors, address: undefined }))
+                      }}
+                      aria-invalid={Boolean(staffFieldErrors.address)}
+                      className={staffFieldErrors.address ? 'has-error' : undefined}
                     />
+                    {staffFieldErrors.address && <span className="role-field-error" role="alert">{staffFieldErrors.address}</span>}
                   </label>
                   {staffFormError && <p className="role-form-error staff-form-wide" role="alert">{staffFormError}</p>}
                 </div>

@@ -4,8 +4,21 @@ import loginImage from '../assets/image_login.png';
 import logoImage from '../assets/logo.png';
 import { register } from '../services/authService';
 import { getAbpErrorMessage } from '../services/abpError';
+import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation';
 import type { RegisterRequest } from '../types/Account/register';
 import '../resources/css/login2.scss';
+
+type RegisterField = 'firstName' | 'lastName' | 'email' | 'username' | 'password' | 'confirmPassword' | 'terms';
+
+const registerFieldAliases = {
+    firstName: ['name', 'firstName'],
+    lastName: ['surname', 'lastName'],
+    email: ['email', 'emailAddress'],
+    username: ['userName', 'username'],
+    password: ['password'],
+    confirmPassword: ['confirmPassword'],
+    terms: ['terms'],
+} as const;
 
 const Register = () => {
     const navigate = useNavigate();
@@ -18,14 +31,27 @@ const Register = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors<RegisterField>>({});
+    const [formError, setFormError] = useState('');
+    const [acceptedTerms, setAcceptedTerms] = useState(false);
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setErrorMessage('');
+        const nextErrors: FieldErrors<RegisterField> = {};
+        if (!firstName.trim()) nextErrors.firstName = 'First name is required.';
+        if (!lastName.trim()) nextErrors.lastName = 'Last name is required.';
+        if (!email.trim()) nextErrors.email = 'Email is required.';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) nextErrors.email = 'Enter a valid email address.';
+        if (!username.trim()) nextErrors.username = 'Username is required.';
+        if (password.length < 8) nextErrors.password = 'Password must be at least 8 characters.';
 
         if (password !== confirmPassword) {
-            setErrorMessage('Passwords do not match.');
+            nextErrors.confirmPassword = 'Passwords do not match.';
+        }
+        if (!acceptedTerms) nextErrors.terms = 'You must accept the terms and privacy policy.';
+        setFieldErrors(nextErrors);
+        setFormError('');
+        if (Object.keys(nextErrors).length) {
             return;
         }
 
@@ -41,14 +67,19 @@ const Register = () => {
         try {
             const response = await register(account);
             if (!response.success) {
-                setErrorMessage(getAbpErrorMessage(response.error, 'Registration failed.'));
+                const serverErrors = mapAbpFieldErrors(response.error, registerFieldAliases);
+                if (Object.keys(serverErrors).length) setFieldErrors(serverErrors);
+                else setFormError(getAbpErrorMessage(response.error, 'Registration failed.'));
                 return;
             }
 
             navigate('/login');
         } catch (error) {
             console.error(error);
-            setErrorMessage(error instanceof Error ? error.message : 'Registration failed.');
+            const message = error instanceof Error ? error.message : 'Registration failed.';
+            const serverErrors = mapMessageToFieldErrors(message, registerFieldAliases);
+            if (Object.keys(serverErrors).length) setFieldErrors(serverErrors);
+            else setFormError(message);
         } finally {
             setIsSubmitting(false);
         }
@@ -81,7 +112,7 @@ const Register = () => {
                         <p>Join us and manage your parking easily.</p>
                     </div>
 
-                    <form className="login-form register-form" onSubmit={handleSubmit}>
+                    <form className="login-form register-form" onSubmit={handleSubmit} noValidate>
                         <div className="register-fields-grid">
                             <div className="register-field">
                                 <label htmlFor="first-name">First name</label>
@@ -92,9 +123,15 @@ const Register = () => {
                                     autoComplete="given-name"
                                     placeholder="First name"
                                     value={firstName}
-                                    onChange={(event) => setFirstName(event.target.value)}
-                                    required
+                                    onChange={(event) => {
+                                        setFirstName(event.target.value);
+                                        setFieldErrors((errors) => ({ ...errors, firstName: undefined }));
+                                    }}
+                                    aria-invalid={Boolean(fieldErrors.firstName)}
+                                    aria-describedby={fieldErrors.firstName ? 'register-first-name-error' : undefined}
+                                    className={fieldErrors.firstName ? 'has-error' : undefined}
                                 />
+                                {fieldErrors.firstName && <span id="register-first-name-error" className="field-error" role="alert">{fieldErrors.firstName}</span>}
                             </div>
                             <div className="register-field">
                                 <label htmlFor="last-name">Last name</label>
@@ -105,9 +142,15 @@ const Register = () => {
                                     autoComplete="family-name"
                                     placeholder="Last name"
                                     value={lastName}
-                                    onChange={(event) => setLastName(event.target.value)}
-                                    required
+                                    onChange={(event) => {
+                                        setLastName(event.target.value);
+                                        setFieldErrors((errors) => ({ ...errors, lastName: undefined }));
+                                    }}
+                                    aria-invalid={Boolean(fieldErrors.lastName)}
+                                    aria-describedby={fieldErrors.lastName ? 'register-last-name-error' : undefined}
+                                    className={fieldErrors.lastName ? 'has-error' : undefined}
                                 />
+                                {fieldErrors.lastName && <span id="register-last-name-error" className="field-error" role="alert">{fieldErrors.lastName}</span>}
                             </div>
                             <div className="register-field">
                                 <label htmlFor="register-email">Email address</label>
@@ -118,9 +161,15 @@ const Register = () => {
                                     autoComplete="email"
                                     placeholder="you@example.com"
                                     value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                    required
+                                    onChange={(event) => {
+                                        setEmail(event.target.value);
+                                        setFieldErrors((errors) => ({ ...errors, email: undefined }));
+                                    }}
+                                    aria-invalid={Boolean(fieldErrors.email)}
+                                    aria-describedby={fieldErrors.email ? 'register-email-error' : undefined}
+                                    className={fieldErrors.email ? 'has-error' : undefined}
                                 />
+                                {fieldErrors.email && <span id="register-email-error" className="field-error" role="alert">{fieldErrors.email}</span>}
                             </div>
                             <div className="register-field">
                                 <label htmlFor="register-username">Username</label>
@@ -131,9 +180,15 @@ const Register = () => {
                                     autoComplete="username"
                                     placeholder="Choose a username"
                                     value={username}
-                                    onChange={(event) => setUsername(event.target.value)}
-                                    required
+                                    onChange={(event) => {
+                                        setUsername(event.target.value);
+                                        setFieldErrors((errors) => ({ ...errors, username: undefined }));
+                                    }}
+                                    aria-invalid={Boolean(fieldErrors.username)}
+                                    aria-describedby={fieldErrors.username ? 'register-username-error' : undefined}
+                                    className={fieldErrors.username ? 'has-error' : undefined}
                                 />
+                                {fieldErrors.username && <span id="register-username-error" className="field-error" role="alert">{fieldErrors.username}</span>}
                             </div>
                             <div className="register-field">
                                 <label htmlFor="register-password">Password</label>
@@ -145,9 +200,14 @@ const Register = () => {
                                         autoComplete="new-password"
                                         placeholder="Create password"
                                         value={password}
-                                        onChange={(event) => setPassword(event.target.value)}
+                                        onChange={(event) => {
+                                            setPassword(event.target.value);
+                                            setFieldErrors((errors) => ({ ...errors, password: undefined, confirmPassword: undefined }));
+                                        }}
                                         minLength={8}
-                                        required
+                                        aria-invalid={Boolean(fieldErrors.password)}
+                                        aria-describedby={fieldErrors.password ? 'register-password-error' : undefined}
+                                        className={fieldErrors.password ? 'has-error' : undefined}
                                     />
                                     <button
                                         className="password-toggle"
@@ -159,6 +219,7 @@ const Register = () => {
                                         <PasswordEye visible={isPasswordVisible} />
                                     </button>
                                 </div>
+                                {fieldErrors.password && <span id="register-password-error" className="field-error" role="alert">{fieldErrors.password}</span>}
                             </div>
                             <div className="register-field">
                                 <label htmlFor="confirm-password">Confirm password</label>
@@ -170,9 +231,14 @@ const Register = () => {
                                         autoComplete="new-password"
                                         placeholder="Confirm password"
                                         value={confirmPassword}
-                                        onChange={(event) => setConfirmPassword(event.target.value)}
+                                        onChange={(event) => {
+                                            setConfirmPassword(event.target.value);
+                                            setFieldErrors((errors) => ({ ...errors, confirmPassword: undefined }));
+                                        }}
                                         minLength={8}
-                                        required
+                                        aria-invalid={Boolean(fieldErrors.confirmPassword)}
+                                        aria-describedby={fieldErrors.confirmPassword ? 'register-confirm-password-error' : undefined}
+                                        className={fieldErrors.confirmPassword ? 'has-error' : undefined}
                                     />
                                     <button
                                         className="password-toggle"
@@ -184,13 +250,24 @@ const Register = () => {
                                         <PasswordEye visible={isConfirmPasswordVisible} />
                                     </button>
                                 </div>
+                                {fieldErrors.confirmPassword && <span id="register-confirm-password-error" className="field-error" role="alert">{fieldErrors.confirmPassword}</span>}
                             </div>
                         </div>
 
-                        <label className="register-terms">
-                            <input type="checkbox" required />
+                        <label className={`register-terms${fieldErrors.terms ? ' has-error' : ''}`}>
+                            <input
+                                type="checkbox"
+                                checked={acceptedTerms}
+                                onChange={(event) => {
+                                    setAcceptedTerms(event.target.checked);
+                                    setFieldErrors((errors) => ({ ...errors, terms: undefined }));
+                                }}
+                                aria-invalid={Boolean(fieldErrors.terms)}
+                                aria-describedby={fieldErrors.terms ? 'register-terms-error' : undefined}
+                            />
                             <span>I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>.</span>
                         </label>
+                        {fieldErrors.terms && <span id="register-terms-error" className="field-error" role="alert">{fieldErrors.terms}</span>}
 
                         <button className="login-button" type="submit" disabled={isSubmitting}>
                             <span>{isSubmitting ? 'Creating account...' : 'Create account'}</span>
@@ -200,7 +277,7 @@ const Register = () => {
                                 </svg>
                             )}
                         </button>
-                        {errorMessage && <p className="form-error" role="alert">{errorMessage}</p>}
+                        {formError && <p className="form-error" role="alert">{formError}</p>}
                     </form>
 
                     <p className="register-prompt">

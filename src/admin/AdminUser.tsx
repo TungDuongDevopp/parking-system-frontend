@@ -4,6 +4,7 @@ import '../resources/css/dashboard.scss'
 import { createUser, deleteUser, getUsers, updateUser } from '../services/userService'
 import { getRoleNames } from '../services/roleService'
 import { getAbpErrorMessage } from '../services/abpError'
+import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
 import type { UserDto } from '../types/User/user'
 import type { SubmitEvent } from 'react'
 import {
@@ -23,6 +24,15 @@ import {
 
 type SortField = 'userName' | 'emailAddress'
 type SortDirection = 'asc' | 'desc' | null
+type UserField = 'userName' | 'name' | 'surname' | 'emailAddress' | 'password'
+
+const userFieldAliases = {
+	userName: ['userName', 'username'],
+	name: ['name', 'firstName'],
+	surname: ['surname', 'lastName'],
+	emailAddress: ['email', 'emailAddress'],
+	password: ['password'],
+} as const
 
 function ActionIcon({ type }: { type: 'create' | 'edit' | 'delete' }) {
 	const icons = {
@@ -54,6 +64,7 @@ const AdminUser = () => {
 	const [isActive, setIsActive] = useState(true)
 	const [roleNames, setRoleNames] = useState<string[]>([])
 	const [userFormError, setUserFormError] = useState('')
+	const [userFieldErrors, setUserFieldErrors] = useState<FieldErrors<UserField>>({})
 	const [isUserSubmitting, setIsUserSubmitting] = useState(false)
 	const [availableRoles, setAvailableRoles] = useState<string[]>([])
 	const [isRoleLoading, setIsRoleLoading] = useState(true)
@@ -139,6 +150,7 @@ const AdminUser = () => {
 		setIsActive(true)
 		setRoleNames([])
 		setUserFormError('')
+		setUserFieldErrors({})
 		setIsUserSubmitting(false)
 	}
 
@@ -156,6 +168,7 @@ const AdminUser = () => {
 		setIsActive(user.isActive)
 		setRoleNames(user.roleNames || [])
 		setUserFormError('')
+		setUserFieldErrors({})
 		setIsUserModalOpen(true)
 	}
 
@@ -170,13 +183,20 @@ const AdminUser = () => {
 
 	const handleUserSubmit = async (event: SubmitEvent) => {
 		event.preventDefault()
-		if (!userName.trim() || !name.trim() || !surname.trim() || !emailAddress.trim() || (!editingUser && !password)) {
-			setUserFormError('Please fill in all required fields.')
+		const validationErrors: FieldErrors<UserField> = {}
+		if (!userName.trim()) validationErrors.userName = 'Username is required.'
+		if (!name.trim()) validationErrors.name = 'First name is required.'
+		if (!surname.trim()) validationErrors.surname = 'Last name is required.'
+		if (!emailAddress.trim()) validationErrors.emailAddress = 'Email is required.'
+		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress.trim())) validationErrors.emailAddress = 'Enter a valid email address.'
+		if (!editingUser && !password) validationErrors.password = 'Password is required.'
+		setUserFieldErrors(validationErrors)
+		setUserFormError('')
+		if (Object.keys(validationErrors).length) {
 			return
 		}
 
 		setIsUserSubmitting(true)
-		setUserFormError('')
 
 		try {
 			const response = editingUser
@@ -200,14 +220,19 @@ const AdminUser = () => {
 				})
 
 			if (!response.success) {
-				setUserFormError(getAbpErrorMessage(response.error, `Unable to ${editingUser ? 'update' : 'create'} user.`))
+				const serverErrors = mapAbpFieldErrors(response.error, userFieldAliases)
+				if (Object.keys(serverErrors).length) setUserFieldErrors(serverErrors)
+				else setUserFormError(getAbpErrorMessage(response.error, `Unable to ${editingUser ? 'update' : 'create'} user.`))
 				return
 			}
 
 			closeUserModal()
 			await loadUsers()
 		} catch (error) {
-			setUserFormError(error instanceof Error ? error.message : `Unable to ${editingUser ? 'update' : 'create'} user.`)
+			const message = error instanceof Error ? error.message : `Unable to ${editingUser ? 'update' : 'create'} user.`
+			const serverErrors = mapMessageToFieldErrors(message, userFieldAliases)
+			if (Object.keys(serverErrors).length) setUserFieldErrors(serverErrors)
+			else setUserFormError(message)
 		} finally {
 			setIsUserSubmitting(false)
 		}
@@ -362,34 +387,40 @@ const AdminUser = () => {
 							</div>
 							<button className="modal-close" type="button" aria-label="Close user dialog" onClick={closeUserModal}><IconX className="action-icon" aria-hidden="true" /></button>
 						</header>
-						<form onSubmit={handleUserSubmit}>
+						<form onSubmit={handleUserSubmit} noValidate>
 							<div className="role-form-body">
 								<label className="role-field">
 									<span>Username <b>*</b></span>
 									<input
 										value={userName}
-										onChange={(event) => setUserName(event.target.value)}
+										onChange={(event) => { setUserName(event.target.value); setUserFieldErrors((errors) => ({ ...errors, userName: undefined })) }}
 										autoFocus={!editingUser}
 										disabled={Boolean(editingUser)}
-										required
+										aria-invalid={Boolean(userFieldErrors.userName)}
+										className={userFieldErrors.userName ? 'has-error' : undefined}
 									/>
+									{userFieldErrors.userName && <span className="role-field-error" role="alert">{userFieldErrors.userName}</span>}
 								</label>
 								<label className="role-field">
 									<span>First name <b>*</b></span>
-									<input value={name} onChange={(event) => setName(event.target.value)} required />
+									<input value={name} onChange={(event) => { setName(event.target.value); setUserFieldErrors((errors) => ({ ...errors, name: undefined })) }} aria-invalid={Boolean(userFieldErrors.name)} className={userFieldErrors.name ? 'has-error' : undefined} />
+									{userFieldErrors.name && <span className="role-field-error" role="alert">{userFieldErrors.name}</span>}
 								</label>
 								<label className="role-field">
 									<span>Last name <b>*</b></span>
-									<input value={surname} onChange={(event) => setSurname(event.target.value)} required />
+									<input value={surname} onChange={(event) => { setSurname(event.target.value); setUserFieldErrors((errors) => ({ ...errors, surname: undefined })) }} aria-invalid={Boolean(userFieldErrors.surname)} className={userFieldErrors.surname ? 'has-error' : undefined} />
+									{userFieldErrors.surname && <span className="role-field-error" role="alert">{userFieldErrors.surname}</span>}
 								</label>
 								<label className="role-field">
 									<span>Email address <b>*</b></span>
-									<input type="email" value={emailAddress} onChange={(event) => setEmailAddress(event.target.value)} required />
+									<input type="email" value={emailAddress} onChange={(event) => { setEmailAddress(event.target.value); setUserFieldErrors((errors) => ({ ...errors, emailAddress: undefined })) }} aria-invalid={Boolean(userFieldErrors.emailAddress)} className={userFieldErrors.emailAddress ? 'has-error' : undefined} />
+									{userFieldErrors.emailAddress && <span className="role-field-error" role="alert">{userFieldErrors.emailAddress}</span>}
 								</label>
 								{!editingUser && (
 									<label className="role-field">
 										<span>Password <b>*</b></span>
-										<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+										<input type="password" value={password} onChange={(event) => { setPassword(event.target.value); setUserFieldErrors((errors) => ({ ...errors, password: undefined })) }} aria-invalid={Boolean(userFieldErrors.password)} className={userFieldErrors.password ? 'has-error' : undefined} />
+										{userFieldErrors.password && <span className="role-field-error" role="alert">{userFieldErrors.password}</span>}
 									</label>
 								)}
 								<label className="role-field">

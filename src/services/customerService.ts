@@ -51,14 +51,14 @@ export const deleteCustomer = async (id: number): Promise<void> => {
     }
 }
 
-export const updateCustomer = async (data: CustomerRequestUpdate): Promise<CustomerResponse> => {
+export const updateCustomer = async (data: CustomerRequestUpdate): Promise<AbpResponse<CustomerDto>> => {
     const response = await apiClient('/api/services/app/Customer/Update', {
         method: 'PUT',
         authenticated: true,
         body: JSON.stringify(data),
     })
 
-    return response.json() as Promise<CustomerResponse>
+    return response.json() as Promise<AbpResponse<CustomerDto>>
 }
 
 export const getMyProfile = async (): Promise<AbpResponse<CustomerDto>> => {
