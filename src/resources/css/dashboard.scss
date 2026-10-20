@@ -118,6 +118,8 @@ button { font: inherit; }
 .staff-filter-field input:focus { border-color: #6f8cf0; outline: 3px solid rgba(75, 111, 237, .12); }
 .staff-filter-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; padding: 0; border: 0; }
 .staff-filter-group legend { grid-column: 1 / -1; margin-bottom: 8px; color: #35465c; font-size: 12px; font-weight: 700; }
+.staff-filter-field input.has-error { border-color: #d34b5f; box-shadow: 0 0 0 3px rgba(211, 75, 95, .1); }
+.staff-filter-field-error { color: #d34b5f; font-size: 11px; font-weight: 500; }
 .staff-filter-error { margin: 0; color: #d34b5f; font-size: 12px; }
 .staff-filter-actions { display: flex; justify-content: flex-end; gap: 9px; padding-top: 3px; }
 .staff-filter-reset { padding: 9px 12px; border: 1px solid #d5deea; border-radius: 7px; color: #52657c; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600; }
@@ -139,6 +141,7 @@ button { font: inherit; }
 .staff-status-save:hover { background: rgba(205, 220, 255, .9); }
 .staff-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
 .staff-form-grid .role-field { grid-template-columns: 1fr; gap: 7px; }
+.staff-form-grid .role-field-error { grid-column: 1; margin: -3px 0 0; }
 .staff-form-grid .role-field input, .staff-form-grid .role-field select { width: 100%; height: 44px; padding: 0 13px; font: inherit; font-weight: 400; }
 .staff-form-grid .role-form-error { grid-column: 1 / -1; }
 .staff-form-wide { grid-column: 1 / -1; }
@@ -203,6 +206,8 @@ button { font: inherit; }
 .permission-option { display: flex; min-width: 0; align-items: flex-start; gap: 8px; color: #34465b; cursor: pointer; font-size: 14px; font-weight: 600; line-height: 1.4; }
 .permission-option input { width: 16px; height: 16px; margin: 0; accent-color: #4b6fed; }
 .permission-option span { min-width: 0; overflow-wrap: anywhere; }
+.role-field input.has-error, .role-field select.has-error, .role-field textarea.has-error { border-color: #d34b5f; box-shadow: 0 0 0 3px rgba(211, 75, 95, .1); }
+.role-field-error { grid-column: 2; margin: -12px 0 0; color: #d34b5f; font-size: 12px; font-weight: 500; }
 .role-form-error { grid-column: 2; margin: -5px 0 0; color: #d34b5f; font-size: 13px; }
 .role-modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid rgba(197, 211, 227, .7); background: rgba(255, 255, 255, .28); }
 .modal-cancel { padding: 10px 17px; border: 1px solid rgba(174, 191, 211, .78); border-radius: 7px; color: #60738a; background: rgba(255, 255, 255, .52); cursor: pointer; font-size: 13px; font-weight: 700; }

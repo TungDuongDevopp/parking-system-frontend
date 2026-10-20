@@ -261,7 +261,19 @@
             border-color: #168b8a;
             box-shadow: 0 0 0 3px rgba(22, 139, 138, .12);
         }
+
+        &.has-error,
+        &.has-error:focus {
+            border-color: #b33a3a;
+            box-shadow: 0 0 0 3px rgba(179, 58, 58, .1);
+        }
     }
+}
+
+.customer-profile-field-error {
+    color: #b33a3a;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .customer-profile-submit {

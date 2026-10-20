@@ -3,6 +3,7 @@ import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
 import { createRole, deleteRole, getPermission, getRoles, updateRole } from '../services/roleService'
 import { getAbpErrorMessage } from '../services/abpError'
+import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
 import type { Role } from '../types/Role/role'
 import type { SubmitEvent } from 'react'
 import {
@@ -23,6 +24,12 @@ import {
 
 type SortField = 'name' | 'displayName'
 type SortDirection = 'asc' | 'desc' | null
+type RoleField = 'name' | 'displayName'
+
+const roleFieldAliases = {
+	name: ['name', 'normalizedName'],
+	displayName: ['displayName'],
+} as const
 
 function ActionIcon({ type }: { type: 'create' | 'edit' | 'delete' | 'refresh' }) {
 	const icons = {
@@ -50,6 +57,7 @@ function AdminRole() {
 	const [permissionError, setPermissionError] = useState('')
 	const [selectedPermissions, setSelectedPermissions] = useState<string[]>([])
 	const [formError, setFormError] = useState('')
+	const [roleFieldErrors, setRoleFieldErrors] = useState<FieldErrors<RoleField>>({})
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [deletingRoleId, setDeletingRoleId] = useState<number | null>(null)
 	const [sortField, setSortField] = useState<SortField | null>(null)
@@ -151,6 +159,7 @@ function AdminRole() {
 		setDescription('')
 		setSelectedPermissions([])
 		setFormError('')
+		setRoleFieldErrors({})
 		setIsSubmitting(false)
 	}
 
@@ -166,6 +175,7 @@ function AdminRole() {
 		setDescription(role.description || '')
 		setSelectedPermissions(role.grantedPermissions || [])
 		setFormError('')
+		setRoleFieldErrors({})
 		setIsCreateOpen(true)
 	}
 
@@ -179,13 +189,16 @@ function AdminRole() {
 
 	const handleCreateSubmit = async (event: SubmitEvent) => {
 		event.preventDefault()
-		if (!roleName.trim() || !displayName.trim()) {
-			setFormError('Role Name and Display Name are required.')
+		const validationErrors: FieldErrors<RoleField> = {}
+		if (!roleName.trim()) validationErrors.name = 'Role name is required.'
+		if (!displayName.trim()) validationErrors.displayName = 'Display name is required.'
+		setRoleFieldErrors(validationErrors)
+		setFormError('')
+		if (Object.keys(validationErrors).length) {
 			return
 		}
 
 		setIsSubmitting(true)
-		setFormError('')
 
 		try {
 			const roleData = {
@@ -200,14 +213,19 @@ function AdminRole() {
 				: await createRole(roleData)
 
 			if (!response.success) {
-				setFormError(getAbpErrorMessage(response.error, `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`))
+				const serverErrors = mapAbpFieldErrors(response.error, roleFieldAliases)
+				if (Object.keys(serverErrors).length) setRoleFieldErrors(serverErrors)
+				else setFormError(getAbpErrorMessage(response.error, `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`))
 				return
 			}
 
 			closeCreateModal()
 			await loadRoles()
 		} catch (error) {
-			setFormError(error instanceof Error ? error.message : `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`)
+			const message = error instanceof Error ? error.message : `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`
+			const serverErrors = mapMessageToFieldErrors(message, roleFieldAliases)
+			if (Object.keys(serverErrors).length) setRoleFieldErrors(serverErrors)
+			else setFormError(message)
 		} finally {
 			setIsSubmitting(false)
 		}
@@ -384,24 +402,34 @@ function AdminRole() {
 							</button>
 						</header>
 
-						<form onSubmit={handleCreateSubmit}>
+						<form onSubmit={handleCreateSubmit} noValidate>
 							<div className="role-form-body">
 								<label className="role-field">
 									<span>Role Name <b>*</b></span>
 									<input
 										value={roleName}
-										onChange={(event) => setRoleName(event.target.value)}
+										onChange={(event) => {
+											setRoleName(event.target.value)
+											setRoleFieldErrors((errors) => ({ ...errors, name: undefined }))
+										}}
 										autoFocus
-										required
+										aria-invalid={Boolean(roleFieldErrors.name)}
+										className={roleFieldErrors.name ? 'has-error' : undefined}
 									/>
+									{roleFieldErrors.name && <span className="role-field-error" role="alert">{roleFieldErrors.name}</span>}
 								</label>
 								<label className="role-field">
 									<span>Display Name <b>*</b></span>
 									<input
 										value={displayName}
-										onChange={(event) => setDisplayName(event.target.value)}
-										required
+										onChange={(event) => {
+											setDisplayName(event.target.value)
+											setRoleFieldErrors((errors) => ({ ...errors, displayName: undefined }))
+										}}
+										aria-invalid={Boolean(roleFieldErrors.displayName)}
+										className={roleFieldErrors.displayName ? 'has-error' : undefined}
 									/>
+									{roleFieldErrors.displayName && <span className="role-field-error" role="alert">{roleFieldErrors.displayName}</span>}
 								</label>
 								<label className="role-field role-description">
 									<span>Role description</span>

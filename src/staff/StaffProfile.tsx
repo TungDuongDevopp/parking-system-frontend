@@ -5,23 +5,44 @@ import '../resources/css/customer-profile.scss'
 import { getMyStaffProfile, changeStaffProfile } from '../services/staffService'
 import { getAbpErrorMessage } from '../services/abpError'
 import type { StaffChangeProfileRequest, StaffDto } from '../types/Staff/staff'
+import { mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
 
 const formatDate = (value: string | null) => value?.split('T')[0] ?? ''
 
-const matchesSubmittedProfile = (profile: StaffDto, draft: StaffChangeProfileRequest) =>
-    profile.phoneNumber.trim() === draft.phoneNumber &&
-    (profile.email ?? '').trim() === draft.email &&
-    profile.gender === draft.gender &&
-    formatDate(profile.dateOfBirth) === formatDate(draft.dateOfBirth) &&
-    (profile.address ?? '').trim() === (draft.address ?? '')
+type StaffProfileDraft = {
+    phoneNumber: string
+    email: string
+    gender: boolean | null
+    dateOfBirth: string
+    address: string
+}
+
+type StaffProfileField = keyof StaffProfileDraft
+
+const staffFieldAliases = {
+    phoneNumber: ['phone', 'phoneNumber'],
+    email: ['email'],
+    gender: ['gender'],
+    dateOfBirth: ['dateOfBirth', 'birthDate'],
+    address: ['address'],
+} as const
+
+const matchesSubmittedProfile = (profile: StaffDto, changes: StaffChangeProfileRequest) =>
+    (changes.phoneNumber === undefined || profile.phoneNumber.trim() === changes.phoneNumber) &&
+    (changes.email === undefined || (profile.email ?? '').trim() === changes.email) &&
+    (changes.gender === undefined || profile.gender === changes.gender) &&
+    (changes.dateOfBirth === undefined || formatDate(profile.dateOfBirth) === changes.dateOfBirth) &&
+    (changes.address === undefined || (profile.address ?? '').trim() === changes.address)
 
 const StaffProfile = () => {
     const [profile, setProfile] = useState<StaffDto | null>(null)
-    const [draft, setDraft] = useState<StaffChangeProfileRequest | null>(null)
+    const [draft, setDraft] = useState<StaffProfileDraft | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isEditing, setIsEditing] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors<StaffProfileField>>({})
+    const [formError, setFormError] = useState('')
 
     useEffect(() => {
         let isMounted = true
@@ -54,38 +75,72 @@ const StaffProfile = () => {
             phoneNumber: profile.phoneNumber,
             email: profile.email ?? '',
             gender: profile.gender,
-            dateOfBirth: formatDate(profile.dateOfBirth) || null,
+            dateOfBirth: formatDate(profile.dateOfBirth),
             address: profile.address ?? '',
         })
-        setErrorMessage('')
+        setFieldErrors({})
+        setFormError('')
         setIsEditing(true)
     }
 
     const cancelEditing = () => {
         setDraft(null)
-        setErrorMessage('')
+        setFieldErrors({})
+        setFormError('')
         setIsEditing(false)
     }
 
     const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        if (!draft) return
-        setIsSubmitting(true)
-        setErrorMessage('')
+        if (!draft || !profile) return
+        setFieldErrors({})
+        setFormError('')
 
-        const updatedProfile: StaffChangeProfileRequest = {
-            phoneNumber: draft.phoneNumber.trim(),
-            email: draft.email.trim(),
-            gender: draft.gender,
-            dateOfBirth: draft.dateOfBirth || null,
-            address: draft.address?.trim() || null,
+        const phoneNumber = draft.phoneNumber.trim()
+        const email = draft.email.trim()
+        const dateOfBirth = draft.dateOfBirth
+        const address = draft.address.trim()
+
+        if (!phoneNumber) {
+            setFieldErrors({ phoneNumber: 'Phone number is required.' })
+            return
         }
 
+        const isClearingExistingValue =
+            (Boolean(profile.email?.trim()) && !email) ||
+            (profile.gender !== null && draft.gender === null) ||
+            (profile.dateOfBirth !== null && !dateOfBirth) ||
+            (Boolean(profile.address?.trim()) && !address)
+
+        if (isClearingExistingValue) {
+            setFieldErrors({
+                ...((Boolean(profile.email?.trim()) && !email) ? { email: 'The profile service cannot clear an existing email. Enter a replacement or keep the current value.' } : {}),
+                ...(profile.gender !== null && draft.gender === null ? { gender: 'The profile service cannot clear an existing value. Select a replacement or keep the current value.' } : {}),
+                ...(profile.dateOfBirth !== null && !dateOfBirth ? { dateOfBirth: 'The profile service cannot clear an existing date. Enter a replacement or keep the current date.' } : {}),
+                ...(Boolean(profile.address?.trim()) && !address ? { address: 'The profile service cannot clear an existing address. Enter a replacement or keep the current address.' } : {}),
+            })
+            return
+        }
+
+        const updatedProfile: StaffChangeProfileRequest = {}
+        if (phoneNumber !== profile.phoneNumber.trim()) updatedProfile.phoneNumber = phoneNumber
+        if (email && email !== (profile.email ?? '').trim()) updatedProfile.email = email
+        if (draft.gender !== null && draft.gender !== profile.gender) updatedProfile.gender = draft.gender
+        if (dateOfBirth && formatDate(profile.dateOfBirth) !== dateOfBirth) updatedProfile.dateOfBirth = dateOfBirth
+        if (address && address !== (profile.address ?? '').trim()) updatedProfile.address = address
+
+        if (Object.keys(updatedProfile).length === 0) {
+            setDraft(null)
+            setIsEditing(false)
+            return
+        }
+
+        setIsSubmitting(true)
         try {
             await changeStaffProfile(updatedProfile)
             const refreshed = await getMyStaffProfile()
             if (!refreshed.success || !refreshed.result) {
-                setErrorMessage(getAbpErrorMessage(
+                setFormError(getAbpErrorMessage(
                     refreshed.error,
                     'Không thể xác nhận hồ sơ đã được cập nhật. Vui lòng tải lại trang.',
                 ))
@@ -94,14 +149,17 @@ const StaffProfile = () => {
 
             setProfile(refreshed.result)
             if (!matchesSubmittedProfile(refreshed.result, updatedProfile)) {
-                setErrorMessage('Máy chủ chưa lưu các thay đổi hồ sơ. Vui lòng thử lại hoặc liên hệ quản trị viên.')
+                setFormError('Máy chủ chưa lưu các thay đổi hồ sơ. Vui lòng thử lại hoặc liên hệ quản trị viên.')
                 return
             }
 
             setDraft(null)
             setIsEditing(false)
         } catch (error) {
-            setErrorMessage(error instanceof Error ? error.message : 'Unable to update your profile.')
+            const message = error instanceof Error ? error.message : 'Unable to update your profile.'
+            const serverErrors = mapMessageToFieldErrors(message, staffFieldAliases)
+            if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
+            else setFormError(message)
         } finally {
             setIsSubmitting(false)
         }
@@ -139,16 +197,21 @@ const StaffProfile = () => {
                                 <h2>{isEditing ? 'Edit profile' : 'Personal details'}</h2>
                             </div>
                             {isEditing && draft ? (
-                                <form className="customer-profile-form" onSubmit={handleUpdate}>
+                                <form className="customer-profile-form" onSubmit={handleUpdate} noValidate>
                                     <label>
                                         <span>Phone number</span>
                                         <input
                                             type="tel"
                                             autoComplete="tel"
                                             value={draft.phoneNumber}
-                                            onChange={(event) => setDraft({ ...draft, phoneNumber: event.target.value })}
-                                            required
+                                            onChange={(event) => {
+                                                setDraft({ ...draft, phoneNumber: event.target.value })
+                                                setFieldErrors((errors) => ({ ...errors, phoneNumber: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.phoneNumber)}
+                                            className={fieldErrors.phoneNumber ? 'has-error' : undefined}
                                         />
+                                        {fieldErrors.phoneNumber && <span className="customer-profile-field-error" role="alert">{fieldErrors.phoneNumber}</span>}
                                     </label>
                                     <label>
                                         <span>Email</span>
@@ -156,22 +219,34 @@ const StaffProfile = () => {
                                             type="email"
                                             autoComplete="email"
                                             value={draft.email ?? ''}
-                                            onChange={(event) => setDraft({ ...draft, email: event.target.value })}
+                                            onChange={(event) => {
+                                                setDraft({ ...draft, email: event.target.value })
+                                                setFieldErrors((errors) => ({ ...errors, email: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.email)}
+                                            className={fieldErrors.email ? 'has-error' : undefined}
                                         />
+                                        {fieldErrors.email && <span className="customer-profile-field-error" role="alert">{fieldErrors.email}</span>}
                                     </label>
                                     <label>
                                         <span>Gender</span>
                                         <select
                                             value={draft.gender === null ? '' : draft.gender.toString()}
-                                            onChange={(event) => setDraft({
-                                                ...draft,
-                                                gender: event.target.value === '' ? null : event.target.value === 'true',
-                                            })}
+                                            onChange={(event) => {
+                                                setDraft({
+                                                    ...draft,
+                                                    gender: event.target.value === '' ? null : event.target.value === 'true',
+                                                })
+                                                setFieldErrors((errors) => ({ ...errors, gender: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.gender)}
+                                            className={fieldErrors.gender ? 'has-error' : undefined}
                                         >
                                             <option value="">Not specified</option>
                                             <option value="true">Male</option>
                                             <option value="false">Female</option>
                                         </select>
+                                        {fieldErrors.gender && <span className="customer-profile-field-error" role="alert">{fieldErrors.gender}</span>}
                                     </label>
                                     <label>
                                         <span>Date of birth</span>
@@ -179,16 +254,28 @@ const StaffProfile = () => {
                                             type="date"
                                             autoComplete="bday"
                                             value={formatDate(draft.dateOfBirth)}
-                                            onChange={(event) => setDraft({ ...draft, dateOfBirth: event.target.value || null })}
+                                            onChange={(event) => {
+                                                setDraft({ ...draft, dateOfBirth: event.target.value })
+                                                setFieldErrors((errors) => ({ ...errors, dateOfBirth: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.dateOfBirth)}
+                                            className={fieldErrors.dateOfBirth ? 'has-error' : undefined}
                                         />
+                                        {fieldErrors.dateOfBirth && <span className="customer-profile-field-error" role="alert">{fieldErrors.dateOfBirth}</span>}
                                     </label>
                                     <label>
                                         <span>Address</span>
                                         <input
                                             autoComplete="street-address"
                                             value={draft.address ?? ''}
-                                            onChange={(event) => setDraft({ ...draft, address: event.target.value })}
+                                            onChange={(event) => {
+                                                setDraft({ ...draft, address: event.target.value })
+                                                setFieldErrors((errors) => ({ ...errors, address: undefined }))
+                                            }}
+                                            aria-invalid={Boolean(fieldErrors.address)}
+                                            className={fieldErrors.address ? 'has-error' : undefined}
                                         />
+                                        {fieldErrors.address && <span className="customer-profile-field-error" role="alert">{fieldErrors.address}</span>}
                                     </label>
                                     <div className="customer-profile-actions">
                                         <button className="customer-profile-submit" type="submit" disabled={isSubmitting}>
@@ -198,6 +285,7 @@ const StaffProfile = () => {
                                             Cancel
                                         </button>
                                     </div>
+                                    {formError && <p className="customer-profile-error" role="alert">{formError}</p>}
                                 </form>
                             ) : (
                                 <>

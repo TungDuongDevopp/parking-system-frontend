@@ -5,6 +5,15 @@ import '../resources/css/login.scss'
 import { changePassword } from '../services/authService'
 import { getAbpErrorMessage } from '../services/abpError'
 import type { ChangePassWordRequest } from '../types/Account/changePassword'
+import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+
+type PasswordField = 'currentPassword' | 'newPassword' | 'confirmPassword'
+
+const passwordFieldAliases = {
+	currentPassword: ['currentPassword'],
+	newPassword: ['newPassword'],
+	confirmPassword: ['confirmPassword'],
+} as const
 function LockIcon() {
 	return <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="10" width="13" height="10" rx="2" /><path d="M8 10V7.5a4 4 0 0 1 8 0V10" /></svg>
 }
@@ -24,7 +33,8 @@ function ChangePassword() {
 	const [newPassword, setNewPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 	const [visiblePasswords, setVisiblePasswords] = useState({ current: false, new: false, confirm: false })
-	const [errorMessage, setErrorMessage] = useState('')
+	const [fieldErrors, setFieldErrors] = useState<FieldErrors<PasswordField>>({})
+	const [formError, setFormError] = useState('')
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate();
 	const togglePasswordVisibility = (field: keyof typeof visiblePasswords) => {
@@ -32,15 +42,20 @@ function ChangePassword() {
 	}
 	const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		setErrorMessage('')
+		const nextErrors: FieldErrors<PasswordField> = {}
+		if (!currentPassword) nextErrors.currentPassword = 'Current password is required.'
+		if (newPassword.length < 8) nextErrors.newPassword = 'Password must be at least 8 characters.'
+		if (!confirmPassword) nextErrors.confirmPassword = 'Please confirm your new password.'
 		setIsSubmitted(true)
 		if (newPassword !== confirmPassword) {
-			setErrorMessage('New password and confirmation password must match.')
-			setIsSubmitted(false)
-			return
+			nextErrors.confirmPassword = 'New password and confirmation password must match.'
 		}
-		if(newPassword == currentPassword){
-			setErrorMessage('New password must not be the same as current password')
+		if (newPassword && newPassword == currentPassword) {
+			nextErrors.newPassword = 'New password must not be the same as current password.'
+		}
+		setFieldErrors(nextErrors)
+		setFormError('')
+		if (Object.keys(nextErrors).length) {
 			setIsSubmitted(false)
 			return
 		}
@@ -51,7 +66,9 @@ function ChangePassword() {
 		try{
 			const response = await changePassword(account);
 			if (!response.success || response.result !== true) {
-				setErrorMessage(getAbpErrorMessage(response.error, 'Change password failed!'));
+				const serverErrors = mapAbpFieldErrors(response.error, passwordFieldAliases)
+				if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
+				else setFieldErrors({ currentPassword: getAbpErrorMessage(response.error, 'Change password failed!') })
 				return
 			}
 			navigate("/login");
@@ -59,7 +76,10 @@ function ChangePassword() {
 		}
 		catch(error){
 			console.error(error);
-			setErrorMessage('Đổi mật khẩu thất bại')
+			const message = error instanceof Error ? error.message : 'Đổi mật khẩu thất bại'
+			const serverErrors = mapMessageToFieldErrors(message, passwordFieldAliases)
+			if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
+			else setFieldErrors({ currentPassword: message })
 		}
 		finally{
 			setIsSubmitted(false)
@@ -81,17 +101,20 @@ function ChangePassword() {
 				</Link>
 				<div className="login-card change-password-card">
 					<div className="login-heading"><p className="eyebrow">ACCOUNT SECURITY</p><h1 id="change-password-title">Change your password</h1><p>Keep your ParkingSystem account secure.</p></div>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} noValidate>
 						<label className="field-label" htmlFor="current-password">Current password</label>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="current-password" name="currentPassword" type={visiblePasswords.current ? 'text' : 'password'} autoComplete="current-password" placeholder="Enter your current password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} required /><button className="password-toggle" type="button" aria-label={visiblePasswords.current ? 'Hide current password' : 'Show current password'} title={visiblePasswords.current ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('current')}><EyeIcon visible={visiblePasswords.current} /></button></div>
+						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="current-password" name="currentPassword" type={visiblePasswords.current ? 'text' : 'password'} autoComplete="current-password" placeholder="Enter your current password" value={currentPassword} onChange={(event) => { setCurrentPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, currentPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.currentPassword)} aria-describedby={fieldErrors.currentPassword ? 'current-password-error' : undefined} className={fieldErrors.currentPassword ? 'has-error' : undefined} /><button className="password-toggle" type="button" aria-label={visiblePasswords.current ? 'Hide current password' : 'Show current password'} title={visiblePasswords.current ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('current')}><EyeIcon visible={visiblePasswords.current} /></button></div>
+						{fieldErrors.currentPassword && <p id="current-password-error" className="field-error" role="alert">{fieldErrors.currentPassword}</p>}
 						<label className="field-label" htmlFor="new-password">New password</label>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="new-password" name="newPassword" type={visiblePasswords.new ? 'text' : 'password'} autoComplete="new-password" placeholder="Enter a new password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} minLength={8} required /><button className="password-toggle" type="button" aria-label={visiblePasswords.new ? 'Hide new password' : 'Show new password'} title={visiblePasswords.new ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('new')}><EyeIcon visible={visiblePasswords.new} /></button></div>
+						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="new-password" name="newPassword" type={visiblePasswords.new ? 'text' : 'password'} autoComplete="new-password" placeholder="Enter a new password" value={newPassword} onChange={(event) => { setNewPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, newPassword: undefined, confirmPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.newPassword)} aria-describedby={fieldErrors.newPassword ? 'new-password-error' : undefined} className={fieldErrors.newPassword ? 'has-error' : undefined} /><button className="password-toggle" type="button" aria-label={visiblePasswords.new ? 'Hide new password' : 'Show new password'} title={visiblePasswords.new ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('new')}><EyeIcon visible={visiblePasswords.new} /></button></div>
+						{fieldErrors.newPassword && <p id="new-password-error" className="field-error" role="alert">{fieldErrors.newPassword}</p>}
 						<label className="field-label" htmlFor="confirm-password">Confirm new password</label>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="confirm-password" name="confirmPassword" type={visiblePasswords.confirm ? 'text' : 'password'} autoComplete="new-password" placeholder="Re-enter your new password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} minLength={8} required /><button className="password-toggle" type="button" aria-label={visiblePasswords.confirm ? 'Hide confirmation password' : 'Show confirmation password'} title={visiblePasswords.confirm ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('confirm')}><EyeIcon visible={visiblePasswords.confirm} /></button></div>
+						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="confirm-password" name="confirmPassword" type={visiblePasswords.confirm ? 'text' : 'password'} autoComplete="new-password" placeholder="Re-enter your new password" value={confirmPassword} onChange={(event) => { setConfirmPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, confirmPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.confirmPassword)} aria-describedby={fieldErrors.confirmPassword ? 'confirm-password-error' : undefined} className={fieldErrors.confirmPassword ? 'has-error' : undefined} /><button className="password-toggle" type="button" aria-label={visiblePasswords.confirm ? 'Hide confirmation password' : 'Show confirmation password'} title={visiblePasswords.confirm ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('confirm')}><EyeIcon visible={visiblePasswords.confirm} /></button></div>
+						{fieldErrors.confirmPassword && <p id="confirm-password-error" className="field-error" role="alert">{fieldErrors.confirmPassword}</p>}
 						<button className="login-button" type="submit" disabled={isSubmitted}><span>{isSubmitted ? 'Changing password...' : 'Update password'}</span>{!isSubmitted && <ArrowIcon />}</button>
 						<Link className="cancel-button" to="/">Cancel</Link>
 						{isSubmitted && <p className="form-message" role="status">Changing your password...</p>}
-						{errorMessage && <p className="form-message form-error" role="alert">{errorMessage}</p>}
+						{formError && <p className="form-message form-error" role="alert">{formError}</p>}
 					</form>
 					<p className="register-prompt"><Link to="/login">Back to sign in</Link></p>
 				</div>

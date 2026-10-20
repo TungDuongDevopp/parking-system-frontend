@@ -355,6 +355,19 @@ body {
         text-align: center;
     }
 
+    .field-error {
+        margin: 6px 0 12px;
+        color: #c13f48;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    input.has-error,
+    .password-field input.has-error {
+        border-color: #c13f48;
+        box-shadow: 0 0 0 3px rgba(193, 63, 72, .1);
+    }
+
     .register-prompt {
         margin: 21px 0 0;
         color: #71889a;
@@ -532,10 +545,21 @@ body {
                 padding-right: 42px;
             }
 
+            > input.has-error,
+            .password-field input.has-error {
+                border-color: #c13f48;
+                box-shadow: 0 0 0 3px rgba(193, 63, 72, .1);
+            }
+
             .password-toggle {
                 right: 5px;
                 width: 30px;
                 height: 30px;
+            }
+
+            .field-error {
+                display: block;
+                margin: 6px 0 0;
             }
         }
 
@@ -548,6 +572,10 @@ body {
             font-size: 12px;
             line-height: 1.5;
             cursor: pointer;
+
+            &.has-error {
+                color: #c13f48;
+            }
 
             input {
                 flex: 0 0 auto;
