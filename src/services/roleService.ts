@@ -38,7 +38,8 @@ export const createRole = async (data: RoleRequest): Promise<Role> => {
 }
 
 export const deleteRole = async (id: number): Promise<void> => {
-  const response = await apiClient(`/api/services/app/Role/Delete/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Role/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,
   })

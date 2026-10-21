@@ -6,7 +6,7 @@ export interface ParkingAreaDto{
     vehicleTypeName: string,
     vehicleType: number
     capacity: number,
-    parkingMode: string,
+    parkingMode: number,
     parkingModeName: string,
     location: string,
     description: string|null,

@@ -3,6 +3,7 @@ import type { SubmitEvent } from 'react'
 import { createPortal } from 'react-dom'
 import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
+import '../resources/css/filters.scss'
 import {
   changeStaffStatus,
   createStaff,
@@ -59,6 +60,7 @@ const emptyFilterDraft: FilterDraft = {
 }
 
 const formatStaffDate = (value: string) => value.split('T')[0]
+
 const staffStatuses = [
   { value: 0, label: 'Active' },
   { value: 1, label: 'Inactive' },
@@ -157,7 +159,7 @@ const AdminStaff = () => {
       const bounds = button.getBoundingClientRect()
       setFilterPosition({
         top: Math.max(12, Math.min(bounds.bottom + 8, window.innerHeight - 520)),
-        right: Math.max(12, Math.min(window.innerWidth - bounds.right, window.innerWidth - 362)),
+        right: Math.max(12, Math.min(window.innerWidth - bounds.right, window.innerWidth - 360)),
       })
     }
 
@@ -170,6 +172,57 @@ const AdminStaff = () => {
       window.removeEventListener('scroll', updatePosition, true)
     }
   }, [isFilterOpen])
+
+   const openFilters = () => {
+    setFilterDraft({
+      status: filters.status?.toString() ?? '',
+      dateOfBirthFrom: filters.dateOfBirthFrom ?? '',
+      dateOfBirthTo: filters.dateOfBirthTo ?? '',
+      hiredDateFrom: filters.hiredDateFrom ?? '',
+      hiredDateTo: filters.hiredDateTo ?? '',
+    })
+    setFilterErrors({})
+    setIsFilterOpen((open) => !open)
+  }
+
+  const applyFilters = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const validationErrors: FieldErrors<StaffFilterField> = {}
+
+    if (filterDraft.dateOfBirthFrom && filterDraft.dateOfBirthTo &&
+      filterDraft.dateOfBirthFrom > filterDraft.dateOfBirthTo) {
+      validationErrors.dateOfBirthTo = 'End date must be on or after the start date.'
+    }
+
+    if (filterDraft.hiredDateFrom && filterDraft.hiredDateTo &&
+      filterDraft.hiredDateFrom > filterDraft.hiredDateTo) {
+      validationErrors.hiredDateTo = 'End date must be on or after the start date.'
+    }
+
+    const status = filterDraft.status === '' ? undefined : Number(filterDraft.status)
+    setFilterErrors(validationErrors)
+    if (Object.keys(validationErrors).length) {
+      return
+    }
+
+    setFilters({
+      status,
+      dateOfBirthFrom: filterDraft.dateOfBirthFrom || undefined,
+      dateOfBirthTo: filterDraft.dateOfBirthTo || undefined,
+      hiredDateFrom: filterDraft.hiredDateFrom || undefined,
+      hiredDateTo: filterDraft.hiredDateTo || undefined,
+    })
+    setCurrentPage(1)
+    setIsFilterOpen(false)
+  }
+
+  const clearFilters = () => {
+    setFilterDraft(emptyFilterDraft)
+    setFilters({})
+    setFilterErrors({})
+    setCurrentPage(1)
+    setIsFilterOpen(false)
+  }
 
   const closeStaffModal = () => {
     setIsStaffModalOpen(false)
@@ -304,57 +357,6 @@ const AdminStaff = () => {
     }
   }
 
-  const openFilters = () => {
-    setFilterDraft({
-      status: filters.status?.toString() ?? '',
-      dateOfBirthFrom: filters.dateOfBirthFrom ?? '',
-      dateOfBirthTo: filters.dateOfBirthTo ?? '',
-      hiredDateFrom: filters.hiredDateFrom ?? '',
-      hiredDateTo: filters.hiredDateTo ?? '',
-    })
-    setFilterErrors({})
-    setIsFilterOpen((open) => !open)
-  }
-
-  const applyFilters = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const validationErrors: FieldErrors<StaffFilterField> = {}
-
-    if (filterDraft.dateOfBirthFrom && filterDraft.dateOfBirthTo &&
-      filterDraft.dateOfBirthFrom > filterDraft.dateOfBirthTo) {
-      validationErrors.dateOfBirthTo = 'End date must be on or after the start date.'
-    }
-
-    if (filterDraft.hiredDateFrom && filterDraft.hiredDateTo &&
-      filterDraft.hiredDateFrom > filterDraft.hiredDateTo) {
-      validationErrors.hiredDateTo = 'End date must be on or after the start date.'
-    }
-
-    const status = filterDraft.status === '' ? undefined : Number(filterDraft.status)
-    setFilterErrors(validationErrors)
-    if (Object.keys(validationErrors).length) {
-      return
-    }
-
-    setFilters({
-      status,
-      dateOfBirthFrom: filterDraft.dateOfBirthFrom || undefined,
-      dateOfBirthTo: filterDraft.dateOfBirthTo || undefined,
-      hiredDateFrom: filterDraft.hiredDateFrom || undefined,
-      hiredDateTo: filterDraft.hiredDateTo || undefined,
-    })
-    setCurrentPage(1)
-    setIsFilterOpen(false)
-  }
-
-  const clearFilters = () => {
-    setFilterDraft(emptyFilterDraft)
-    setFilters({})
-    setFilterErrors({})
-    setCurrentPage(1)
-    setIsFilterOpen(false)
-  }
-
   return (
     <div className="workspace roles-workspace">
       <Sidebar />
@@ -370,7 +372,7 @@ const AdminStaff = () => {
           </button>
         </header>
         <section className="roles-card" aria-label="Staff list">
-          <div className="roles-toolbar staff-toolbar">
+          <div className="roles-toolbar filter-toolbar">
             <label className="roles-search">
               <span aria-hidden="true"><IconSearch className="action-icon" /></span>
               <input
@@ -384,34 +386,34 @@ const AdminStaff = () => {
                 aria-label="Search staff"
               />
             </label>
-            <div className="staff-filter-wrap">
+            <div className="filter-wrap">
               <button
                 ref={filterButtonRef}
-                className={`staff-filter-trigger${activeFilterCount ? ' has-filters' : ''}`}
+                className={`filter-trigger${activeFilterCount ? ' has-filters' : ''}`}
                 type="button"
                 aria-label="Open staff filters"
                 aria-expanded={isFilterOpen}
-                aria-controls="staff-filter-popover"
+                aria-controls="filter-popover"
                 onClick={openFilters}
               >
                 <IconAdjustmentsHorizontal className="action-icon" aria-hidden="true" />
                 <span>Filters</span>
-                {activeFilterCount > 0 && <span className="staff-filter-count">{activeFilterCount}</span>}
+                {activeFilterCount > 0 && <span className="filter-count">{activeFilterCount}</span>}
               </button>
             </div>
           </div>
           {isFilterOpen && createPortal(
             <form
-              className="staff-filter-popover"
-              id="staff-filter-popover"
+              className="filter-popover"
+              id="filter-popover"
               aria-label="Filter staff"
               onSubmit={applyFilters}
               style={{ top: filterPosition.top, right: filterPosition.right }}
             >
-              <div className="staff-filter-heading">
+              <div className="filter-heading">
                 <strong>Filter staff</strong>
                 <button
-                  className="staff-filter-close"
+                  className="filter-close"
                   type="button"
                   aria-label="Close filters"
                   onClick={() => setIsFilterOpen(false)}
@@ -419,7 +421,7 @@ const AdminStaff = () => {
                   <IconX className="action-icon" aria-hidden="true" />
                 </button>
               </div>
-              <label className="staff-filter-field">
+              <label className="filter-field">
                 <span>Status</span>
                 <select
                   value={filterDraft.status}
@@ -435,9 +437,9 @@ const AdminStaff = () => {
                   ))}
                 </select>
               </label>
-              <fieldset className="staff-filter-group">
+              <fieldset className="filter-group">
                 <legend>Date of birth</legend>
-                <label className="staff-filter-field">
+                <label className="filter-field">
                   <span>From</span>
                   <input
                     type="date"
@@ -446,7 +448,7 @@ const AdminStaff = () => {
                     onChange={(event) => setFilterDraft((draft) => ({ ...draft, dateOfBirthFrom: event.target.value }))}
                   />
                 </label>
-                <label className="staff-filter-field">
+                <label className="filter-field">
                   <span>To</span>
                   <input
                     type="date"
@@ -459,12 +461,12 @@ const AdminStaff = () => {
                     aria-invalid={Boolean(filterErrors.dateOfBirthTo)}
                     className={filterErrors.dateOfBirthTo ? 'has-error' : undefined}
                   />
-                  {filterErrors.dateOfBirthTo && <span className="staff-filter-field-error" role="alert">{filterErrors.dateOfBirthTo}</span>}
+                  {filterErrors.dateOfBirthTo && <span className="filter-field-error" role="alert">{filterErrors.dateOfBirthTo}</span>}
                 </label>
               </fieldset>
-              <fieldset className="staff-filter-group">
+              <fieldset className="filter-group">
                 <legend>Hired date</legend>
-                <label className="staff-filter-field">
+                <label className="filter-field">
                   <span>From</span>
                   <input
                     type="date"
@@ -473,7 +475,7 @@ const AdminStaff = () => {
                     onChange={(event) => setFilterDraft((draft) => ({ ...draft, hiredDateFrom: event.target.value }))}
                   />
                 </label>
-                <label className="staff-filter-field">
+                <label className="filter-field">
                   <span>To</span>
                   <input
                     type="date"
@@ -486,11 +488,11 @@ const AdminStaff = () => {
                     aria-invalid={Boolean(filterErrors.hiredDateTo)}
                     className={filterErrors.hiredDateTo ? 'has-error' : undefined}
                   />
-                  {filterErrors.hiredDateTo && <span className="staff-filter-field-error" role="alert">{filterErrors.hiredDateTo}</span>}
+                  {filterErrors.hiredDateTo && <span className="filter-field-error" role="alert">{filterErrors.hiredDateTo}</span>}
                 </label>
               </fieldset>
-              <div className="staff-filter-actions">
-                <button className="staff-filter-reset" type="button" onClick={clearFilters}>Clear</button>
+              <div className="filter-actions">
+                <button className="filter-reset" type="button" onClick={clearFilters}>Clear</button>
                 <button className="primary-action" type="submit">Apply filters</button>
               </div>
             </form>,
@@ -639,6 +641,7 @@ const AdminStaff = () => {
                   <IconX className="action-icon" aria-hidden="true" />
                 </button>
               </header>
+              
               <form onSubmit={handleStaffSubmit} noValidate>
                 <div className="role-form-body staff-form-grid">
                   {!editingStaff && (

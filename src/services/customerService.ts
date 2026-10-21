@@ -29,7 +29,8 @@ export const createCustomer = async (data: CustomerRequestCreate): Promise<Custo
 }
 
 export const deleteCustomer = async (id: number): Promise<void> => {
-  const response = await apiClient(`/api/services/app/Customer/Delete/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Customer/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,
   })

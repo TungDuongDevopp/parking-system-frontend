@@ -59,7 +59,7 @@ export const SideBarMenus: Item[] = [
     },
     {
         label: "Parking Area",
-        path: "/admin/parkingAreas",
+        path: { Admin: "/admin/parkingAreas", Staff: "/staff/parkingAreas" },
         icon: IconParking,
         roles: ["Admin", "Staff"],
     },

@@ -51,7 +51,8 @@ export const updateStaff = async (data: StaffRequestUpdate): Promise<StaffDto> =
 }
 
 export const deleteStaff = async (id: number): Promise<void> => {
-  const response = await apiClient(`/api/services/app/Staff/Delete/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Staff/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,
   })

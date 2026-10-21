@@ -104,27 +104,6 @@ button { font: inherit; }
 .roles-search:focus-within { border-color: rgba(75, 111, 237, .6); background: rgba(255, 255, 255, .8); box-shadow: 0 0 0 4px rgba(75, 111, 237, .09), inset 0 1px rgba(255, 255, 255, .9); }
 .roles-search span { display: grid; width: 43px; height: 100%; place-items: center; color: #5c7de2; background: transparent; font-size: 25px; line-height: 1; }
 .roles-search input { min-width: 0; flex: 1; height: 100%; padding: 0 14px; border: 0; outline: 0; color: #27384d; font-size: 13px; }
-.staff-toolbar { align-items: center; gap: 12px; }
-.staff-filter-wrap,.parkingArea-filter-wrap { position: relative; }
-.staff-filter-trigger { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid rgba(173, 192, 214, .72); border-radius: 12px; color: #52657c; background: rgba(255, 255, 255, .58); box-shadow: 0 7px 18px rgba(62, 87, 118, .06); cursor: pointer; font-size: 13px; font-weight: 600; }
-.staff-filter-trigger:hover, .staff-filter-trigger[aria-expanded="true"], .staff-filter-trigger.has-filters { border-color: rgba(75, 111, 237, .55); color: #4169e8; background: rgba(232, 240, 255, .75); }
-.staff-filter-count { display: grid; min-width: 19px; height: 19px; place-items: center; padding: 0 4px; border-radius: 10px; color: #fff; background: #4b6fed; font-size: 11px; }
-.staff-filter-popover { position: fixed; z-index: 1000; display: grid; width: min(350px, calc(100vw - 24px)); max-height: calc(100vh - 24px); gap: 14px; overflow-y: auto; padding: 18px; border: 1px solid rgba(173, 192, 214, .7); border-radius: 14px; color: #27384d; background: rgba(255, 255, 255, .98); box-shadow: 0 18px 48px rgba(36, 54, 78, .2); }
-.staff-filter-heading { display: flex; align-items: center; justify-content: space-between; color: #27384d; font-size: 15px; }
-.staff-filter-close { display: grid; width: 30px; height: 30px; place-items: center; border: 0; border-radius: 7px; color: #71869e; background: transparent; cursor: pointer; }
-.staff-filter-close:hover { color: #e0445a; background: rgba(224, 68, 90, .08); }
-.staff-filter-field { display: grid; min-width: 0; gap: 6px; color: #64758a; font-size: 12px; font-weight: 600; }
-.staff-filter-field input, .staff-filter-field select { width: 100%; min-width: 0; height: 38px; padding: 0 10px; border: 1px solid rgba(173, 192, 214, .72); border-radius: 8px; color: #27384d; background: #fff; font: inherit; }
-.staff-filter-field input:focus, .staff-filter-field select:focus { border-color: #6f8cf0; outline: 3px solid rgba(75, 111, 237, .12); }
-.staff-filter-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; padding: 0; border: 0; }
-.staff-filter-group legend { grid-column: 1 / -1; margin-bottom: 8px; color: #35465c; font-size: 12px; font-weight: 700; }
-.staff-filter-field input.has-error, .staff-filter-field select.has-error { border-color: #d34b5f; box-shadow: 0 0 0 3px rgba(211, 75, 95, .1); }
-.staff-filter-field-error { color: #d34b5f; font-size: 11px; font-weight: 500; }
-.staff-filter-error { margin: 0; color: #d34b5f; font-size: 12px; }
-.staff-filter-actions { display: flex; justify-content: flex-end; gap: 9px; padding-top: 3px; }
-.staff-filter-reset { padding: 9px 12px; border: 1px solid #d5deea; border-radius: 7px; color: #52657c; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600; }
-.staff-filter-reset:hover { border-color: #aebed1; background: #f5f8fc; }
-.staff-filter-actions .primary-action { padding: 9px 12px; font-size: 12px; }
 .roles-table-wrap:has(.staffs-table) { overflow-x: auto; }
 .staffs-table { min-width: 900px; table-layout: fixed; }
 .staffs-table th:nth-child(1), .staffs-table td:nth-child(1) { width: 18%; }
@@ -155,6 +134,22 @@ button { font: inherit; }
 .roles-table tbody tr:nth-child(odd) { background: #f5f5f5; }
 .roles-table td:first-child { width: 40%; }
 .roles-table td:nth-child(2) { width: 50%; }
+.roles-table-wrap:has(.parkingAreas-table) { overflow-x: auto; }
+.parkingAreas-table { min-width: 1280px; table-layout: fixed; }
+.parkingAreas-table th, .parkingAreas-table td { padding-right: 12px; padding-left: 12px; overflow-wrap: anywhere; vertical-align: middle; }
+.parkingAreas-table th:nth-child(1), .parkingAreas-table td:nth-child(1) { width: 14%; }
+.parkingAreas-table th:nth-child(2), .parkingAreas-table td:nth-child(2) { width: 14%; }
+.parkingAreas-table th:nth-child(3), .parkingAreas-table td:nth-child(3) { width: 14%; }
+.parkingAreas-table th:nth-child(4), .parkingAreas-table td:nth-child(4) { width: 7%; }
+.parkingAreas-table th:nth-child(5), .parkingAreas-table td:nth-child(5) { width: 9%; }
+.parkingAreas-table th:nth-child(6), .parkingAreas-table td:nth-child(6) { width: 11%; }
+.parkingAreas-table th:nth-child(7), .parkingAreas-table td:nth-child(7) { width: 9%; }
+.parkingAreas-table th:nth-child(8), .parkingAreas-table td:nth-child(8) { width: 10%; }
+.parkingAreas-table th:nth-child(9), .parkingAreas-table td:nth-child(9) { width: 12%; }
+.parkingAreas-table .staff-status-control { width: 100%; }
+.parkingAreas-table .staff-status-control select { width: 100%; }
+.parkingAreas-table .role-actions { align-items: stretch; }
+.parkingAreas-table .role-actions button { width: 100%; min-width: 0; justify-content: center; padding-right: 6px; padding-left: 6px; }
 .users-table th:nth-child(1), .users-table td:nth-child(1) { width: 19%; }
 .users-table th:nth-child(2), .users-table td:nth-child(2) { width: 24%; }
 .users-table th:nth-child(3), .users-table td:nth-child(3) { width: 31%; }
@@ -188,11 +183,27 @@ button { font: inherit; }
 .roles-note a:hover { text-decoration: underline; }
 .role-modal-backdrop { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(26, 43, 67, .35); backdrop-filter: blur(5px); }
 .role-modal { width: min(100%, 900px); max-height: min(760px, calc(100vh - 48px)); overflow: auto; border: 1px solid rgba(255, 255, 255, .82); border-radius: 16px; background: rgba(248, 251, 255, .88); box-shadow: 0 28px 70px rgba(29, 53, 82, .25), inset 0 1px rgba(255, 255, 255, .85); backdrop-filter: blur(24px); }
+.area-modal { width: min(100%, 760px); }
 .role-modal-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 25px 28px 20px; border-bottom: 1px solid rgba(197, 211, 227, .7); }
 .role-modal-header h2 { margin: 0; color: #26374c; font-family: Manrope, sans-serif; font-size: 22px; }
+.area-modal-header { align-items: center; padding-bottom: 22px; }
+.area-modal-header p { margin: 8px 0 0; color: #718198; font-size: 13px; line-height: 1.5; }
+.area-modal-header .eyebrow-label { color: #5c78df; }
+.area-modal .modal-close { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid rgba(173, 192, 214, .55); border-radius: 10px; background: rgba(255, 255, 255, .55); }
 .modal-close { border: 0; color: #7b8795; background: transparent; cursor: pointer; font-size: 27px; line-height: 1; }
 .modal-close:hover { color: #e0445a; }
 .role-form-body { display: grid; gap: 18px; padding: 25px 28px 30px; }
+.area-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 22px; padding: 26px 30px 28px; }
+.area-form-grid .role-field { grid-template-columns: 1fr; align-items: stretch; gap: 8px; font-size: 13px; }
+.area-form-grid .role-field > span { display: flex; align-items: center; gap: 5px; }
+.area-form-grid .role-field > span small { margin-left: 3px; color: #94a1b2; font-size: 11px; font-weight: 500; }
+.area-form-grid .role-field input, .area-form-grid .role-field select, .area-form-grid .role-field textarea { min-width: 0; height: 44px; padding: 0 13px; border: 1px solid rgba(178, 196, 217, .78); border-radius: 9px; color: #263b54; background: rgba(255, 255, 255, .72); font: inherit; font-size: 13px; font-weight: 400; transition: border-color .2s, box-shadow .2s, background .2s; }
+.area-form-grid .role-field textarea { height: auto; min-height: 100px; padding: 12px 13px; resize: vertical; }
+.area-form-grid .role-field input::placeholder, .area-form-grid .role-field textarea::placeholder { color: #a3afbd; }
+.area-form-grid .role-field input:focus, .area-form-grid .role-field select:focus, .area-form-grid .role-field textarea:focus { border-color: #6d8df0; outline: 0; background: rgba(255, 255, 255, .96); box-shadow: 0 0 0 4px rgba(75, 111, 237, .1); }
+.area-form-grid .area-description-field { grid-column: 1 / -1; }
+.area-form-error { margin: 0 30px 18px; padding: 11px 13px; border: 1px solid rgba(211, 75, 95, .2); border-radius: 8px; background: rgba(211, 75, 95, .06); }
+.area-modal .role-modal-footer { padding: 16px 30px; }
 .role-field { display: grid; grid-template-columns: 190px 1fr; align-items: center; gap: 20px; color: #27374b; font-size: 14px; font-weight: 700; }
 .role-field > span b { color: #e0445a; }
 .role-field input, .role-field textarea { width: 100%; border: 1px solid rgba(178, 196, 217, .78); border-radius: 8px; outline: 0; color: #263b54; background: rgba(255, 255, 255, .62); box-shadow: inset 0 1px rgba(255, 255, 255, .75); font: inherit; font-weight: 400; transition: border-color .2s, box-shadow .2s, background .2s; }
@@ -216,7 +227,12 @@ button { font: inherit; }
 .dashboard-dark .role-modal-header, .dashboard-dark .role-modal-footer { border-color: rgba(94, 117, 151, .45); }
 .dashboard-dark .role-modal-header h2, .dashboard-dark .role-field, .dashboard-dark .permissions-field legend, .dashboard-dark .permission-option { color: #e6edf7; }
 .dashboard-dark .role-field input, .dashboard-dark .role-field textarea, .dashboard-dark .modal-cancel { border-color: #536987; color: #e6edf7; background: rgba(41, 55, 75, .76); }
-.dashboard-dark .staff-status-control select, .dashboard-dark .staff-modal .role-field select, .dashboard-dark .staff-filter-field input, .dashboard-dark .staff-filter-field select { border-color: #536987; color: #e6edf7; background-color: rgba(41, 55, 75, .76); }
+.dashboard-dark .area-modal-header p, .dashboard-dark .area-form-grid .role-field > span small { color: #aebdd0; }
+.dashboard-dark .area-modal .modal-close { border-color: #405067; color: #aebdd0; background: #263142; }
+.dashboard-dark .area-form-grid .role-field input, .dashboard-dark .area-form-grid .role-field select, .dashboard-dark .area-form-grid .role-field textarea { border-color: #536987; color: #e6edf7; background: rgba(41, 55, 75, .76); }
+.dashboard-dark .area-form-grid .role-field input::placeholder, .dashboard-dark .area-form-grid .role-field textarea::placeholder { color: #8292a8; }
+.dashboard-dark .area-form-grid .role-field input:focus, .dashboard-dark .area-form-grid .role-field select:focus, .dashboard-dark .area-form-grid .role-field textarea:focus { background: #202a39; }
+.dashboard-dark .staff-status-control select, .dashboard-dark .staff-modal .role-field select { border-color: #536987; color: #e6edf7; background-color: rgba(41, 55, 75, .76); }
 .dashboard-dark .staff-status-save { border-color: rgba(130, 153, 235, .45); color: #b8c6ff; background: #293550; }
 .dashboard-dark .staff-form-hint { color: #e0a2ab; }
 .dashboard-dark .role-modal-footer { background: rgba(19, 28, 41, .35); }
@@ -232,6 +248,11 @@ button { font: inherit; }
 	.sidebar-bottom-nav { margin-bottom: 5px; }
 	.roles-content { padding: 0 14px 25px; }
 	.role-modal-backdrop { padding: 12px; }
+	.area-form-grid { grid-template-columns: 1fr; gap: 16px; padding: 22px 20px; }
+	.area-form-grid .area-description-field { grid-column: auto; }
+	.area-modal-header { padding: 21px 20px 18px; }
+	.area-modal .role-modal-footer { padding: 14px 20px; }
+	.area-form-error { margin-right: 20px; margin-left: 20px; }
 	.role-field, .permissions-field { grid-template-columns: 1fr; gap: 8px; }
 	.permissions-grid { grid-template-columns: 1fr; }
 	.role-form-error { grid-column: auto; }
@@ -320,12 +341,3 @@ button { font: inherit; }
 .dashboard-dark .roles-table tbody tr:hover td, .dashboard-dark .roles-table tbody tr:nth-child(odd):hover td { background: rgba(61, 82, 119, .62); }
 .dashboard-dark .roles-table tbody tr:nth-child(odd) td { background: rgba(42, 56, 76, .54); }
 .dashboard-dark .parking-table tbody tr:hover { background: rgba(61, 82, 119, .4); }
-.dashboard-dark .staff-filter-trigger { border-color: rgba(102, 126, 160, .55); color: #c1cee0; background: rgba(31, 42, 58, .75); }
-.dashboard-dark .staff-filter-trigger:hover, .dashboard-dark .staff-filter-trigger[aria-expanded="true"], .dashboard-dark .staff-filter-trigger.has-filters { border-color: rgba(130, 153, 235, .65); color: #b8c6ff; background: #293550; }
-.dashboard-dark .staff-filter-popover { border-color: rgba(102, 126, 160, .55); color: #dbe5f1; background: #202a39; }
-.dashboard-dark .staff-filter-heading, .dashboard-dark .staff-filter-group legend { color: #e2eaf5; }
-.dashboard-dark .staff-filter-close { color: #aebdd0; }
-.dashboard-dark .staff-filter-field { color: #aebdd0; }
-.dashboard-dark .staff-filter-field input, .dashboard-dark .staff-filter-field select { border-color: #405067; color: #e2eaf5; background: #192332; }
-.dashboard-dark .staff-filter-reset { border-color: #405067; color: #dbe5f1; background: #263142; }
-.dashboard-dark .staff-filter-reset:hover { background: #303f54; }

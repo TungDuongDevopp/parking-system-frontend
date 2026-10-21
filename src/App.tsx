@@ -65,6 +65,11 @@ const App = () => {
                   </ProtectedRoute>
 
                   } />
+                <Route path="/staff/parkingAreas" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminParkingArea readOnly />
+                  </ProtectedRoute>
+                } />
                 <Route path="/staff/profile" element={
                   <ProtectedRoute allowedRole='Staff'>
                     <StaffProfile />

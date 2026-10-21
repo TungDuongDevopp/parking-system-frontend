@@ -49,11 +49,12 @@ export const updateParkingArea = async (data: ParkingAreaUpdateRequest): Promise
 }
 
 export const deleteParkingArea = async (id: number): Promise<void> => {
-  const response = await apiClient(`/api/services/app/ParkingArea/Delete/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/ParkingArea/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,
   })
-  await readAbpVoid(response, 'Không thể khu vực đỗ xe.')
+  await readAbpVoid(response, 'Không thể xóa khu vực đỗ xe.')
 }
 export const changeParkingAreaStatus = async (data: ParkingAreaChangeStatus): Promise<ParkingAreaDto> => {
   const response = await apiClient('/api/services/app/ParkingArea/ChangeStatus', {
