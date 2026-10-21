@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
 import { getMyStaffProfile, changeStaffProfile } from '../services/staffService'
-import { getAbpErrorMessage } from '../services/abpError'
 import type { StaffChangeProfileRequest, StaffDto } from '../types/Staff/staff'
-import { mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 
 const formatDate = (value: string | null) => value?.split('T')[0] ?? ''
 
@@ -47,17 +47,9 @@ const StaffProfile = () => {
     useEffect(() => {
         let isMounted = true
 
-        getMyStaffProfile().then((response) => {
+        getMyStaffProfile().then((result) => {
             if (!isMounted) return
-            if (!response.success) {
-                setErrorMessage(getAbpErrorMessage(response.error, 'Unable to load your profile.'))
-                return
-            }
-            if (!response.result) {
-                setErrorMessage('Staff profile not found. Please contact an administrator.')
-                return
-            }
-            setProfile(response.result)
+            setProfile(result)
         }).catch((error: unknown) => {
             if (isMounted) {
                 setErrorMessage(error instanceof Error ? error.message : 'Unable to load your profile.')
@@ -139,16 +131,9 @@ const StaffProfile = () => {
         try {
             await changeStaffProfile(updatedProfile)
             const refreshed = await getMyStaffProfile()
-            if (!refreshed.success || !refreshed.result) {
-                setFormError(getAbpErrorMessage(
-                    refreshed.error,
-                    'Không thể xác nhận hồ sơ đã được cập nhật. Vui lòng tải lại trang.',
-                ))
-                return
-            }
 
-            setProfile(refreshed.result)
-            if (!matchesSubmittedProfile(refreshed.result, updatedProfile)) {
+            setProfile(refreshed)
+            if (!matchesSubmittedProfile(refreshed, updatedProfile)) {
                 setFormError('Máy chủ chưa lưu các thay đổi hồ sơ. Vui lòng thử lại hoặc liên hệ quản trị viên.')
                 return
             }
@@ -157,7 +142,10 @@ const StaffProfile = () => {
             setIsEditing(false)
         } catch (error) {
             const message = error instanceof Error ? error.message : 'Unable to update your profile.'
-            const serverErrors = mapMessageToFieldErrors(message, staffFieldAliases)
+            const abpError = getAbpErrorFromException(error)
+            const serverErrors = abpError
+                ? mapAbpFieldErrors(abpError, staffFieldAliases)
+                : mapMessageToFieldErrors(message, staffFieldAliases)
             if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
             else setFormError(message)
         } finally {

@@ -16,6 +16,7 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
 import Sidebar from './components/sidebar/Sidebar';
 import AdminStaff from './admin/AdminStaff';
+import AdminParkingArea from './admin/AdminParkingArea';
 import { AuthProvider } from './auth/AuthContext';
 const App = () => {
   
@@ -48,6 +49,11 @@ const App = () => {
                     <AdminCustomer />
                   </ProtectedRoute>
                 } />
+                 <Route path="/admin/parkingAreas" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminParkingArea/>
+                  </ProtectedRoute>
+                } />
                 <Route path="/admin/staffs" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminStaff/>
@@ -59,6 +65,11 @@ const App = () => {
                   </ProtectedRoute>
 
                   } />
+                <Route path="/staff/parkingAreas" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminParkingArea readOnly />
+                  </ProtectedRoute>
+                } />
                 <Route path="/staff/profile" element={
                   <ProtectedRoute allowedRole='Staff'>
                     <StaffProfile />

@@ -1,61 +1,61 @@
-import type { Role, RoleRequest, RoleResponse } from '../types/Role/role'
+import type { PagedResult } from '../types/Apb/abp'
+import type { Role, RoleRequest } from '../types/Role/role'
 import { apiClient } from './apiClient'
-import type { AbpResponse, AbpUserConfiguration } from '../types/Apb/abp'
-import { getAbpErrorMessage } from './abpError'
+import { readAbpResult, readAbpVoid } from './serviceResponse'
 
-export const getRoles = async (): Promise<RoleResponse> => {
-	const response = await apiClient('/api/services/app/Role/GetAll', {
-		method: 'GET',
-		authenticated: true,
-	})
-
-	return response.json() as Promise<RoleResponse>
+export const getRoles = async (): Promise<PagedResult<Role>> => {
+  const response = await apiClient('/api/services/app/Role/GetAll', {
+    method: 'GET',
+    authenticated: true,
+  })
+  return readAbpResult(response, 'Không thể tải danh sách role.')
 }
+
 export const getPermission = async (): Promise<string[]> => {
-    const response = await apiClient('/AbpUserConfiguration/GetAll', {
-        method: 'GET',
-        authenticated: true,
-    });
+  const response = await apiClient('/AbpUserConfiguration/GetAll', {
+    method: 'GET',
+    authenticated: true,
+  })
+  if (!response.ok) {
+    throw new Error(`Không thể tải danh sách permission (HTTP ${response.status}).`)
+  }
 
-    const data: { result: AbpUserConfiguration } = await response.json();
-
-    return Object.keys(data.result.auth.allPermissions);
-};
-
-export const createRole = async (data:RoleRequest) : Promise<RoleResponse>=>{
-	const response = await apiClient('/api/services/app/Role/Create',
-
-		{	method:'POST',
-			authenticated:true,
-			body:JSON.stringify(data)
-		});
-		return response.json() as Promise<RoleResponse>;
+  const data = await response.json() as {
+    result?: { auth?: { allPermissions?: Record<string, string> } } | null
+  }
+  const permissions = data.result?.auth?.allPermissions
+  if (!permissions) throw new Error('Invalid permission response from server.')
+  return Object.keys(permissions)
 }
+
+export const createRole = async (data: RoleRequest): Promise<Role> => {
+  const response = await apiClient('/api/services/app/Role/Create', {
+    method: 'POST',
+    authenticated: true,
+    body: JSON.stringify(data),
+  })
+  return readAbpResult(response, 'Không thể tạo role.')
+}
+
 export const deleteRole = async (id: number): Promise<void> => {
-	const response = await apiClient(`/api/services/app/Role/Delete/${id}`, {
-		method: 'DELETE',
-		authenticated: true,
-	})
-	const data = await response.json() as AbpResponse<null>
-
-	if (!response.ok || !data.success) {
-		throw new Error(getAbpErrorMessage(data.error, 'Không thể xóa role.'))
-	}
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Role/Delete?${query.toString()}`, {
+    method: 'DELETE',
+    authenticated: true,
+  })
+  await readAbpVoid(response, 'Không thể xóa role.')
 }
-export const updateRole = async (data: Role): Promise<RoleResponse> => {
-	const response = await apiClient('/api/services/app/Role/Update', {
-		method: 'PUT',
-		authenticated: true,
-		body: JSON.stringify(data),
-	})
 
-	return response.json() as Promise<RoleResponse>
+export const updateRole = async (data: Role): Promise<Role> => {
+  const response = await apiClient('/api/services/app/Role/Update', {
+    method: 'PUT',
+    authenticated: true,
+    body: JSON.stringify(data),
+  })
+  return readAbpResult(response, 'Không thể cập nhật role.')
 }
+
 export const getRoleNames = async (): Promise<string[]> => {
-   const data = await getRoles();
- 	if (!data.result) {
-        return []
-    }
-	const roleNames = data.result.items.map(role => role.name);
-	return roleNames;
-};
+  const roles = await getRoles()
+  return roles.items.map((role) => role.name)
+}

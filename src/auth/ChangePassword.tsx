@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import '../resources/css/login.scss'
 import { changePassword } from '../services/authService'
-import { getAbpErrorMessage } from '../services/abpError'
 import type { ChangePassWordRequest } from '../types/Account/changePassword'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 
 type PasswordField = 'currentPassword' | 'newPassword' | 'confirmPassword'
 
@@ -64,20 +64,17 @@ function ChangePassword() {
 			newPassword : newPassword
 		}
 		try{
-			const response = await changePassword(account);
-			if (!response.success || response.result !== true) {
-				const serverErrors = mapAbpFieldErrors(response.error, passwordFieldAliases)
-				if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
-				else setFieldErrors({ currentPassword: getAbpErrorMessage(response.error, 'Change password failed!') })
-				return
-			}
+			await changePassword(account)
 			navigate("/login");
 
 		}
 		catch(error){
 			console.error(error);
 			const message = error instanceof Error ? error.message : 'Đổi mật khẩu thất bại'
-			const serverErrors = mapMessageToFieldErrors(message, passwordFieldAliases)
+			const abpError = getAbpErrorFromException(error)
+			const serverErrors = abpError
+				? mapAbpFieldErrors(abpError, passwordFieldAliases)
+				: mapMessageToFieldErrors(message, passwordFieldAliases)
 			if (Object.keys(serverErrors).length) setFieldErrors(serverErrors)
 			else setFieldErrors({ currentPassword: message })
 		}

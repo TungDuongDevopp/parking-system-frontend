@@ -3,8 +3,8 @@ import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
 import type { CustomerDto } from '../types/Customer/customer'
 import { deleteCustomer,updateCustomer,getCustomers } from '../services/customerService'
-import { getAbpErrorMessage } from '../services/abpError'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 import {
   IconSearch,
   IconPencil,
@@ -76,20 +76,14 @@ const AdminCustomer = () => {
 		setIsLoading(true)
 		setErrorMessage('')
 		try {
-			const response = await getCustomers({
+			const result = await getCustomers({
 				keyword: query.trim() || undefined,
 				sorting: sortField && sortDirection ? `${backendSortField[sortField]} ${sortDirection}` : undefined,
 				skipCount: (safeCurrentPage - 1) * rowsPerPage,
 				maxResultCount: rowsPerPage,
 			})
-			if (!response.success || !response.result) {
-				setErrorMessage(getAbpErrorMessage(response.error, 'Unable to load customers.'))
-				setCustomers([])
-				setTotalCount(0)
-				return
-			}
-			setCustomers(response.result.items)
-			setTotalCount(response.result.totalCount)
+			setCustomers(result.items)
+			setTotalCount(result.totalCount)
 		} catch (error) {
 			setErrorMessage(error instanceof Error ? error.message : 'Unable to load customers.')
 			setCustomers([])
@@ -152,7 +146,6 @@ const AdminCustomer = () => {
 		if (!name.trim()) validationErrors.name = 'Name is required.'
 		if (!phoneNumber.trim()) validationErrors.phoneNumber = 'Phone number is required.'
 		if (!email.trim()) validationErrors.email = 'Email is required.'
-		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) validationErrors.email = 'Enter a valid email address.'
 		setCustomerFieldErrors(validationErrors)
 		setCustomerFormError('')
 		if (Object.keys(validationErrors).length) {
@@ -160,23 +153,20 @@ const AdminCustomer = () => {
 		}
 		setIsSubmitting(true)
 		try{
-			const response = await updateCustomer({
+			await updateCustomer({
 				id: editingCustomer.id,
 				phoneNumber :phoneNumber.trim(),
 				email: email.trim(),
 				name: name.trim()
 			})
-			if (!response.success) {
-				const serverErrors = mapAbpFieldErrors(response.error, customerFieldAliases)
-				if (Object.keys(serverErrors).length) setCustomerFieldErrors(serverErrors)
-				else setCustomerFormError(getAbpErrorMessage(response.error, 'Unable to update customer.'))
-				return
-			}
 			closeCustomerModal()
 			await loadCustomers()
 		} catch(error) {
 			const message = error instanceof Error ? error.message : 'Unable to update customer.'
-			const serverErrors = mapMessageToFieldErrors(message, customerFieldAliases)
+			const abpError = getAbpErrorFromException(error)
+			const serverErrors = abpError
+				? mapAbpFieldErrors(abpError, customerFieldAliases)
+				: mapMessageToFieldErrors(message, customerFieldAliases)
 			if (Object.keys(serverErrors).length) setCustomerFieldErrors(serverErrors)
 			else setCustomerFormError(message)
 		} finally {

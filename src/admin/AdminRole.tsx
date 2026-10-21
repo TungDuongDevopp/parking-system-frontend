@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import Sidebar from '../components/sidebar/Sidebar'
 import '../resources/css/dashboard.scss'
 import { createRole, deleteRole, getPermission, getRoles, updateRole } from '../services/roleService'
-import { getAbpErrorMessage } from '../services/abpError'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 import type { Role } from '../types/Role/role'
 import type { SubmitEvent } from 'react'
 import {
@@ -68,13 +68,8 @@ function AdminRole() {
 		setErrorMessage('')
 
 		try {
-			const response = await getRoles()
-			if (!response.success || !response.result) {
-				setErrorMessage(getAbpErrorMessage(response.error, 'Không thể tải danh sách role.'))
-				setRoles([])
-				return
-			}
-			setRoles(response.result.items)
+			const result = await getRoles()
+			setRoles(result.items)
 		} catch (error) {
 			setErrorMessage(error instanceof Error ? error.message : 'Không thể tải danh sách role.')
 			setRoles([])
@@ -208,22 +203,17 @@ function AdminRole() {
 				description: description.trim(),
 				grantedPermissions: selectedPermissions,
 			}
-			const response = editingRole
-				? await updateRole({ ...editingRole, ...roleData })
-				: await createRole(roleData)
-
-			if (!response.success) {
-				const serverErrors = mapAbpFieldErrors(response.error, roleFieldAliases)
-				if (Object.keys(serverErrors).length) setRoleFieldErrors(serverErrors)
-				else setFormError(getAbpErrorMessage(response.error, `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`))
-				return
-			}
+			if (editingRole) await updateRole({ ...editingRole, ...roleData })
+			else await createRole(roleData)
 
 			closeCreateModal()
 			await loadRoles()
 		} catch (error) {
 			const message = error instanceof Error ? error.message : `Không thể ${editingRole ? 'cập nhật' : 'tạo'} role.`
-			const serverErrors = mapMessageToFieldErrors(message, roleFieldAliases)
+			const abpError = getAbpErrorFromException(error)
+			const serverErrors = abpError
+				? mapAbpFieldErrors(abpError, roleFieldAliases)
+				: mapMessageToFieldErrors(message, roleFieldAliases)
 			if (Object.keys(serverErrors).length) setRoleFieldErrors(serverErrors)
 			else setFormError(message)
 		} finally {

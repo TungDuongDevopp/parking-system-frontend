@@ -4,8 +4,8 @@ import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
 import type { CustomerDto, CustomerRequestUpdate } from '../types/Customer/customer'
 import { getMyProfile, updateCustomer } from '../services/customerService'
-import { getAbpErrorMessage } from '../services/abpError'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
+import { getAbpErrorFromException } from '../services/serviceResponse'
 
 type CustomerProfileDraft = {
     name: string
@@ -44,17 +44,13 @@ const CustomerProfile = () => {
     useEffect(() => {
         let isMounted = true
 
-        getMyProfile().then((response) => {
+        getMyProfile().then((result) => {
             if (!isMounted) return
-            if (!response.success) {
-                setErrorMessage(getAbpErrorMessage(response.error, 'Unable to load your profile.'))
-                return
-            }
-            if (!response.result) {
+            if (!result) {
                 navigate('/customer/profile/create', { replace: true })
                 return
             }
-            setProfile(response.result)
+            setProfile(result)
         }).catch((error: unknown) => {
             if (isMounted) {
                 setErrorMessage(error instanceof Error ? error.message : 'Unable to load your profile.')
@@ -99,9 +95,6 @@ const CustomerProfile = () => {
             const validationErrors: CustomerProfileFieldErrors = {}
             if (!name) validationErrors.name = 'Name is required.'
             if (!phoneNumber) validationErrors.phoneNumber = 'Phone number is required.'
-            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                validationErrors.email = 'Enter a valid email address.'
-            }
             if (Object.keys(validationErrors).length) {
                 setFieldErrors(validationErrors)
                 return
@@ -126,21 +119,9 @@ const CustomerProfile = () => {
             }
 
             setIsSubmitting(true)
-            const response = await updateCustomer(changes)
-            if (!response.success) {
-                const serverFieldErrors = mapServerErrorsToFields(response.error)
-                if (Object.keys(serverFieldErrors).length) setFieldErrors(serverFieldErrors)
-                else setFormError(getAbpErrorMessage(response.error, 'Unable to update your profile.'))
-                return
-            }
-
-            if (!response.result) {
-                setFormError('The server did not return the updated profile. Please reload the page to confirm your changes.')
-                return
-            }
-
-            setProfile(response.result)
-            if (!matchesSubmittedProfile(response.result, changes)) {
+            const updatedProfile = await updateCustomer(changes)
+            setProfile(updatedProfile)
+            if (!matchesSubmittedProfile(updatedProfile, changes)) {
                 setFormError('The server did not save all profile changes. Please try again or contact an administrator.')
                 return
             }
@@ -149,7 +130,10 @@ const CustomerProfile = () => {
             setIsEditing(false)
         } catch (error) {
             const message = error instanceof Error ? error.message : 'Unable to update your profile.'
-            const fieldErrorsByMessage = mapMessageToFieldErrors(message, customerFieldAliases)
+            const serverError = getAbpErrorFromException(error)
+            const fieldErrorsByMessage = serverError
+                ? mapServerErrorsToFields(serverError)
+                : mapMessageToFieldErrors(message, customerFieldAliases)
             if (Object.keys(fieldErrorsByMessage).length) setFieldErrors(fieldErrorsByMessage)
             else setFormError(message)
         } finally {
