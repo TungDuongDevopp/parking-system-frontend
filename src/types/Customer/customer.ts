@@ -1,19 +1,14 @@
 
-export interface CustomerRequestCreate{
-    name: string,
-    phoneNumber: string,
-    email?: string
-}
 export interface CustomerDto{
     id: number,
     name: string,
-    phoneNumber: string,
-    email: string|null
+    phoneNumber: string | null,
+    email: string
 }
 
 export interface CustomerRequestUpdate{
     id: number
     name?: string,
-    phoneNumber?: string,
+    phoneNumber?: string | null,
     email?: string
 }

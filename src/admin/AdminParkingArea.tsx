@@ -16,6 +16,7 @@ import type { ParkingAreaQuery } from '../types/ParkingArea/parkingAreaQuery'
 import type { ParkingAreaDto } from '../types/ParkingArea/parkingArea'
 import {
   IconAdjustmentsHorizontal,
+  IconArrowsSort,
   IconCheck,
   IconChevronLeft,
   IconChevronRight,
@@ -25,9 +26,33 @@ import {
   IconPlus,
   IconRefresh,
   IconSearch,
+  IconSortAscending,
+  IconSortDescending,
   IconTrash,
   IconX,
 } from '@tabler/icons-react'
+
+type ParkingAreaSortField =
+  | 'parkingCode'
+  | 'name'
+  | 'vehicleType'
+  | 'capacity'
+  | 'currentOccupancy'
+  | 'parkingMode'
+  | 'location'
+  | 'status'
+type SortDirection = 'asc' | 'desc' | null
+
+const backendSortField: Record<ParkingAreaSortField, string> = {
+  parkingCode: 'ParkingCode',
+  name: 'Name',
+  vehicleType: 'VehicleType',
+  capacity: 'Capacity',
+  currentOccupancy: 'CurrentOccupancy',
+  parkingMode: 'ParkingMode',
+  location: 'Location',
+  status: 'Status',
+}
 
 type ParkingAreaFilters = Pick<
 ParkingAreaQuery,
@@ -105,6 +130,8 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
   //Search & Filter
   const [keyword, setKeyword] = useState('')
   const [filters, setFilters] = useState<ParkingAreaFilters>({})
+  const [sortField, setSortField] = useState<ParkingAreaSortField | null>(null)
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null)
   const [filterDraft, setFilterDraft] = useState<FilterDraft>(emptyFilterDraft)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterErrors, setFilterErrors] = useState<ParkingAreaFilterErrors>({})
@@ -119,7 +146,6 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
   const safeCurrentPage = Math.min(currentPage, pageCount)
   const firstItem = totalCount ? (safeCurrentPage - 1) * rowsPerPage + 1 : 0
   const lastItem = Math.min(safeCurrentPage * rowsPerPage, totalCount)
-
   //form
   const [isAreaModalOpen,setIsAreaModalOpen] = useState(false)
   const [areaFormError, setAreaFormError] = useState('')
@@ -130,12 +156,14 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
   //action 
   const [deletingAreaId, setDeletingAreaId] = useState<number | null>(null)
   const [updatingStatusId, setUpdatingStatusId] = useState<number | null>(null)
+ 
   const loadAreas = useCallback(async () =>{
     setIsLoading(true)
     setErrorMessage('')
     try{
       const result = await getParkingAreas({
         keyword: keyword.trim() || undefined,
+        sorting: sortField && sortDirection ? `${backendSortField[sortField]} ${sortDirection}` : undefined,
         skipCount: (safeCurrentPage-1) *rowsPerPage,
         maxResultCount:rowsPerPage,
         ...filters
@@ -151,11 +179,47 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
     finally{
       setIsLoading(false)
     }
-  },[filters,keyword,rowsPerPage,safeCurrentPage])
+  },[filters,keyword,rowsPerPage,safeCurrentPage,sortDirection,sortField])
 
   useEffect(() => {
     void loadAreas()
   }, [loadAreas])
+
+  const handleSort = (field: ParkingAreaSortField) => {
+    setCurrentPage(1)
+    if (sortField !== field) {
+      setSortField(field)
+      setSortDirection('asc')
+    } else if (sortDirection === 'asc') {
+      setSortDirection('desc')
+    } else {
+      setSortField(null)
+      setSortDirection(null)
+    }
+  }
+
+  const sortIcon = (field: ParkingAreaSortField) => {
+    if (sortField !== field || !sortDirection) {
+      return <IconArrowsSort className="action-icon" aria-hidden="true" />
+    }
+
+    const Icon = sortDirection === 'asc' ? IconSortAscending : IconSortDescending
+    return <Icon className="action-icon" aria-hidden="true" />
+  }
+
+  const sortHeader = (field: ParkingAreaSortField, label: string) => (
+    <th key={field}>
+      {label}
+      <button
+        className="sort-button"
+        type="button"
+        aria-label={`Sort by ${label}`}
+        onClick={() => handleSort(field)}
+      >
+        {sortIcon(field)}
+      </button>
+    </th>
+  )
 
   useEffect(() => {
     if (!isFilterOpen) return
@@ -349,6 +413,8 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
     }
   }
 
+  const isEditingActiveArea = editingArea?.status === 1
+
   return (
     <div className="workspace roles-workspace">
       <Sidebar />
@@ -493,14 +559,14 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
             <table className="roles-table parkingAreas-table">
                   <thead>
                     <tr>
-                      <th>ParkingCode</th>
-                      <th>Name</th>
-                      <th>VehicleType</th>
-                      <th>Capacity</th>
-                      <th>Current Occupancy</th>
-                      <th>ParkingMode</th>
-                      <th>Location</th>
-                      <th>Status</th>
+                      {sortHeader('parkingCode', 'Parking code')}
+                      {sortHeader('name', 'Name')}
+                      {sortHeader('vehicleType', 'Vehicle type')}
+                      {sortHeader('capacity', 'Capacity')}
+                      {sortHeader('currentOccupancy', 'Current occupancy')}
+                      {sortHeader('parkingMode', 'Parking mode')}
+                      {sortHeader('location', 'Location')}
+                      {sortHeader('status', 'Status')}
                       {!readOnly && <th>Actions</th>}
                     </tr>
                   </thead>
@@ -677,6 +743,7 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
                       <span>Vehicle type <b>*</b></span>
                       <select
                         value={areaForm.vehicleType}
+                        disabled={isEditingActiveArea}
                         onChange={(event) => {
                           setAreaForm((form) => ({
                             ...form,
@@ -700,6 +767,8 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
                         type="number"
                         min="1"
                         value={areaForm.capacity}
+          
+                        disabled={isEditingActiveArea}
                         onChange={(event) => {
                           setAreaForm((form) => ({
                             ...form,
@@ -717,6 +786,7 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
                       <span>Parking mode <b>*</b></span>
                       <select
                         value={areaForm.parkingMode}
+                        disabled={isEditingActiveArea}
                         onChange={(event) => {
                           setAreaForm((form) => ({
                             ...form,
