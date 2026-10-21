@@ -159,6 +159,30 @@ button { font: inherit; }
 .customers-table th:nth-child(2), .customers-table td:nth-child(2) { width: 28%; text-align: right; }
 .customers-table th:nth-child(3), .customers-table td:nth-child(3) { width: 38%; }
 .customers-table th:nth-child(4), .customers-table td:nth-child(4) { width: 15%; }
+.roles-table-wrap:has(.parkingSpots-table) { overflow-x: auto; }
+.parkingSpots-table { min-width: 1100px; table-layout: fixed; }
+.parkingSpots-table th, .parkingSpots-table td { padding-right: 14px; padding-left: 14px; vertical-align: middle; }
+.parkingSpots-table th:nth-child(1), .parkingSpots-table td:nth-child(1) { width: 15%; }
+.parkingSpots-table th:nth-child(2), .parkingSpots-table td:nth-child(2) { width: 10%; }
+.parkingSpots-table th:nth-child(3), .parkingSpots-table td:nth-child(3) { width: 17%; }
+.parkingSpots-table th:nth-child(4), .parkingSpots-table td:nth-child(4) { width: 20%; }
+.parkingSpots-table th:nth-child(5), .parkingSpots-table td:nth-child(5) { width: 18%; }
+.parkingSpots-table th:nth-child(6), .parkingSpots-table td:nth-child(6) { width: 20%; }
+.parkingSpots-table-readonly { min-width: 900px; }
+.parkingSpots-table-readonly th:nth-child(1), .parkingSpots-table-readonly td:nth-child(1) { width: 20%; }
+.parkingSpots-table-readonly th:nth-child(2), .parkingSpots-table-readonly td:nth-child(2) { width: 12%; }
+.parkingSpots-table-readonly th:nth-child(3), .parkingSpots-table-readonly td:nth-child(3) { width: 20%; }
+.parkingSpots-table-readonly th:nth-child(4), .parkingSpots-table-readonly td:nth-child(4) { width: 25%; }
+.parkingSpots-table-readonly th:nth-child(5), .parkingSpots-table-readonly td:nth-child(5) { width: 23%; }
+.parkingSpots-table .staff-status-control { width: 100%; min-width: 0; }
+.parkingSpots-table .staff-status-control select { width: 100%; min-width: 0; }
+.parking-spot-actions { flex-direction: row; align-items: center; gap: 8px; }
+.parking-spot-actions button { min-width: 0; justify-content: center; padding: 7px 9px; }
+.parking-spot-modal { width: min(100%, 560px); }
+.parking-spot-modal .role-field { grid-template-columns: 120px minmax(0, 1fr); }
+.parking-spot-modal .role-field select { width: 100%; min-width: 0; height: 44px; padding: 0 13px; border: 1px solid rgba(178, 196, 217, .78); border-radius: 8px; color: #263b54; background: rgba(255, 255, 255, .72); font: inherit; font-weight: 400; }
+.parking-spot-modal .role-field select:focus { border-color: #6d8df0; outline: 0; box-shadow: 0 0 0 4px rgba(75, 111, 237, .1); }
+.parking-spot-modal .role-field-error { grid-column: 2; }
 .users-table td:nth-child(4) input { width: 16px; height: 16px; accent-color: #4b6fed; }
 .role-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
 .role-actions button { display: inline-flex; min-width: 72px; align-items: center; gap: 5px; padding: 8px 11px; border: 1px solid rgba(255, 255, 255, .75); border-radius: 6px; color: #fff; cursor: pointer; font-size: 13px; font-weight: 600; box-shadow: 0 5px 11px rgba(50, 75, 105, .16), inset 0 1px rgba(255, 255, 255, .45); transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }

@@ -1,5 +1,5 @@
 import type { PagedResult } from '../types/Apb/abp'
-import type { CustomerDto, CustomerRequestCreate, CustomerRequestUpdate } from '../types/Customer/customer'
+import type { CustomerDto, CustomerRequestUpdate } from '../types/Customer/customer'
 import type { CustomerQuery } from '../types/Customer/customerQuery'
 import { apiClient } from './apiClient'
 import { readAbpResult, readAbpVoid } from './serviceResponse'
@@ -17,15 +17,6 @@ export const getCustomers = async (params: CustomerQuery): Promise<PagedResult<C
     : '/api/services/app/Customer/GetAll'
   const response = await apiClient(endpoint, { method: 'GET', authenticated: true })
   return readAbpResult(response, 'Unable to load customers.')
-}
-
-export const createCustomer = async (data: CustomerRequestCreate): Promise<CustomerDto> => {
-  const response = await apiClient('/api/services/app/Customer/Create', {
-    method: 'POST',
-    authenticated: true,
-    body: JSON.stringify(data),
-  })
-  return readAbpResult(response, 'Unable to create customer profile.')
 }
 
 export const deleteCustomer = async (id: number): Promise<void> => {

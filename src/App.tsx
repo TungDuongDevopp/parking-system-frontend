@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom'
 import Login from './auth/Login';
 import Register from './auth/Register';
 import ChangePassword from './auth/ChangePassword';
@@ -9,7 +9,6 @@ import AdminUser from './admin/AdminUser';
 import AdminCustomer from './admin/AdminCustomer';
 import CustomerHome from './customer/CustomerHome';
 import CustomerProfile from './customer/CustomerProfile';
-import CreateCustomerProfile from './customer/CreateCustomerProfile';
 import StaffHome from './staff/StaffHome';
 import StaffProfile from './staff/StaffProfile';
 import ProtectedRoute from './auth/ProtectedRoute';
@@ -18,6 +17,7 @@ import Sidebar from './components/sidebar/Sidebar';
 import AdminStaff from './admin/AdminStaff';
 import AdminParkingArea from './admin/AdminParkingArea';
 import { AuthProvider } from './auth/AuthContext';
+import AdminParkingSpot from './admin/AdminParkingSpot';
 const App = () => {
   
     return (
@@ -54,6 +54,17 @@ const App = () => {
                     <AdminParkingArea/>
                   </ProtectedRoute>
                 } />
+                 <Route path="/admin/parkingAreas" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminParkingArea/>
+                  </ProtectedRoute>
+                } />
+                 <Route path="/admin/parkingSpots" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminParkingSpot/>
+                  </ProtectedRoute>
+                } />
+
                 <Route path="/admin/staffs" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminStaff/>
@@ -68,6 +79,11 @@ const App = () => {
                 <Route path="/staff/parkingAreas" element={
                   <ProtectedRoute allowedRole='Staff'>
                     <AdminParkingArea readOnly />
+                  </ProtectedRoute>
+                } />
+                <Route path="/staff/parkingSpots" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminParkingSpot readOnly />
                   </ProtectedRoute>
                 } />
                 <Route path="/staff/profile" element={
@@ -87,7 +103,7 @@ const App = () => {
                 } />
                 <Route path="/customer/profile/create" element={
                   <ProtectedRoute allowedRole='Customer'>
-                    <CreateCustomerProfile />
+                    <Navigate to="/customer/profile" replace />
                   </ProtectedRoute>
                 } />
               </Routes>

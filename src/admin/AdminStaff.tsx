@@ -18,6 +18,7 @@ import type { AvailableUser, StaffDto } from '../types/Staff/staff'
 import type { StaffQuery } from '../types/Staff/staffQuery'
 import {
   IconAdjustmentsHorizontal,
+  IconArrowsSort,
   IconCheck,
   IconChevronLeft,
   IconChevronRight,
@@ -27,9 +28,29 @@ import {
   IconPlus,
   IconRefresh,
   IconSearch,
+  IconSortAscending,
+  IconSortDescending,
   IconTrash,
   IconX,
 } from '@tabler/icons-react'
+
+type StaffSortField =
+  | 'email'
+  | 'hiredDate'
+  | 'status'
+  | 'dateOfBirth'
+  | 'name'
+  | 'phoneNumber'
+type SortDirection = 'asc' | 'desc' | null
+
+const backendSortField: Record<StaffSortField, string> = {
+  email: 'Email',
+  hiredDate: 'HiredDate',
+  status: 'Status',
+  dateOfBirth: 'DateOfBirth',
+  name: 'Name',
+  phoneNumber: 'PhoneNumber',
+}
 
 type StaffFilters = Pick<
   StaffQuery,
@@ -94,6 +115,8 @@ const AdminStaff = () => {
   const [totalCount, setTotalCount] = useState(0)
   const [keyword, setKeyword] = useState('')
   const [filters, setFilters] = useState<StaffFilters>({})
+  const [sortField, setSortField] = useState<StaffSortField | null>(null)
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null)
   const [filterDraft, setFilterDraft] = useState<FilterDraft>(emptyFilterDraft)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterErrors, setFilterErrors] = useState<FieldErrors<StaffFilterField>>({})
@@ -129,6 +152,7 @@ const AdminStaff = () => {
     try {
       const result = await getStaffs({
         keyword: keyword.trim() || undefined,
+        sorting: sortField && sortDirection ? `${backendSortField[sortField]} ${sortDirection}` : undefined,
         skipCount: (safeCurrentPage - 1) * rowsPerPage,
         maxResultCount: rowsPerPage,
         ...filters,
@@ -143,11 +167,47 @@ const AdminStaff = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [filters, keyword, rowsPerPage, safeCurrentPage])
+  }, [filters, keyword, rowsPerPage, safeCurrentPage, sortDirection, sortField])
 
   useEffect(() => {
     void loadStaffs()
   }, [loadStaffs])
+
+  const handleSort = (field: StaffSortField) => {
+    setCurrentPage(1)
+    if (sortField !== field) {
+      setSortField(field)
+      setSortDirection('asc')
+    } else if (sortDirection === 'asc') {
+      setSortDirection('desc')
+    } else {
+      setSortField(null)
+      setSortDirection(null)
+    }
+  }
+
+  const sortIcon = (field: StaffSortField) => {
+    if (sortField !== field || !sortDirection) {
+      return <IconArrowsSort className="action-icon" aria-hidden="true" />
+    }
+
+    const Icon = sortDirection === 'asc' ? IconSortAscending : IconSortDescending
+    return <Icon className="action-icon" aria-hidden="true" />
+  }
+
+  const sortHeader = (field: StaffSortField, label: string) => (
+    <th key={field}>
+      {label}
+      <button
+        className="sort-button"
+        type="button"
+        aria-label={`Sort by ${label}`}
+        onClick={() => handleSort(field)}
+      >
+        {sortIcon(field)}
+      </button>
+    </th>
+  )
 
   useEffect(() => {
     if (!isFilterOpen) return
@@ -504,12 +564,12 @@ const AdminStaff = () => {
             <table className="roles-table staffs-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Phone number</th>
-                  <th>Email</th>
-                  <th>Date of birth</th>
-                  <th>Hired date</th>
-                  <th>Status</th>
+                  {sortHeader('name', 'Name')}
+                  {sortHeader('phoneNumber', 'Phone number')}
+                  {sortHeader('email', 'Email')}
+                  {sortHeader('dateOfBirth', 'Date of birth')}
+                  {sortHeader('hiredDate', 'Hired date')}
+                  {sortHeader('status', 'Status')}
                   <th>Actions</th>
                 </tr>
               </thead>

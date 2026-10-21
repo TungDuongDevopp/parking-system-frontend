@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
 import type { CustomerDto, CustomerRequestUpdate } from '../types/Customer/customer'
@@ -18,8 +18,8 @@ type CustomerProfileFieldErrors = FieldErrors<CustomerProfileField>
 
 const matchesSubmittedProfile = (profile: CustomerDto, changes: CustomerRequestUpdate) =>
     (changes.name === undefined || profile.name.trim() === changes.name) &&
-    (changes.phoneNumber === undefined || profile.phoneNumber.trim() === changes.phoneNumber) &&
-    (changes.email === undefined || (profile.email ?? '').trim() === changes.email)
+    (changes.phoneNumber === undefined || (profile.phoneNumber ?? '').trim() === (changes.phoneNumber ?? '').trim()) &&
+    (changes.email === undefined || profile.email.trim() === changes.email)
 
 const customerFieldAliases = {
     name: ['name'],
@@ -31,7 +31,6 @@ const mapServerErrorsToFields = (error: Parameters<typeof mapAbpFieldErrors>[0])
     mapAbpFieldErrors(error, customerFieldAliases)
 
 const CustomerProfile = () => {
-    const navigate = useNavigate()
     const [profile, setProfile] = useState<CustomerDto | null>(null)
     const [draft, setDraft] = useState<CustomerProfileDraft | null>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -47,7 +46,7 @@ const CustomerProfile = () => {
         getMyProfile().then((result) => {
             if (!isMounted) return
             if (!result) {
-                navigate('/customer/profile/create', { replace: true })
+                setErrorMessage('Your profile is unavailable. Please contact an administrator.')
                 return
             }
             setProfile(result)
@@ -60,14 +59,14 @@ const CustomerProfile = () => {
         })
 
         return () => { isMounted = false }
-    }, [navigate])
+    }, [])
 
     const startEditing = () => {
         if (!profile) return
         setDraft({
             name: profile.name,
-            phoneNumber: profile.phoneNumber,
-            email: profile.email ?? '',
+            phoneNumber: profile.phoneNumber ?? '',
+            email: profile.email,
         })
         setFieldErrors({})
         setFormError('')
@@ -94,23 +93,16 @@ const CustomerProfile = () => {
 
             const validationErrors: CustomerProfileFieldErrors = {}
             if (!name) validationErrors.name = 'Name is required.'
-            if (!phoneNumber) validationErrors.phoneNumber = 'Phone number is required.'
+            if (!email) validationErrors.email = 'Email is required.'
             if (Object.keys(validationErrors).length) {
                 setFieldErrors(validationErrors)
                 return
             }
 
-            if (profile.email?.trim() && !email) {
-                setFieldErrors({
-                    email: 'The profile service cannot clear an existing email address. Enter a replacement email or keep the current one.',
-                })
-                return
-            }
-
             const changes: CustomerRequestUpdate = { id: profile.id }
             if (name !== profile.name.trim()) changes.name = name
-            if (phoneNumber !== profile.phoneNumber.trim()) changes.phoneNumber = phoneNumber
-            if (email && email !== (profile.email ?? '').trim()) changes.email = email
+            if (phoneNumber !== (profile.phoneNumber ?? '').trim()) changes.phoneNumber = phoneNumber || null
+            if (email !== profile.email.trim()) changes.email = email
 
             if (Object.keys(changes).length === 1) {
                 setDraft(null)
@@ -242,14 +234,14 @@ const CustomerProfile = () => {
                                                 <svg viewBox="0 0 24 24"><path d="M6.6 3.8h2.8l1.4 4-1.8 1.6a15 15 0 0 0 5.6 5.6l1.6-1.8 4 1.4v2.8a2 2 0 0 1-2.2 2A16 16 0 0 1 4.6 6a2 2 0 0 1 2-2.2Z" /></svg>
                                             </span>
                                             <dt>Phone number</dt>
-                                            <dd>{profile.phoneNumber}</dd>
+                                            <dd>{profile.phoneNumber || '—'}</dd>
                                         </div>
                                         <div>
                                             <span className="customer-profile-field-icon" aria-hidden="true">
                                                 <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2" /><path d="m4.5 7 7.5 6 7.5-6" /></svg>
                                             </span>
                                             <dt>Email</dt>
-                                            <dd>{profile.email}</dd>
+                                            <dd>{profile.email || '—'}</dd>
                                         </div>
                                     </dl>
                                     <button className="customer-profile-submit" type="button" onClick={startEditing}>
