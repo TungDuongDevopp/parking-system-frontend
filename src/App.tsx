@@ -18,6 +18,7 @@ import AdminStaff from './admin/AdminStaff';
 import AdminParkingArea from './admin/AdminParkingArea';
 import { AuthProvider } from './auth/AuthContext';
 import AdminParkingSpot from './admin/AdminParkingSpot';
+import AdminQuotation from './admin/AdminQuotation';
 const App = () => {
   
     return (
@@ -28,7 +29,6 @@ const App = () => {
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/change-password" element={<ChangePassword />} />
-                <Route path="side-bar" element={<Sidebar/>}/>
                 <Route path="/admin" element={
                   <ProtectedRoute allowedRole='Admin'>
                 <Dashboard />
@@ -54,9 +54,9 @@ const App = () => {
                     <AdminParkingArea/>
                   </ProtectedRoute>
                 } />
-                 <Route path="/admin/parkingAreas" element={
+                 <Route path="/admin/quotations" element={
                   <ProtectedRoute allowedRole='Admin'>
-                    <AdminParkingArea/>
+                    <AdminQuotation/>
                   </ProtectedRoute>
                 } />
                  <Route path="/admin/parkingSpots" element={
@@ -89,6 +89,10 @@ const App = () => {
                 <Route path="/staff/profile" element={
                   <ProtectedRoute allowedRole='Staff'>
                     <StaffProfile />
+                  </ProtectedRoute>
+                } /><Route path="/staff/quotations" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminQuotation readOnly/>
                   </ProtectedRoute>
                 } />
                 <Route path="/customer" element={

@@ -107,8 +107,8 @@ export const SideBarMenus: Item[] = [
     },
     {
         label: "Quotation",
-        path: "/quotations",
+        path: { Admin: "/admin/quotations", Staff: "/staff/quotations" },
         icon: IconFileInvoice,
-        roles: ["Admin"],
+        roles: ["Admin","Staff"],
     },
 ];
