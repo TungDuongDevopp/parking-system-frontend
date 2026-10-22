@@ -277,7 +277,7 @@ function AdminRole() {
 								{errorMessage}
 							</p>
 						)}
-						<table className="roles-table">
+						<table className="roles-table role-list-table">
 							<thead>
 								<tr>
 									<th>

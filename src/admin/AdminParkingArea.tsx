@@ -88,7 +88,6 @@ const parkingAreaStatuses =[
   { value: 0, label: 'Inactive' },
   { value: 1, label: 'Active' },
 ]
-
 const parkingAreaModes =[
    { value: 0, label: 'IndividualSpot' },
   { value: 1, label: 'CapacityBase' },
@@ -560,7 +559,6 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
                   <thead>
                     <tr>
                       {sortHeader('parkingCode', 'Parking code')}
-                      {sortHeader('name', 'Name')}
                       {sortHeader('vehicleType', 'Vehicle type')}
                       {sortHeader('capacity', 'Capacity')}
                       {sortHeader('currentOccupancy', 'Current occupancy')}
@@ -574,7 +572,6 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
                     {!isLoading && parkingAreas.map((area)=> (
                       <tr key={area.id}>
                           <td>{area.parkingCode}</td>
-                          <td>{area.name}</td>
                           <td>{area.vehicleTypeName}</td>
                           <td>{area.capacity}</td>
                           <td>{area.currentOccupancy}</td>
@@ -670,7 +667,7 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
               </select>
               entries
             </label>
-             <div className="pagination">
+            <div className="pagination">
               <button type="button" aria-label="First page" onClick={() => setCurrentPage(1)} disabled={isLoading || safeCurrentPage === 1}>
                 <IconChevronsLeft className="action-icon" aria-hidden="true" />
               </button>
