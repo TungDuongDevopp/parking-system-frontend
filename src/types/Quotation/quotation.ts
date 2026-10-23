@@ -4,6 +4,7 @@ export interface QuotationDto{
     vehicleTypeName: string,
     duration: number,
     durationUnit: number,
+    durationUnitType:string
     price: number
 
 }

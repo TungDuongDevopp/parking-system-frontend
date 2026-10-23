@@ -385,6 +385,10 @@ button { font: inherit; }
 .dashboard-dark .roles-table tbody tr:hover td, .dashboard-dark .roles-table tbody tr:nth-child(odd):hover td { background: rgba(61, 82, 119, .62); }
 .dashboard-dark .roles-table tbody tr:nth-child(odd) td { background: rgba(42, 56, 76, .54); }
 .dashboard-dark .parking-table tbody tr:hover { background: rgba(61, 82, 119, .4); }
+.dashboard-dark .subscription-status.pending { color: #f7d77d; background: rgba(148, 98, 0, .24); }
+.dashboard-dark .subscription-status.in-use { color: #8de0ad; background: rgba(24, 115, 68, .25); }
+.dashboard-dark .subscription-status.canceled { color: #ff9aa5; background: rgba(180, 35, 54, .25); }
+.dashboard-dark .subscription-status.expired, .dashboard-dark .subscription-status.unknown { color: #c0cad6; background: rgba(101, 113, 132, .28); }
 
 .quotation-table { width: 100%; min-width: 720px; }
 .quotation-table th:nth-child(1), .quotation-table td:nth-child(1) { width: 24%; }
@@ -398,6 +402,26 @@ button { font: inherit; }
 .quotation-table:has(thead th:nth-child(3):last-child) th:nth-child(3),
 .quotation-table:has(thead th:nth-child(3):last-child) td:nth-child(3) { width: 45%; }
 
+.subscription-table { width: 100%; min-width: 900px; table-layout: fixed; }
+.subscription-table th, .subscription-table td { padding-right: 14px; padding-left: 14px; }
+.subscription-table th:nth-child(1), .subscription-table td:nth-child(1) { width: 11%; }
+.subscription-table th:nth-child(2), .subscription-table td:nth-child(2) { width: 16%; }
+.subscription-table th:nth-child(3), .subscription-table td:nth-child(3) { width: 20%; }
+.subscription-table th:nth-child(4), .subscription-table td:nth-child(4) { width: 13%; }
+.subscription-table th:nth-child(5), .subscription-table td:nth-child(5) { width: 9%; }
+.subscription-table th:nth-child(6), .subscription-table td:nth-child(6) { width: 10%; }
+.subscription-table th:nth-child(7), .subscription-table td:nth-child(7) { width: 10%; }
+.subscription-table th:nth-child(8), .subscription-table td:nth-child(8) { width: 11%; }
+.subscription-table th:nth-child(6), .subscription-table th:nth-child(7),
+.subscription-table td:nth-child(6), .subscription-table td:nth-child(7) { padding-right: 8px; padding-left: 8px; white-space: nowrap; }
+.subscription-sort-header { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 4px; }
+.subscription-sort-label { min-width: 0; }
+.subscription-table .sort-button { float: none; width: 20px; flex: 0 0 20px; margin: 0; }
+.subscription-status { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
+.subscription-status.pending { color: #946200; background: #fff1c2; }
+.subscription-status.in-use { color: #187344; background: #d9f6e5; }
+.subscription-status.canceled { color: #b42336; background: #ffe0e3; }
+.subscription-status.expired, .subscription-status.unknown { color: #657184; background: #e8edf2; }
 .roles-table.staffs-table { width: 100%; min-width: 1180px; table-layout: fixed; }
 .roles-table.staffs-table th:nth-child(1), .roles-table.staffs-table td:nth-child(1) { width: 12%; }
 .roles-table.staffs-table th:nth-child(2), .roles-table.staffs-table td:nth-child(2) { width: 10%; }
@@ -406,3 +430,7 @@ button { font: inherit; }
 .roles-table.staffs-table th:nth-child(5), .roles-table.staffs-table td:nth-child(5) { width: 12%; }
 .roles-table.staffs-table th:nth-child(6), .roles-table.staffs-table td:nth-child(6) { width: 14%; }
 .roles-table.staffs-table th:nth-child(7), .roles-table.staffs-table td:nth-child(7) { width: 19%; }
+
+@media (max-width: 700px) {
+	.subscription-table-wrap { padding-right: 14px; padding-left: 14px; }
+}

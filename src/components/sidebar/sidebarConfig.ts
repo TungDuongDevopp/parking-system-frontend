@@ -58,6 +58,12 @@ export const SideBarMenus: Item[] = [
         roles: ["Admin"],
     },
     {
+        label: "Quotation",
+        path: { Admin: "/admin/quotations", Staff: "/staff/quotations" },
+        icon: IconFileInvoice,
+        roles: ["Admin","Staff"],
+    },
+    {
         label: "Parking Area",
         path: { Admin: "/admin/parkingAreas", Staff: "/staff/parkingAreas" },
         icon: IconParking,
@@ -77,15 +83,9 @@ export const SideBarMenus: Item[] = [
     },
     {
         label: "Subscription",
-        path: "/subscriptions",
+        path: { Admin: "/admin/subscriptions", Staff: "/staff/subscriptions" },
         icon: IconCalendarRepeat,
-        roles: ["Admin"],
-    },
-    {
-        label: "Parking Session",
-        path: "/parking-sessions",
-        icon: IconClockPlay,
-        roles: ["Admin", "Staff"],
+        roles: ["Admin","Staff"],
     },
     {
         label: "License Plate",
@@ -93,6 +93,13 @@ export const SideBarMenus: Item[] = [
         icon: IconLicense,
         roles: ["Admin", "Staff"],
     },
+    {
+        label: "Parking Session",
+        path: "/parking-sessions",
+        icon: IconClockPlay,
+        roles: ["Admin", "Staff"],
+    },
+   
     {
         label: "Payment",
         path: "/payments",
@@ -104,11 +111,6 @@ export const SideBarMenus: Item[] = [
         path: "/transactions",
         icon: IconReceipt,
         roles: ["Admin"],
-    },
-    {
-        label: "Quotation",
-        path: { Admin: "/admin/quotations", Staff: "/staff/quotations" },
-        icon: IconFileInvoice,
-        roles: ["Admin","Staff"],
-    },
+    }
+   
 ];

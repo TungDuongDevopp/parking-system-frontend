@@ -13,12 +13,12 @@ import StaffHome from './staff/StaffHome';
 import StaffProfile from './staff/StaffProfile';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AuthRedirect from './auth/AuthRedirect';
-import Sidebar from './components/sidebar/Sidebar';
 import AdminStaff from './admin/AdminStaff';
 import AdminParkingArea from './admin/AdminParkingArea';
 import { AuthProvider } from './auth/AuthContext';
 import AdminParkingSpot from './admin/AdminParkingSpot';
 import AdminQuotation from './admin/AdminQuotation';
+import AdminSubscription from './admin/AdminSubscription';
 const App = () => {
   
     return (
@@ -63,11 +63,15 @@ const App = () => {
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminParkingSpot/>
                   </ProtectedRoute>
-                } />
-
+                } />   
                 <Route path="/admin/staffs" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminStaff/>
+                  </ProtectedRoute>
+                } />
+                 <Route path="/admin/subscriptions" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminSubscription/>
                   </ProtectedRoute>
                 } />
                 <Route path="/staff" element={
@@ -93,6 +97,11 @@ const App = () => {
                 } /><Route path="/staff/quotations" element={
                   <ProtectedRoute allowedRole='Staff'>
                     <AdminQuotation readOnly/>
+                  </ProtectedRoute>
+                } />
+                 <Route path="/staff/subscriptions" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminSubscription readOnly/>
                   </ProtectedRoute>
                 } />
                 <Route path="/customer" element={

@@ -1,6 +1,7 @@
 export interface ParkingSpotDto{
     id:number,
     spotCode: string,
+    parkingSpotStatusName:string
     status: number,
     parkingAreaId: number,
     parkingAreaCode: string,
