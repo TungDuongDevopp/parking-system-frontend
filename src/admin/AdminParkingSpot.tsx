@@ -40,12 +40,6 @@ const backendSortField: Record<ParkingSpotSortField, string> = {
   spotCode: 'SpotCode',
 }
 
-const parkingSpotStatusLabels: Record<number, string> = {
-  1: 'Available',
-  2: 'Reserved',
-  3: 'Occupied',
-  4: 'Unavailable',
-}
 const parkingSpotStatuses = [
   { value: 1, label: 'Available' },
   { value: 2, label: 'Reserved' },
@@ -468,10 +462,10 @@ const AdminParkingSpot = ({ readOnly = false }: { readOnly?: boolean }) => {
                     <td>{spot.parkingAreaName}</td>
                     <td>
                       {readOnly ? (
-                        parkingSpotStatusLabels[spot.status] ?? `Unknown (${spot.status})`
+                        spot.parkingSpotStatusName
                       ) : (
                         <div className="staff-status-control">
-                          <span>{parkingSpotStatusLabels[spot.status] ?? `Unknown (${spot.status})`}</span>
+                          <span>{spot.parkingSpotStatusName}</span>
                           {(spot.status === 1 || spot.status === 4) && (
                             <>
                               <select

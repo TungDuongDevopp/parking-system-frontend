@@ -33,13 +33,6 @@ import {
   IconX,
 } from '@tabler/icons-react'
 
-const durationUnitNames: Record<number, string> = {
-  1: 'hour',
-  2: 'day',
-  3: 'week',
-  4: 'month',
-  5: 'year',
-}
 const vehicleTypes = [
   {value:1, label:'Bicycle'},
   {value:2, label:'ElectricBicycle'},
@@ -372,7 +365,7 @@ const AdminQuotation = ({ readOnly = false }: { readOnly?: boolean }) =>{
                   setTotalCount(result.totalCount)
         }
         catch (error){
-            setErrorMessage(error instanceof Error ? error.message : 'Không thể tải danh sách khu vực đỗ xe.')
+            setErrorMessage(error instanceof Error ? error.message : 'Không thể tải danh sách bảng giá.')
             setQuotations([])
             setTotalCount(0)
         }
@@ -547,8 +540,7 @@ const AdminQuotation = ({ readOnly = false }: { readOnly?: boolean }) =>{
                                             <td>{quotation.vehicleTypeName}</td>
                                             <td>
                                                 {quotation.duration}{' '}
-                                                {durationUnitNames[Number(quotation.durationUnit)]?.toLowerCase()
-                                                    ?? String(quotation.durationUnit).toLowerCase()}
+                                                {quotation.durationUnitType}
                                                 </td>
                                             <td>{vndFormatter.format(quotation.price)}</td>
                                         {!readOnly &&(
