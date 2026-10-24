@@ -77,7 +77,7 @@ export const SideBarMenus: Item[] = [
     },
     {
         label: "Reservation",
-        path: "/reservations",
+        path: { Admin: "/admin/reservations", Staff: "/staff/reservations" },
         icon: IconCalendarClock,
         roles: ["Admin", "Staff"],
     },
