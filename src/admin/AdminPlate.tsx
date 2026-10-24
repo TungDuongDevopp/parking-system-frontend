@@ -372,9 +372,9 @@ const AdminPlate = ({ readOnly = false }: { readOnly?: boolean })=>{
                         </tbody>
                     </table>
                     {isLoading && <p className="roles-status" role="status">Loading plates...</p>}
-                        {errorMessage && <p className="roles-status form-error" role="alert">{errorMessage}</p>}
-                        {!isLoading && !errorMessage && plates.length === 0 && (
-                        <p className="empty-roles">No subscriptions found.</p>)}
+                    {errorMessage && <p className="roles-status form-error" role="alert">{errorMessage}</p>}
+                    {!isLoading && !errorMessage && plates.length === 0 && (
+                    <p className="empty-roles">No subscriptions found.</p>)}
                </div>
                <footer className="roles-footer">
                     <button className="refresh-action"

@@ -20,6 +20,7 @@ import AdminParkingSpot from './admin/AdminParkingSpot';
 import AdminQuotation from './admin/AdminQuotation';
 import AdminSubscription from './admin/AdminSubscription';
 import AdminPlate from './admin/AdminPlate';
+import AdminReservation from './admin/AdminReservation';
 
 const App = () => {
   
@@ -81,6 +82,11 @@ const App = () => {
                    <AdminPlate/>
                   </ProtectedRoute>
                 } />
+                  <Route path="/admin/reservations" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminReservation/>
+                  </ProtectedRoute>
+                } />
                 <Route path="/staff" element={
                   <ProtectedRoute allowedRole='Staff'>
                      <StaffHome/>
@@ -129,6 +135,11 @@ const App = () => {
                 <Route path="/customer/profile/create" element={
                   <ProtectedRoute allowedRole='Customer'>
                     <Navigate to="/customer/profile" replace />
+                  </ProtectedRoute>
+                } />
+                <Route path="/staff/reservations" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminReservation readOnly/>
                   </ProtectedRoute>
                 } />
               </Routes>
