@@ -421,7 +421,7 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
         <header className="roles-header">
               <div>
                 <span className="eyebrow-label">{readOnly ? 'Staff lookup' : 'Administration'}</span>
-                <h1>Parking Area</h1>
+                <h1>Parking Areas</h1>
               </div>
             {!readOnly && (
               <button className="primary-action" type="button" onClick={openCreateAreaModal}>

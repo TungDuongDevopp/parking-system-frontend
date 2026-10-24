@@ -7,7 +7,7 @@ import type{
     QuotationDto
  } from "../types/Quotation/quotation"
  import type{SubscriptionQuery} from "../types/Subscription/subscriptionQuery"
- import type { PagedResult } from '../types/Apb/abp';
+import type { PagedResult } from '../types/Apb/abp';
 import { apiClient } from './apiClient';
 import { readAbpResult} from './serviceResponse';
 

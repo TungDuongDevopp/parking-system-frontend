@@ -385,7 +385,7 @@ const AdminQuotation = ({ readOnly = false }: { readOnly?: boolean }) =>{
                  <header className="roles-header">
                     <div>
                         <span className="eyebrow-label">{readOnly ? 'Staff lookup' : 'Administration'}</span>
-                        <h1>Quotation</h1>
+                        <h1>Quotations</h1>
                     </div>
                     {!readOnly && (
                         <button className="primary-action" type="button" onClick={openCreateQuotationModal}>
