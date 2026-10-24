@@ -19,6 +19,8 @@ import { AuthProvider } from './auth/AuthContext';
 import AdminParkingSpot from './admin/AdminParkingSpot';
 import AdminQuotation from './admin/AdminQuotation';
 import AdminSubscription from './admin/AdminSubscription';
+import AdminPlate from './admin/AdminPlate';
+
 const App = () => {
   
     return (
@@ -74,6 +76,11 @@ const App = () => {
                     <AdminSubscription/>
                   </ProtectedRoute>
                 } />
+                <Route path="/admin/plates" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                   <AdminPlate/>
+                  </ProtectedRoute>
+                } />
                 <Route path="/staff" element={
                   <ProtectedRoute allowedRole='Staff'>
                      <StaffHome/>
@@ -102,6 +109,11 @@ const App = () => {
                  <Route path="/staff/subscriptions" element={
                   <ProtectedRoute allowedRole='Staff'>
                     <AdminSubscription readOnly/>
+                  </ProtectedRoute>
+                } />
+                <Route path="/staff/plates" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                   <AdminPlate readOnly/>
                   </ProtectedRoute>
                 } />
                 <Route path="/customer" element={

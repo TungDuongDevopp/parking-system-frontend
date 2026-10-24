@@ -89,7 +89,7 @@ export const SideBarMenus: Item[] = [
     },
     {
         label: "License Plate",
-        path: "/license-plates",
+           path: { Admin: "/admin/plates", Staff: "/staff/plates" },
         icon: IconLicense,
         roles: ["Admin", "Staff"],
     },

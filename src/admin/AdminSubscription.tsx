@@ -52,6 +52,7 @@ type SubscriptionSortField =
     | 'endTime'
     | 'status'
     | 'customerName'
+    |'id'
 
 const backendSortField: Record<SubscriptionSortField, string> = {
    vehicleType: 'vehicleType',
@@ -62,7 +63,8 @@ const backendSortField: Record<SubscriptionSortField, string> = {
    endTime: 'EndTime',
    status : 'Status',
    customerName: 'customerName',
-   durationUnit : 'durationUnit'
+   durationUnit : 'durationUnit',
+   id: 'Id'
     
 }
 type SubscriptionFilters= Pick<SubscriptionQuery,
@@ -206,7 +208,7 @@ const AdminSubscription = ({ readOnly = false }: { readOnly?: boolean })=> {
         return <Icon className="action-icon" aria-hidden="true" />
     }
     const loadSubscriptions = useCallback(async () =>{
-         setIsLoading(true)
+        setIsLoading(true)
         setErrorMessage('')
         try{
             const result = await getSubscriptions({
@@ -224,7 +226,7 @@ const AdminSubscription = ({ readOnly = false }: { readOnly?: boolean })=> {
             setTotalCount(result.totalCount)
         }
         catch(error){
-             setErrorMessage(error instanceof Error ? error.message : 'Không thể tải danh sách gói đăng ký.')
+            setErrorMessage(error instanceof Error ? error.message : 'Không thể tải danh sách gói đăng ký.')
             setSubscriptions([])
             setTotalCount(0)
         }
@@ -302,15 +304,14 @@ const AdminSubscription = ({ readOnly = false }: { readOnly?: boolean })=> {
         setCurrentPage(1)
         setIsFilterOpen(false)
     }
-    return (
-        
+    return (    
         <div className="workspace roles-workspace">
             <Sidebar/>
             <main className="main-content roles-content">
                 <header className="roles-header">
                      <div>
                         <span className="eyebrow-label">{readOnly ? 'Staff lookup' : 'Administration'}</span>
-                        <h1>Subscription</h1>
+                        <h1>Subscriptions</h1>
                     </div> 
                 </header>
                 <section className="roles-card subscription-card" aria-label="Subscription list">
@@ -333,64 +334,64 @@ const AdminSubscription = ({ readOnly = false }: { readOnly?: boolean })=> {
                                 ref={filterButtonRef}
                                 className={`filter-trigger${activeFilterCount ? ' has-filters' : ''}`}
                                 type="button"
-                                aria-label="Open quotation filters"
+                                aria-label="Open subscription filters"
                                 aria-expanded={isFilterOpen}
                                 aria-controls="filter-popover"
                                 onClick={openFilters}
                             >
                             <IconAdjustmentsHorizontal className="action-icon" aria-hidden="true" />
                             <span>Filters</span>
-                             {/* {activeFilterCount > 0 && <span className="filter-count">{activeFilterCount}</span>} */}
+                             {activeFilterCount > 0 && <span className="filter-count">{activeFilterCount}</span>}
                             </button>
                         </div>
                     </div>
                       {isFilterOpen && createPortal(
-                                            <form
-                                             ref={filterPopoverRef}
-                                             className="filter-popover quotation-filter"
-                                                id="filter-popover"
-                                                aria-label="Filter quotations"
-                                                onSubmit={applyFilters}
-                                                style={{ top: filterPosition.top, right: filterPosition.right }}
+                            <form
+                                ref={filterPopoverRef}
+                                className="filter-popover quotation-filter"
+                                id="filter-popover"
+                                aria-label="Filter quotations"
+                                onSubmit={applyFilters}
+                                style={{ top: filterPosition.top, right: filterPosition.right }}
+                                >
+                                    <div className="filter-heading">
+                                        <strong>Filter subscriptions</strong>
+                                            <button
+                                             className="filter-close"
+                                             type="button"
+                                            aria-label="Close filters"
+                                            onClick={() => setIsFilterOpen(false)}>
+                                            <IconX className="action-icon" aria-hidden="true" />
+                                            </button>
+                                    </div>  
+                                    <div className="subscription-filter-fields">
+                                        <label className="filter-field">
+                                            <span>Status</span>
+                                            <select
+                                            value={filterDraft.status}
+                                            onChange={(event) => {
+                                                setFilterDraft((draft) => ({ ...draft, status: event.target.value }))
+                                            }}
                                             >
-                                              <div className="filter-heading">
-                                                <strong>Filter subscriptions</strong>
-                                                 <button
-                                                    className="filter-close"
-                                                    type="button"
-                                                    aria-label="Close filters"
-                                                    onClick={() => setIsFilterOpen(false)}>
-                                                    <IconX className="action-icon" aria-hidden="true" />
-                                                </button>
-                                            </div>  
-                                            <div className="subscription-filter-fields">
-                                               <label className="filter-field">
-                                                    <span>Status</span>
-                                                    <select
-                                                    value={filterDraft.status}
-                                                    onChange={(event) => {
-                                                        setFilterDraft((draft) => ({ ...draft, status: event.target.value }))
-                                                    }}
-                                                    >
-                                                    <option value="">All statuses</option>
-                                                    {subscriptionStatuses.map((statusOption) => (
-                                                        <option key={statusOption.value} value={statusOption.value}>
-                                                        {statusOption.label}
-                                                        </option>
-                                                    ))}
-                                                    </select>
-                                                </label>
-                                                <fieldset className="filter-group">
-                                                    <legend>StartTime</legend>
-                                                    <label className="filter-field">
-                                                    <span>From</span>
-                                                    <input
-                                                        type="date"
-                                                        value={filterDraft.startTimeFrom}
-                                                        max={filterDraft.startTimeTo || undefined}
-                                                        onChange={(event) => setFilterDraft((draft) => ({ ...draft, startTimeFrom: event.target.value }))}
-                                                    />
-                                                    </label>
+                                            <option value="">All statuses</option>
+                                                {subscriptionStatuses.map((statusOption) => (
+                                                <option key={statusOption.value} value={statusOption.value}>
+                                                {statusOption.label}
+                                                </option>
+                                            ))}
+                                            </select>
+                                        </label>
+                                        <fieldset className="filter-group">
+                                        <legend>StartTime</legend>
+                                        <label className="filter-field">
+                                        <span>From</span>
+                                            <input
+                                            type="date"
+                                            value={filterDraft.startTimeFrom}
+                                            max={filterDraft.startTimeTo || undefined}
+                                            onChange={(event) => setFilterDraft((draft) => ({ ...draft, startTimeFrom: event.target.value }))}
+                                            />
+                                        </label>
                                                     <label className="filter-field">
                                                     <span>To</span>
                                                     <input
@@ -476,31 +477,39 @@ const AdminSubscription = ({ readOnly = false }: { readOnly?: boolean })=> {
                                             </form>,document.body
                                         )}
                     <div className="roles-table-wrap subscription-table-wrap">
-                        <table className="roles-table subscription-table">
+                        <table className={`roles-table subscription-table${readOnly ? ' subscription-table-readonly' : ''}`}>
                             <thead>
                                 <tr>
-                                {sortHeader('customerId','Customer Id')}
-                                {sortHeader('customerName','Customer Name')}
-                                {sortHeader('vehicleType','Vehicle Type')}
-                                {sortHeader('duration','Duration')}
-                                {sortHeader('totalAmount','Total Amount')}
-                                {sortHeader('startTime','Start time')}
-                                {sortHeader('endTime','End time')}
-                                {sortHeader('status','Status')}
+                                    {sortHeader('id','Id')}
+                                    {sortHeader('customerId','Customer Id')}
+                                    {sortHeader('customerName','Customer Name')}
+                                    {sortHeader('vehicleType','Vehicle Type')}
+                                    {sortHeader('totalAmount','Total Amount')}
+                                    {!readOnly && (
+                                        <>
+                                            {sortHeader('duration','Duration')}
+                                            {sortHeader('startTime','Start time')}
+                                            {sortHeader('endTime','End time')}
+                                        </>
+                                    )}
+                                    {sortHeader('status','Status')}
                                 </tr>
-                                
                             </thead>
                              <tbody>
                                     {!isLoading && subscriptions.map((subscription)=>(
                                         <tr key={subscription.id}>
-                                            
+                                            <td>{subscription.id}</td>
                                             <td>{subscription.customerId}</td>
                                             <td>{subscription.customerName}</td>
-                                            <td>{subscription.vehicleTypeName}</td>
-                                            <td>{subscription.duration} {subscription.durationUnitName}</td>
+                                            <td>{subscription.vehicleTypeName}</td>                                      
                                             <td>{subscriptionAmountFormatter.format(Number(subscription.totalAmount))}</td>
-                                            <td>{formatSubscriptionDate(subscription.startTime)}</td>
-                                            <td>{formatSubscriptionDate(subscription.endTime)}</td>
+                                            {!readOnly && (
+                                                <>
+                                                    <td>{subscription.duration} {subscription.durationUnitName}</td>
+                                                    <td>{formatSubscriptionDate(subscription.startTime)}</td>
+                                                    <td>{formatSubscriptionDate(subscription.endTime)}</td>
+                                                </>
+                                            )}
                                             <td>
                                                 <span className={`subscription-status ${subscriptionStatusLabels[subscription.status]?.className ?? 'unknown'}`}>
                                                     {subscriptionStatusLabels[subscription.status]?.label ?? subscription.subscriptionStatusName}
@@ -523,7 +532,7 @@ const AdminSubscription = ({ readOnly = false }: { readOnly?: boolean })=> {
                     <footer className="roles-footer">
                         <button className="refresh-action"
                                 type="button"
-                                aria-label="Refresh areas"
+                                aria-label="Refresh subscriptions"
                                  onClick={() => void loadSubscriptions()}
                                 disabled={isLoading} >
                             <IconRefresh className="action-icon" aria-hidden="true" /> 
