@@ -518,8 +518,6 @@ const AdminSubscription = ({ readOnly = false }: { readOnly?: boolean })=> {
 
                                         </tr>
 
-
-
                                     ))}
                              </tbody>
                         </table>

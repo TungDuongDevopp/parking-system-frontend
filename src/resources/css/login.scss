@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
 
 :root {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--ps-font);
   color: #12233f;
   background: #f4f8fc;
   font-synthesis: none;
@@ -42,14 +41,14 @@ button, input { font: inherit; }
 .login-brand { display: flex; align-items: center; gap: 13px; margin: 0 0 22px 5px; }
 .brand-mark { display: grid; width: 43px; height: 43px; place-items: center; border-radius: 13px; background: #087cf4; box-shadow: 0 9px 20px rgba(8, 124, 244, .23); }
 .brand-mark svg { width: 29px; fill: none; stroke: white; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.2; }
-.login-brand strong { display: block; color: #122e54; font-family: Manrope, sans-serif; font-size: 18px; letter-spacing: -.6px; }
+.login-brand strong { display: block; color: #122e54; font-family: var(--ps-font-display); font-size: 18px; letter-spacing: -.6px; }
 .login-brand strong span { color: #087cf4; }
 .login-brand small { display: block; margin-top: 2px; color: #7890aa; font-size: 8px; font-weight: 700; letter-spacing: 1.7px; }
 
 .login-card { padding: 40px 42px 32px; border: 1px solid rgba(218, 231, 245, .95); border-radius: 18px; background: rgba(255, 255, 255, .93); box-shadow: 0 24px 60px rgba(42, 88, 133, .12), 0 2px 7px rgba(42, 88, 133, .04); }
 .login-heading { margin-bottom: 30px; }
 .eyebrow { margin: 0 0 9px; color: #087cf4; font-size: 11px; font-weight: 700; letter-spacing: 1.8px; }
-.login-heading h1 { margin: 0; color: #122e54; font-family: Manrope, sans-serif; font-size: clamp(25px, 5vw, 31px); letter-spacing: -1.2px; line-height: 1.18; }
+.login-heading h1 { margin: 0; color: #122e54; font-family: var(--ps-font-display); font-size: clamp(25px, 5vw, 31px); letter-spacing: -1.2px; line-height: 1.18; }
 .login-heading > p:last-child { margin: 10px 0 0; color: #71849d; font-size: 14px; }
 
 .field-label { display: block; margin: 0 0 8px; color: #344b68; font-size: 13px; font-weight: 700; }

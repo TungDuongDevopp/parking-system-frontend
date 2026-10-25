@@ -21,7 +21,7 @@ import AdminQuotation from './admin/AdminQuotation';
 import AdminSubscription from './admin/AdminSubscription';
 import AdminPlate from './admin/AdminPlate';
 import AdminReservation from './admin/AdminReservation';
-
+import AdminSession from './admin/AdminSession';
 const App = () => {
   
     return (
@@ -87,6 +87,11 @@ const App = () => {
                     <AdminReservation/>
                   </ProtectedRoute>
                 } />
+                  <Route path="/admin/sessions" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminSession/>
+                  </ProtectedRoute>
+                } />
                 <Route path="/staff" element={
                   <ProtectedRoute allowedRole='Staff'>
                      <StaffHome/>
@@ -122,6 +127,16 @@ const App = () => {
                    <AdminPlate readOnly/>
                   </ProtectedRoute>
                 } />
+                <Route path="/staff/sessions" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminSession readOnly/>
+                  </ProtectedRoute>
+                } />
+                 <Route path="/staff/reservations" element={
+                  <ProtectedRoute allowedRole='Staff'>
+                    <AdminReservation readOnly/>
+                  </ProtectedRoute>
+                } />
                 <Route path="/customer" element={
                   <ProtectedRoute allowedRole='Customer'>
                        <CustomerHome />
@@ -137,11 +152,7 @@ const App = () => {
                     <Navigate to="/customer/profile" replace />
                   </ProtectedRoute>
                 } />
-                <Route path="/staff/reservations" element={
-                  <ProtectedRoute allowedRole='Staff'>
-                    <AdminReservation readOnly/>
-                  </ProtectedRoute>
-                } />
+               
               </Routes>
           </AuthProvider>
                                                         

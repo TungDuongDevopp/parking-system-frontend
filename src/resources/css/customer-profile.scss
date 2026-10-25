@@ -18,7 +18,7 @@
     align-items: center;
     gap: 9px;
     color: #183c59;
-    font-family: Manrope, sans-serif;
+    font-family: var(--ps-font-display);
     font-size: 15px;
     font-weight: 800;
     text-decoration: none;
@@ -61,7 +61,7 @@
     > h1 {
         margin: 0 0 25px;
         color: #183c59;
-        font-family: Manrope, sans-serif;
+        font-family: var(--ps-font-display);
         font-size: 32px;
     }
 }
@@ -104,7 +104,7 @@
         max-width: 100%;
         margin: 6px 0 22px;
         color: #fff;
-        font-family: Manrope, sans-serif;
+        font-family: var(--ps-font-display);
         font-size: 25px;
         line-height: 1.25;
         overflow-wrap: anywhere;
@@ -121,7 +121,7 @@
     border-radius: 20px 20px 20px 5px;
     color: #164a4b;
     background: #d5f18d;
-    font-family: Manrope, sans-serif;
+    font-family: var(--ps-font-display);
     font-size: 34px;
     font-weight: 800;
     box-shadow: 0 12px 24px rgba(0, 0, 0, .13);
@@ -167,7 +167,7 @@
 
     > span {
         color: #168b8a;
-        font-family: Manrope, sans-serif;
+        font-family: var(--ps-font-display);
         font-size: 11px;
         font-weight: 800;
     }
@@ -175,7 +175,7 @@
     h2 {
         margin: 0;
         color: #183c59;
-        font-family: Manrope, sans-serif;
+        font-family: var(--ps-font-display);
         font-size: 19px;
     }
 }
