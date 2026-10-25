@@ -1,6 +1,7 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
+import { useSearchParams } from 'react-router-dom'
 import { getReservationLookUp, getReservations } from '../services/reservationService'
 import type { ReservationDto, ReservationLookUp } from '../types/Reservation/reservation'
 import Sidebar from '../components/sidebar/Sidebar'
@@ -93,6 +94,7 @@ const formatDateOnly = (value?: string | null) => {
 }
 
 const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
+    const [searchParams] = useSearchParams()
     const [isLoading,setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState('')
     const [reservations, setReservations] = useState<ReservationDto[]>([]) 
@@ -142,7 +144,7 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
     const firstItem = totalCount ? (safeCurrentPage - 1) * rowsPerPage + 1 : 0
     const lastItem = Math.min(safeCurrentPage * rowsPerPage, totalCount)  
 //Search & Filter
-    const [keyword, setKeyword] = useState('')
+    const [keyword, setKeyword] = useState(() => searchParams.get('keyword') ?? '')
 
     const loadReservations = useCallback(async() =>{
         setIsLoading(true)
@@ -318,8 +320,8 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
                                 setKeyword(event.target.value)
                                 setCurrentPage(1)
                                 }}
-                                placeholder="Search subscription"
-                                aria-label="Search subscription"
+                                placeholder="Search reservation"
+                                aria-label="Search reservation"
                             />
                              </label>
                               <div className="filter-wrap">
@@ -442,6 +444,7 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
                                         {sortHeader('parkingAreaCode', 'Parking Area Code')}
                                         {sortHeader('parkingSpotCode', 'Parking Spot Code')}
                                         <th>Vehicle Type</th>
+                                        <th>Phone Contact</th>
                                         {sortHeader('reservedAt', 'Reserved At')}
                                         {sortHeader('endTime', 'End Time')}
                                         {sortHeader('status', 'Status')}
@@ -454,6 +457,7 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
                                             <td>{reservation.parkingAreaCode}</td>
                                             <td>{reservation.parkingSpotCode || '-'}</td>
                                             <td>{reservation.vehicleTypeName}</td>
+                                            <td>{reservation.contactPhone}</td>
                                             <td>{formatDateOnly(reservation.reservedAt)}</td>
                                             <td>{formatDateOnly(reservation.endTime)}</td>
                                             <td>

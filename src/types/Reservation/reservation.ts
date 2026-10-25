@@ -11,7 +11,8 @@ status : string,
 endTime : string,
 vehicleType: number|null,
 vehicleTypeName : string|null
-reservationStatusName: string
+reservationStatusName: string,
+contactPhone: string
 }
 
 export interface ReservationCreateRequest{

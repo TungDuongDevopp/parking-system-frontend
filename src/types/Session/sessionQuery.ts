@@ -1,0 +1,22 @@
+export interface SessionQuery{
+   keyword?:string,
+   sorting?:string,
+   skipCount?: number,
+   maxResultCount? : number,
+   parkingAreaId?:number,
+   customerId? : number,
+   parkingSpotId? : number,
+   minFee?: number,
+   maxFee?: number,
+   minHourlyRate?:number,
+   maxHourlyRate?:number,
+   minDailyRate?:number,
+   maxDailyRate?:number,
+   entryFrom?:string,
+   entryTo?:string,
+   exitFrom?:string,
+   exitTo?:string,
+   status?:number,
+   checkInStaffId?:number,
+   checkOutStaffId?:number
+}

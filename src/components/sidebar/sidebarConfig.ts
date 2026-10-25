@@ -95,7 +95,7 @@ export const SideBarMenus: Item[] = [
     },
     {
         label: "Parking Session",
-        path: "/parking-sessions",
+        path: { Admin: "/admin/sessions", Staff: "/staff/sessions" },
         icon: IconClockPlay,
         roles: ["Admin", "Staff"],
     },
