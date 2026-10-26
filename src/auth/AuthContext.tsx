@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null)
     setError(null)
     setStatus('anonymous')
+    window.location.replace('/')
   }, [])
 
   return (

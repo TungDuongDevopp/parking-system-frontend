@@ -39,7 +39,8 @@ export const getSessions = async (params: SessionQuery): Promise<PagedResult<Ses
   return readAbpResult(response, 'Unable to load session.')  
 }
 export const getSessionById = async (id: number): Promise<SessionDto> => {
-  const response = await apiClient(`/api/services/app/ParkingSession/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/ParkingSession/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })

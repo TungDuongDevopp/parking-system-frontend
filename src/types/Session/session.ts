@@ -21,9 +21,11 @@ export interface CheckInRequest{
     parkingAreaId?: number|null,
     parkingSpotId?:number|null,
     plateNumber?: string|null,
+    reservationId?: number|null,
     vehicleType: number
 }
 export interface CheckInResponse{
+    id: number,
     success:boolean,
     message: string,
     ticketCode: string|null,

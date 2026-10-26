@@ -56,10 +56,10 @@ export const deleteQuotation = async (id: number): Promise<void> => {
   await readAbpVoid(response, 'Không thể xóa bảng giá.')
 }
 export const getQuotationById = async (id: number): Promise<QuotationDto> => {
-  const response = await apiClient(`/api/services/app/Quotation/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Quotation/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })
   return readAbpResult(response, 'Không thể tải hồ sơ bảng giá.')
 }
-

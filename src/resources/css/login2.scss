@@ -738,6 +738,530 @@ body {
         }
     }
 
+    .main-container.public-auth-page {
+        position: relative;
+        display: grid;
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        height: auto;
+        place-items: center;
+        margin: 0;
+        padding: 40px 20px;
+        overflow: hidden auto;
+        background: #0f172b;
+    }
+
+    .main-container.public-auth-page > .image-content {
+        position: fixed;
+        z-index: 0;
+        inset: -18px;
+        display: block;
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        filter: blur(2px);
+        opacity: .58;
+        pointer-events: none;
+    }
+
+    .main-container.public-auth-page > .image-content::after {
+        display: none;
+    }
+
+    .main-container.public-auth-page > .image-content .image-caption,
+    .main-container.public-auth-page > .image-content .register-image-content {
+        display: none;
+    }
+
+    .main-container.public-auth-page > .login-panel {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        width: min(100%, 560px);
+        min-height: 0;
+        flex: none;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .main-container.public-auth-page .login-panel-inner {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .main-container.public-auth-page .login-brand {
+        flex-direction: row;
+        gap: 12px;
+        margin: 0 0 22px;
+        color: #e2e8f0;
+        font-size: 20px;
+    }
+
+    .main-container.public-auth-page .login-brand > img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+    }
+
+    .main-container.public-auth-page .login-brand > span > span {
+        color: #c084fc;
+    }
+
+    .main-container.public-auth-page .title {
+        margin: 0 0 30px;
+        text-align: left;
+    }
+
+    .main-container.public-auth-page .title h1 {
+        margin: 8px 0;
+        color: #e2e8f0;
+        font-size: clamp(27px, 4vw, 34px);
+        font-weight: 750;
+        letter-spacing: -.035em;
+        line-height: 1.2;
+    }
+
+    .main-container.public-auth-page .title .title-eyebrow {
+        color: #c084fc;
+    }
+
+    .main-container.public-auth-page .title > p:last-child {
+        margin: 8px 0 0;
+        color: #9eabc2;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .main-container.public-auth-page .login-form > label,
+    .main-container.public-auth-page .register-form .register-field > label {
+        margin: 0 0 8px;
+        color: #e2e8f0;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .main-container.public-auth-page .login-form > input,
+    .main-container.public-auth-page .login-form .password-field input,
+    .main-container.public-auth-page .register-form .register-field > input,
+    .main-container.public-auth-page .register-form .register-field .password-field input {
+        height: 49px;
+        padding: 0 15px;
+        border: 1px solid rgba(148, 163, 184, .24);
+        border-radius: 9px;
+        color: #e2e8f0;
+        background: #1e293b;
+    }
+
+    .main-container.public-auth-page .login-form > input:focus,
+    .main-container.public-auth-page .login-form .password-field input:focus,
+    .main-container.public-auth-page .register-form .register-field > input:focus,
+    .main-container.public-auth-page .register-form .register-field .password-field input:focus {
+        border-color: #a855f7;
+        background: #1e293b;
+        box-shadow: 0 0 0 3px rgba(168, 85, 247, .18);
+    }
+
+    .main-container.public-auth-page .login-form .password-field .password-toggle {
+        color: #aab4c6;
+    }
+
+    .main-container.public-auth-page .login-form .password-field .password-toggle:hover {
+        color: #e9d5ff;
+        background: rgba(168, 85, 247, .16);
+    }
+
+    .main-container.public-auth-page .login-form .form-options a,
+    .main-container.public-auth-page .register-prompt a {
+        color: #c084fc;
+    }
+
+    .main-container.public-auth-page .login-form .remember-option {
+        color: #9eabc2;
+    }
+
+    .main-container.public-auth-page .login-form .remember-option input,
+    .main-container.public-auth-page .register-form .register-terms input {
+        accent-color: #a947f0;
+    }
+
+    .main-container.public-auth-page .login-form .login-button {
+        min-height: 49px;
+        border-radius: 9px;
+        color: #fff;
+        background: linear-gradient(100deg, #b13ef4, #8b35e8);
+        box-shadow: none;
+    }
+
+    .main-container.public-auth-page .login-form .login-button:hover {
+        background: linear-gradient(100deg, #a12ce8, #762bd2);
+        box-shadow: 0 8px 24px rgba(177, 62, 244, .2);
+    }
+
+    .main-container.public-auth-page .login-form .register-prompt,
+    .main-container.public-auth-page .register-prompt {
+        color: #94a3b8;
+    }
+
+    .main-container.public-auth-page .login-footer {
+        color: #8391a7;
+    }
+
+    .main-container.public-auth-page .login-footer a {
+        color: #b9c4d5;
+    }
+
+    .main-container.public-auth-page .field-error,
+    .main-container.public-auth-page .form-error {
+        color: #fca5a5;
+    }
+
+    .main-container.public-auth-page.register-page > .login-panel {
+        width: min(100%, 640px);
+    }
+
+    .main-container.public-auth-page.register-page .login-panel-inner {
+        max-width: 540px;
+    }
+
+    .main-container.public-auth-page.register-page .title {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .main-container.public-auth-page.register-page .register-form .register-fields-grid {
+        gap: 16px;
+    }
+
+    .main-container.public-auth-page.register-page .register-form .register-terms {
+        margin: 22px 0;
+        color: #aab4c6;
+    }
+
+    .main-container.public-auth-page.register-page .register-form .register-terms a {
+        color: #c084fc;
+    }
+
+    @media (max-width: 700px) {
+        .main-container.public-auth-page {
+            min-height: 100vh;
+            min-height: 100dvh;
+            height: auto;
+            margin: 0;
+            padding: 32px 20px;
+        }
+
+        .main-container.public-auth-page > .image-content {
+            display: block;
+        }
+
+        .main-container.public-auth-page > .login-panel {
+            width: 100%;
+            padding: 0;
+        }
+
+        .main-container.public-auth-page.register-page .login-panel-inner {
+            max-width: 480px;
+        }
+
+        .main-container.public-auth-page.register-page .register-form .register-fields-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+    }
+
+    .main-container.public-auth-page {
+        position: relative;
+        display: grid;
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        height: auto;
+        place-items: center;
+        margin: 0;
+        padding: 40px 20px;
+        overflow: hidden auto;
+        background: #0f172b;
+    }
+
+    .public-auth-page > .image-content {
+        position: fixed;
+        z-index: 0;
+        inset: -18px;
+        display: block;
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        filter: blur(12px);
+        opacity: .18;
+        pointer-events: none;
+
+        &::after {
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 28% 12%, rgba(124, 58, 237, .48), transparent 42%),
+                linear-gradient(115deg, rgba(15, 23, 43, .55), rgba(15, 23, 43, .92) 74%);
+        }
+
+        > img {
+            object-position: center;
+        }
+
+        .image-caption,
+        .register-image-content {
+            display: none;
+        }
+    }
+
+    .public-auth-page > .login-panel {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        width: min(100%, 560px);
+        min-height: 0;
+        flex: none;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .public-auth-page .login-panel-inner {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .public-auth-page .login-brand {
+        flex-direction: row;
+        gap: 12px;
+        margin: 0 0 22px;
+        color: #e2e8f0;
+        font-size: 20px;
+    }
+
+    .public-auth-page .login-brand > img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+    }
+
+    .public-auth-page .brand-accent,
+    .public-auth-page .login-brand > span > span {
+        color: #c084fc;
+    }
+
+    .public-auth-page .title {
+        margin: 0 0 30px;
+        text-align: left;
+    }
+
+    .public-auth-page .title h1 {
+        margin: 8px 0;
+        color: #e2e8f0;
+        font-size: clamp(27px, 4vw, 34px);
+        font-weight: 750;
+        letter-spacing: -.035em;
+        line-height: 1.2;
+    }
+
+    .public-auth-page .title .title-eyebrow {
+        color: #c084fc;
+    }
+
+    .public-auth-page .title > p:last-child {
+        margin: 8px 0 0;
+        color: #9eabc2;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .public-auth-page .login-form > label,
+    .public-auth-page .register-form .register-field > label {
+        margin: 0 0 8px;
+        color: #e2e8f0;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .public-auth-page .login-form > input,
+    .public-auth-page .login-form .password-field input,
+    .public-auth-page .register-form .register-field > input,
+    .public-auth-page .register-form .register-field .password-field input {
+        height: 49px;
+        padding: 0 15px;
+        border: 1px solid rgba(148, 163, 184, .24);
+        border-radius: 9px;
+        color: #e2e8f0;
+        background: #1e293b;
+    }
+
+    .public-auth-page .login-form > input::placeholder,
+    .public-auth-page .login-form .password-field input::placeholder,
+    .public-auth-page .register-form .register-field > input::placeholder,
+    .public-auth-page .register-form .register-field .password-field input::placeholder {
+        color: #8793a8;
+    }
+
+    .public-auth-page .login-form > input:focus,
+    .public-auth-page .login-form .password-field input:focus,
+    .public-auth-page .register-form .register-field > input:focus,
+    .public-auth-page .register-form .register-field .password-field input:focus {
+        border-color: #a855f7;
+        background: #1e293b;
+        box-shadow: 0 0 0 3px rgba(168, 85, 247, .18);
+    }
+
+    .public-auth-page .login-form > input {
+        margin-bottom: 22px;
+    }
+
+    .public-auth-page .login-form .password-field .password-toggle {
+        color: #aab4c6;
+
+        &:hover {
+            color: #e9d5ff;
+            background: rgba(168, 85, 247, .16);
+        }
+    }
+
+    .public-auth-page .login-form .form-options {
+        justify-content: space-between;
+        margin: 14px 0 22px;
+    }
+
+    .public-auth-page .login-form .remember-option {
+        color: #9eabc2;
+    }
+
+    .public-auth-page .login-form .remember-option input {
+        accent-color: #a947f0;
+    }
+
+    .public-auth-page .login-form .form-options a {
+        color: #c084fc;
+    }
+
+    .public-auth-page .login-form .login-button {
+        min-height: 49px;
+        border-radius: 9px;
+        background: linear-gradient(100deg, #b13ef4, #8b35e8);
+        box-shadow: none;
+        font-size: 14px;
+
+        &:hover {
+            background: linear-gradient(100deg, #a12ce8, #762bd2);
+            box-shadow: 0 8px 24px rgba(177, 62, 244, .2);
+        }
+    }
+
+    .public-auth-page .login-form .register-prompt,
+    .public-auth-page .register-prompt {
+        margin: 22px 0 0;
+        color: #94a3b8;
+        font-size: 15px;
+        text-align: center;
+
+        a {
+            color: #c026ff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    }
+
+    .public-auth-page .login-footer {
+        margin-top: 22px;
+        color: #8391a7;
+
+        a {
+            color: #b9c4d5;
+        }
+    }
+
+    .public-auth-page .field-error,
+    .public-auth-page .form-error {
+        color: #fca5a5;
+    }
+
+    .public-auth-page .register-panel {
+        width: min(100%, 640px);
+    }
+
+    .register-auth-page .login-panel-inner {
+        max-width: 540px;
+    }
+
+    .register-auth-page .title {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .register-auth-page .title h1 {
+        font-size: clamp(27px, 4vw, 34px);
+    }
+
+    .register-auth-page .register-form .register-fields-grid {
+        gap: 16px;
+    }
+
+    .register-auth-page .register-form .register-field > label {
+        display: block;
+    }
+
+    .register-auth-page .register-form .register-terms {
+        margin: 22px 0;
+        color: #aab4c6;
+    }
+
+    .register-auth-page .register-form .register-terms input {
+        accent-color: #a947f0;
+    }
+
+    .register-auth-page .register-form .register-terms a {
+        color: #c084fc;
+    }
+
+    .register-auth-page .register-form .register-prompt {
+        margin-top: 20px;
+    }
+
+    @media (max-width: 700px) {
+        .main-container.public-auth-page {
+            min-height: 100vh;
+            min-height: 100dvh;
+            height: auto;
+            margin: 0;
+            padding: 32px 20px;
+        }
+
+        .public-auth-page > .image-content {
+            display: block;
+        }
+
+        .public-auth-page > .login-panel {
+            width: 100%;
+            padding: 0;
+        }
+
+        .public-auth-page .title {
+            margin-bottom: 28px;
+        }
+
+        .register-auth-page .login-panel-inner {
+            max-width: 480px;
+        }
+
+        .register-auth-page .register-form .register-fields-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+    }
+
     .login-form > label {
         margin-bottom: 4px;
         font-size: 11px;
@@ -833,5 +1357,244 @@ body {
             margin-top: 8px;
             font-size: 10px;
         }
+    }
+}
+
+.main-container.public-auth-page {
+    position: relative;
+    display: grid;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    place-items: center;
+    margin: 0;
+    padding: 40px 20px;
+    overflow: hidden auto;
+    background: #0f172b;
+}
+
+.main-container.public-auth-page > .image-content {
+    position: fixed;
+    z-index: 0;
+    inset: -18px;
+    display: block;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    filter: blur(12px);
+    opacity: .18;
+    pointer-events: none;
+}
+
+.main-container.public-auth-page > .image-content::after {
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 28% 12%, rgba(124, 58, 237, .48), transparent 42%),
+        linear-gradient(115deg, rgba(15, 23, 43, .55), rgba(15, 23, 43, .92) 74%);
+}
+
+.main-container.public-auth-page > .image-content .image-caption,
+.main-container.public-auth-page > .image-content .register-image-content {
+    display: none;
+}
+
+.main-container.public-auth-page > .login-panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: min(100%, 560px);
+    min-height: 0;
+    flex: none;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.main-container.public-auth-page .login-panel-inner {
+    width: 100%;
+    max-width: 480px;
+}
+
+.main-container.public-auth-page .login-brand {
+    flex-direction: row;
+    gap: 12px;
+    margin: 0 0 22px;
+    color: #e2e8f0;
+    font-size: 20px;
+}
+
+.main-container.public-auth-page .login-brand > img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.main-container.public-auth-page .login-brand > span > span {
+    color: #c084fc;
+}
+
+.main-container.public-auth-page .title {
+    margin: 0 0 30px;
+    text-align: left;
+}
+
+.main-container.public-auth-page .title h1 {
+    margin: 8px 0;
+    color: #e2e8f0;
+    font-size: clamp(27px, 4vw, 34px);
+    font-weight: 750;
+    letter-spacing: -.035em;
+    line-height: 1.2;
+}
+
+.main-container.public-auth-page .title .title-eyebrow {
+    color: #c084fc;
+}
+
+.main-container.public-auth-page .title > p:last-child {
+    margin: 8px 0 0;
+    color: #9eabc2;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.main-container.public-auth-page .login-form > label,
+.main-container.public-auth-page .register-form .register-field > label {
+    margin: 0 0 8px;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.main-container.public-auth-page .login-form > input,
+.main-container.public-auth-page .login-form .password-field input,
+.main-container.public-auth-page .register-form .register-field > input,
+.main-container.public-auth-page .register-form .register-field .password-field input {
+    height: 49px;
+    padding: 0 15px;
+    border: 1px solid rgba(148, 163, 184, .24);
+    border-radius: 9px;
+    color: #e2e8f0;
+    background: #1e293b;
+}
+
+.main-container.public-auth-page .login-form > input:focus,
+.main-container.public-auth-page .login-form .password-field input:focus,
+.main-container.public-auth-page .register-form .register-field > input:focus,
+.main-container.public-auth-page .register-form .register-field .password-field input:focus {
+    border-color: #a855f7;
+    background: #1e293b;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, .18);
+}
+
+.main-container.public-auth-page .login-form .password-field .password-toggle {
+    color: #aab4c6;
+}
+
+.main-container.public-auth-page .login-form .password-field .password-toggle:hover {
+    color: #e9d5ff;
+    background: rgba(168, 85, 247, .16);
+}
+
+.main-container.public-auth-page .login-form .form-options a,
+.main-container.public-auth-page .register-prompt a {
+    color: #c084fc;
+}
+
+.main-container.public-auth-page .login-form .remember-option {
+    color: #9eabc2;
+}
+
+.main-container.public-auth-page .login-form .remember-option input,
+.main-container.public-auth-page .register-form .register-terms input {
+    accent-color: #a947f0;
+}
+
+.main-container.public-auth-page .login-form .login-button {
+    min-height: 49px;
+    border-radius: 9px;
+    color: #fff;
+    background: linear-gradient(100deg, #b13ef4, #8b35e8);
+    box-shadow: none;
+}
+
+.main-container.public-auth-page .login-form .login-button:hover {
+    background: linear-gradient(100deg, #a12ce8, #762bd2);
+    box-shadow: 0 8px 24px rgba(177, 62, 244, .2);
+}
+
+.main-container.public-auth-page .login-form .register-prompt,
+.main-container.public-auth-page .register-prompt {
+    color: #94a3b8;
+}
+
+.main-container.public-auth-page .login-footer {
+    color: #8391a7;
+}
+
+.main-container.public-auth-page .login-footer a {
+    color: #b9c4d5;
+}
+
+.main-container.public-auth-page .field-error,
+.main-container.public-auth-page .form-error {
+    color: #fca5a5;
+}
+
+.main-container.public-auth-page.register-page > .login-panel {
+    width: min(100%, 640px);
+}
+
+.main-container.public-auth-page.register-page .login-panel-inner {
+    max-width: 540px;
+}
+
+.main-container.public-auth-page.register-page .title {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.main-container.public-auth-page.register-page .register-form .register-fields-grid {
+    gap: 16px;
+}
+
+.main-container.public-auth-page.register-page .register-form .register-terms {
+    margin: 22px 0;
+    color: #aab4c6;
+}
+
+.main-container.public-auth-page.register-page .register-form .register-terms a {
+    color: #c084fc;
+}
+
+@media (max-width: 700px) {
+    .main-container.public-auth-page {
+        min-height: 100vh;
+        min-height: 100dvh;
+        height: auto;
+        margin: 0;
+        padding: 32px 20px;
+    }
+
+    .main-container.public-auth-page > .image-content {
+        display: block;
+    }
+
+    .main-container.public-auth-page > .login-panel {
+        width: 100%;
+        padding: 0;
+    }
+
+    .main-container.public-auth-page.register-page .login-panel-inner {
+        max-width: 480px;
+    }
+
+    .main-container.public-auth-page.register-page .register-form .register-fields-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
     }
 }

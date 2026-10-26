@@ -18,7 +18,7 @@ export interface SubscriptionDto{
 export interface SubscriptionCreateRequest{
     startTime:string,
     quotationId:number,
-    plateNumbers:number[]
+    plateNumbers:string[]
 }
 
 export interface SubscriptionCustomerLookup{

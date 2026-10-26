@@ -86,7 +86,8 @@ export const changeStaffProfile = async (data: StaffChangeProfileRequest): Promi
 }
 
 export const getStaffById = async (id: number): Promise<StaffDto> => {
-  const response = await apiClient(`/api/services/app/Staff/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Staff/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })

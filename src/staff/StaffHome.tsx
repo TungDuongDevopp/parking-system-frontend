@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IconArrowRight,
@@ -14,9 +14,14 @@ import {
 } from '@tabler/icons-react'
 import Sidebar from '../components/sidebar/Sidebar'
 import { useStaffDashboardData } from '../admin/dashboard/useDashboardData'
+import { getParkingAreas } from '../services/parkingAreaService'
 import { getParkingSpots } from '../services/parkingSpotService'
+import { getReservations } from '../services/reservationService'
+import { checkIn } from '../services/sessionService'
+import type { ParkingAreaDto } from '../types/ParkingArea/parkingArea'
 import type { RecentActivityDto } from '../types/Dashboard/dashboard'
 import type { ParkingSpotDto } from '../types/ParkingSpot/parkingSpot'
+import type { ReservationDto } from '../types/Reservation/reservation'
 import '../resources/css/design-system.scss'
 import '../resources/css/dashboard.scss'
 import '../resources/css/staffDashboard.scss'
@@ -29,6 +34,14 @@ const isCheckInActivity = (value: RecentActivityDto['activityType']) =>
 const vehicleTypeName = (value: number) =>
   ({ 1: 'Bicycle', 2: 'E-bike', 3: 'Motorcycle', 4: 'E-moto', 5: 'Car' })[value] ?? `Type ${value}`
 
+const vehicleTypes = [
+  { id: 1, label: 'Bicycle' },
+  { id: 2, label: 'Electric Bicycle' },
+  { id: 3, label: 'Motorcycle' },
+  { id: 4, label: 'Electric Motorcycle' },
+  { id: 5, label: 'Car' },
+]
+
 const parkingModeName = (value: number) =>
   value === 0 ? 'Individual spot' : value === 1 ? 'Capacity based' : `Mode ${value}`
 
@@ -36,6 +49,24 @@ const StaffHome = () => {
   const navigate = useNavigate()
   const [username, setUsername] = useState('Staff')
   const [retryKey, setRetryKey] = useState(0)
+  const [isCheckInFormOpen, setIsCheckInFormOpen] = useState(false)
+  const [isCheckInLookupsLoading, setIsCheckInLookupsLoading] = useState(false)
+  const [checkInLookupError, setCheckInLookupError] = useState('')
+  const [checkInParkingAreas, setCheckInParkingAreas] = useState<ParkingAreaDto[]>([])
+  const [checkInReservations, setCheckInReservations] = useState<ReservationDto[]>([])
+  const [checkInParkingSpots, setCheckInParkingSpots] = useState<ParkingSpotDto[]>([])
+  const [selectedCheckInAreaId, setSelectedCheckInAreaId] = useState<number | ''>('')
+  const [selectedCheckInSpotId, setSelectedCheckInSpotId] = useState<number | ''>('')
+  const [selectedCheckInReservationId, setSelectedCheckInReservationId] = useState<number | ''>('')
+  const [selectedCheckInVehicleType, setSelectedCheckInVehicleType] = useState<number | ''>('')
+  const [areCheckInSpotsLoading, setAreCheckInSpotsLoading] = useState(false)
+  const [checkInSpotsError, setCheckInSpotsError] = useState('')
+  const [checkInPlateNumber, setCheckInPlateNumber] = useState('')
+  const [checkInSubmitError, setCheckInSubmitError] = useState('')
+  const [checkInSuccessMessage, setCheckInSuccessMessage] = useState('')
+  const [checkInTicketCode, setCheckInTicketCode] = useState('')
+  const [isCheckInSubmitting, setIsCheckInSubmitting] = useState(false)
+  const [isCheckInConfirmationOpen, setIsCheckInConfirmationOpen] = useState(false)
   const [isReservationSearchOpen, setIsReservationSearchOpen] = useState(false)
   const [reservationSearch, setReservationSearch] = useState('')
   const [selectedSpotAreaId, setSelectedSpotAreaId] = useState<number | ''>('')
@@ -58,6 +89,172 @@ const StaffHome = () => {
     day: 'numeric',
     year: 'numeric',
   }).format(new Date())
+
+  const openCheckInForm = async () => {
+    setIsCheckInFormOpen(true)
+    setIsCheckInLookupsLoading(true)
+    setCheckInLookupError('')
+    try {
+      const pageSize = 100
+      const [areaPage, reservationPage] = await Promise.all([
+        getParkingAreas({ status: 1, skipCount: 0, maxResultCount: pageSize }),
+        getReservations({ status: 1, skipCount: 0, maxResultCount: pageSize }),
+      ])
+
+      const areas = [...areaPage.items]
+      const reservations = [...reservationPage.items]
+      const pagesToLoad = Math.max(
+        Math.ceil(areaPage.totalCount / pageSize),
+        Math.ceil(reservationPage.totalCount / pageSize),
+      )
+      for (let page = 1; page < pagesToLoad; page += 1) {
+        const [nextAreas, nextReservations] = await Promise.all([
+          page * pageSize < areaPage.totalCount
+            ? getParkingAreas({ status: 1, skipCount: page * pageSize, maxResultCount: pageSize })
+            : Promise.resolve(null),
+          page * pageSize < reservationPage.totalCount
+            ? getReservations({ status: 1, skipCount: page * pageSize, maxResultCount: pageSize })
+            : Promise.resolve(null),
+        ])
+        if (nextAreas) areas.push(...nextAreas.items)
+        if (nextReservations) reservations.push(...nextReservations.items)
+      }
+
+      setCheckInParkingAreas(areas)
+      setCheckInReservations(reservations)
+      setSelectedCheckInAreaId('')
+      setSelectedCheckInSpotId('')
+      setSelectedCheckInReservationId('')
+      setSelectedCheckInVehicleType('')
+      setCheckInPlateNumber('')
+      setCheckInSubmitError('')
+      setCheckInSuccessMessage('')
+      setCheckInTicketCode('')
+      setIsCheckInConfirmationOpen(false)
+      setCheckInParkingSpots([])
+    } catch (lookupError) {
+      setCheckInLookupError(
+        lookupError instanceof Error ? lookupError.message : 'Unable to load check-in options.',
+      )
+    } finally {
+      setIsCheckInLookupsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!selectedCheckInAreaId) {
+      setCheckInParkingSpots([])
+      setSelectedCheckInSpotId('')
+      setCheckInSpotsError('')
+      setAreCheckInSpotsLoading(false)
+      return
+    }
+
+    let cancelled = false
+    const loadCheckInSpots = async () => {
+      setAreCheckInSpotsLoading(true)
+      setCheckInSpotsError('')
+      setCheckInParkingSpots([])
+      try {
+        const pageSize = 100
+        const firstPage = await getParkingSpots({
+          parkingAreaId: selectedCheckInAreaId,
+          status: 1,
+          skipCount: 0,
+          maxResultCount: pageSize,
+        })
+        const spots = [...firstPage.items]
+        for (let skipCount = pageSize; skipCount < firstPage.totalCount; skipCount += pageSize) {
+          const page = await getParkingSpots({
+            parkingAreaId: selectedCheckInAreaId,
+            status: 1,
+            skipCount,
+            maxResultCount: pageSize,
+          })
+          if (!page.items.length) throw new Error('Unable to load all available parking spots.')
+          spots.push(...page.items)
+        }
+        if (!cancelled) setCheckInParkingSpots(spots)
+      } catch (error) {
+        if (!cancelled) {
+          setCheckInSpotsError(error instanceof Error ? error.message : 'Unable to load parking spots.')
+        }
+      } finally {
+        if (!cancelled) setAreCheckInSpotsLoading(false)
+      }
+    }
+
+    void loadCheckInSpots()
+    return () => {
+      cancelled = true
+    }
+  }, [selectedCheckInAreaId])
+
+  const selectedCheckInReservation = checkInReservations.find(
+    (reservation) => reservation.id === selectedCheckInReservationId,
+  )
+
+  const submitCheckIn = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setCheckInSubmitError('')
+    setCheckInSuccessMessage('')
+    setCheckInTicketCode('')
+
+    if (!selectedCheckInReservationId) {
+      if (!selectedCheckInAreaId) {
+        setCheckInSubmitError('Select a parking area.')
+        return
+      }
+      if (
+        checkInParkingAreas.find((area) => area.id === selectedCheckInAreaId)?.parkingMode === 0 &&
+        !selectedCheckInSpotId
+      ) {
+        setCheckInSubmitError('Select a parking spot.')
+        return
+      }
+    }
+    if (!selectedCheckInVehicleType) {
+      setCheckInSubmitError('Select a vehicle type.')
+      return
+    }
+    if (!checkInPlateNumber.trim()) {
+      setCheckInSubmitError('Enter a license plate number.')
+      return
+    }
+
+    setIsCheckInConfirmationOpen(true)
+  }
+
+  const confirmCheckIn = async () => {
+    setCheckInSubmitError('')
+    setIsCheckInSubmitting(true)
+    try {
+      const result = await checkIn({
+        ...(selectedCheckInReservationId
+          ? { reservationId: selectedCheckInReservationId }
+          : {
+              parkingAreaId: Number(selectedCheckInAreaId),
+              parkingSpotId: selectedCheckInSpotId ? Number(selectedCheckInSpotId) : null,
+            }),
+        vehicleType: Number(selectedCheckInVehicleType),
+        plateNumber: checkInPlateNumber.trim(),
+      })
+      if (!result.success) {
+        setCheckInSubmitError(result.message || 'Check-in could not be completed.')
+        return
+      }
+      setCheckInSuccessMessage(result.message || 'Vehicle checked in successfully.')
+      setCheckInTicketCode(result.ticketCode ?? '')
+      setIsCheckInConfirmationOpen(false)
+      setRetryKey((key) => key + 1)
+    } catch (submitError) {
+      setCheckInSubmitError(
+        submitError instanceof Error ? submitError.message : 'Unable to check in vehicle.',
+      )
+    } finally {
+      setIsCheckInSubmitting(false)
+    }
+  }
 
   useEffect(() => {
     if (!selectedSpotArea) {
@@ -190,10 +387,14 @@ const StaffHome = () => {
                   <IconParking size={19} aria-hidden="true" />
                 </div>
                 <div className="staff-gate-actions">
-                  <Link className="ps-btn ps-btn-primary staff-session-primary staff-workspace-action" to="/staffs/sessions">
-                    <IconLogin2 size={16} /> Check-in / sessions
-                  </Link>
-                  <Link className="ps-btn staff-checkout-link staff-workspace-action" to="/staffs/sessions">
+                  <button
+                    className="ps-btn ps-btn-primary staff-session-primary staff-workspace-action"
+                    type="button"
+                    onClick={() => void openCheckInForm()}
+                  >
+                    <IconLogin2 size={16} /> Check-in
+                  </button>
+                  <Link className="ps-btn staff-checkout-link staff-workspace-action" to="/staff/sessions">
                     <IconLogout2 size={16} /> Check-out / sessions
                   </Link>
                 </div>
@@ -387,7 +588,7 @@ const StaffHome = () => {
                 <h2>Recent parking activity</h2>
                 <p>Latest Check-in and Check-out events</p>
               </div>
-              <Link className="ps-link" to="/staffs/sessions">
+              <Link className="ps-link" to="/staff/sessions">
                 All sessions <IconArrowRight size={15} />
               </Link>
             </div>
@@ -412,7 +613,7 @@ const StaffHome = () => {
                       const time = activity.localEventTime || activity.eventTime
                       return (
                         <tr key={`${activity.parkingSessionId}-${activity.activityType}`}>
-                          <td><Link to="/staffs/sessions">{activity.ticketCode}</Link></td>
+                          <td><Link to="/staff/sessions">{activity.ticketCode}</Link></td>
                           <td>{activity.plateNumber ?? '—'}</td>
                           <td>{checkIn ? 'Check-in' : 'Check-out'}</td>
                           <td>{activity.parkingAreaName}</td>
@@ -435,6 +636,270 @@ const StaffHome = () => {
             )}
           </section>
         </div>
+
+        {isCheckInFormOpen && (
+          <div
+            className="staff-checkin-backdrop"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setIsCheckInFormOpen(false)
+            }}
+          >
+            <section
+              className="staff-checkin-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="staff-checkin-heading"
+            >
+              <header className="staff-checkin-dialog-header">
+                <div>
+                  <span>Session workspace</span>
+                  <h2 id="staff-checkin-heading">Vehicle Check-in</h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCheckInFormOpen(false)}
+                  aria-label="Close check-in form"
+                >
+                  ×
+                </button>
+              </header>
+
+              {isCheckInLookupsLoading ? (
+                <p className="staff-checkin-state" role="status">Loading check-in options...</p>
+              ) : checkInLookupError ? (
+                <div className="staff-checkin-error" role="alert">
+                  <p>{checkInLookupError}</p>
+                  <button type="button" onClick={() => void openCheckInForm()}>Try again</button>
+                </div>
+              ) : (
+                <form className="staff-checkin-form" onSubmit={submitCheckIn}>
+                  {isCheckInConfirmationOpen && !checkInSuccessMessage ? (
+                    <div className="staff-checkin-confirmation">
+                      <p>Please confirm the vehicle and reservation details before checking in.</p>
+                      <dl>
+                        <div>
+                          <dt>License plate</dt>
+                          <dd>{checkInPlateNumber.trim()}</dd>
+                        </div>
+                        <div>
+                          <dt>Vehicle type</dt>
+                          <dd>{vehicleTypes.find((vehicle) => vehicle.id === selectedCheckInVehicleType)?.label ?? '—'}</dd>
+                        </div>
+                        {selectedCheckInReservation ? (
+                          <>
+                            <div>
+                              <dt>Reservation</dt>
+                              <dd>#{selectedCheckInReservation.id}</dd>
+                            </div>
+                            <div>
+                              <dt>Parking area</dt>
+                              <dd>{selectedCheckInReservation.parkingAreaCode}</dd>
+                            </div>
+                            <div>
+                              <dt>Parking spot</dt>
+                              <dd>{selectedCheckInReservation.parkingSpotCode ?? 'Capacity-based area'}</dd>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div>
+                              <dt>Parking area</dt>
+                              <dd>{checkInParkingAreas.find((area) => area.id === selectedCheckInAreaId)?.name ?? '—'}</dd>
+                            </div>
+                            <div>
+                              <dt>Parking spot</dt>
+                              <dd>{checkInParkingSpots.find((spot) => spot.id === selectedCheckInSpotId)?.spotCode ?? '—'}</dd>
+                            </div>
+                          </>
+                        )}
+                      </dl>
+                      <p className="staff-checkin-confirmation-warning">
+                        Verify the vehicle type matches the reservation to avoid an invalid check-in.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="staff-checkin-fields">
+                  <label className="staff-checkin-field">
+                    Parking area
+                    <select
+                      value={selectedCheckInAreaId}
+                      disabled={Boolean(selectedCheckInReservationId)}
+                      onChange={(event) => {
+                        setSelectedCheckInAreaId(event.target.value ? Number(event.target.value) : '')
+                        setSelectedCheckInSpotId('')
+                        setSelectedCheckInReservationId('')
+                      }}
+                    >
+                      <option value="">
+                        {checkInParkingAreas.length ? 'Select parking area' : 'No active parking areas'}
+                      </option>
+                      {checkInParkingAreas.map((area) => (
+                        <option key={area.id} value={area.id}>
+                          {area.name} ({area.parkingCode})
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="staff-checkin-field">
+                    Parking spot
+                    <select
+                      value={selectedCheckInSpotId}
+                      onChange={(event) => {
+                        const spotId = event.target.value ? Number(event.target.value) : ''
+                        setSelectedCheckInSpotId(spotId)
+                        if (selectedCheckInReservation?.parkingSpotId !== spotId) {
+                          setSelectedCheckInReservationId('')
+                        }
+                      }}
+                      disabled={Boolean(selectedCheckInReservationId) || !selectedCheckInAreaId || areCheckInSpotsLoading ||
+                        checkInParkingAreas.find((area) => area.id === selectedCheckInAreaId)?.parkingMode !== 0}
+                    >
+                      <option value="">
+                        {!selectedCheckInAreaId
+                          ? 'Select a parking area first'
+                          : checkInParkingAreas.find((area) => area.id === selectedCheckInAreaId)?.parkingMode !== 0
+                            ? 'Capacity-based area'
+                            : areCheckInSpotsLoading
+                              ? 'Loading available spots...'
+                                : checkInParkingSpots.length
+                                  ? 'Select parking spot'
+                                  : 'No available spots'}
+                      </option>
+                      {checkInParkingSpots.map((spot) => (
+                        <option key={spot.id} value={spot.id}>
+                          {spot.spotCode}
+                        </option>
+                      ))}
+                      {selectedCheckInReservation?.parkingSpotId &&
+                        selectedCheckInReservation.parkingAreaId === selectedCheckInAreaId &&
+                        !checkInParkingSpots.some((spot) => spot.id === selectedCheckInReservation.parkingSpotId) && (
+                          <option value={selectedCheckInReservation.parkingSpotId}>
+                            {selectedCheckInReservation.parkingSpotCode ?? `Spot #${selectedCheckInReservation.parkingSpotId}`} (reserved)
+                          </option>
+                        )}
+                    </select>
+                    {checkInSpotsError && <span className="staff-checkin-field-error" role="alert">{checkInSpotsError}</span>}
+                  </label>
+
+                  <label className="staff-checkin-field">
+                    Reservation
+                    <select
+                      value={selectedCheckInReservationId}
+                      onChange={(event) => {
+                        const reservationId = event.target.value ? Number(event.target.value) : ''
+                        setSelectedCheckInReservationId(reservationId)
+                        const reservation = checkInReservations.find((item) => item.id === reservationId)
+                        if (reservation) {
+                          setSelectedCheckInAreaId(reservation.parkingAreaId)
+                          setSelectedCheckInSpotId(reservation.parkingSpotId ?? '')
+                          setSelectedCheckInVehicleType(reservation.vehicleType ?? '')
+                        }
+                      }}
+                    >
+                      <option value="">
+                        {checkInReservations.length ? 'No reservation' : 'No reserved bookings'}
+                      </option>
+                      {checkInReservations.map((reservation) => (
+                        <option key={reservation.id} value={reservation.id}>
+                          #{reservation.id} · {reservation.parkingAreaCode}
+                          {reservation.parkingSpotCode ? ` · ${reservation.parkingSpotCode}` : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="staff-checkin-field">
+                    License plate
+                    <input
+                      type="text"
+                      value={checkInPlateNumber}
+                      onChange={(event) => setCheckInPlateNumber(event.target.value)}
+                      autoComplete="off"
+                      maxLength={32}
+                      placeholder="Enter license plate"
+                    />
+                  </label>
+
+                  <label className="staff-checkin-field">
+                    Vehicle type
+                    <select
+                      value={selectedCheckInVehicleType}
+                      onChange={(event) => setSelectedCheckInVehicleType(event.target.value ? Number(event.target.value) : '')}
+                    >
+                      <option value="">Select vehicle type</option>
+                      {vehicleTypes.map((vehicleType) => (
+                        <option key={vehicleType.id} value={vehicleType.id}>{vehicleType.label}</option>
+                      ))}
+                    </select>
+                  </label>
+                    </div>
+                  )}
+
+                  {checkInSubmitError && (
+                    <p className="staff-checkin-submit-error" role="alert">{checkInSubmitError}</p>
+                  )}
+                  {checkInSuccessMessage && (
+                    <div className="staff-checkin-success" role="status">
+                      <strong>{checkInSuccessMessage}</strong>
+                      {checkInTicketCode && <span>Ticket: {checkInTicketCode}</span>}
+                    </div>
+                  )}
+                  <footer className="staff-checkin-actions">
+                    {checkInSuccessMessage ? (
+                      <button
+                        className="ps-btn"
+                        type="button"
+                        onClick={() => setIsCheckInFormOpen(false)}
+                      >
+                        Done
+                      </button>
+                    ) : isCheckInConfirmationOpen ? (
+                      <>
+                        <button
+                          className="ps-btn"
+                          type="button"
+                          onClick={() => {
+                            setIsCheckInConfirmationOpen(false)
+                            setCheckInSubmitError('')
+                          }}
+                          disabled={isCheckInSubmitting}
+                        >
+                          Back to edit
+                        </button>
+                        <button
+                          className="ps-btn ps-btn-primary"
+                          type="button"
+                          onClick={() => void confirmCheckIn()}
+                          disabled={isCheckInSubmitting}
+                        >
+                          {isCheckInSubmitting ? 'Checking in...' : 'Confirm Check-in'}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="ps-btn"
+                          type="button"
+                          onClick={() => setIsCheckInFormOpen(false)}
+                        >
+                          Close
+                        </button>
+                        <button
+                          className="ps-btn ps-btn-primary"
+                          type="submit"
+                          disabled={areCheckInSpotsLoading}
+                        >
+                          Review Check-in
+                        </button>
+                      </>
+                    )}
+                  </footer>
+                </form>
+              )}
+            </section>
+          </div>
+        )}
       </main>
     </div>
   )

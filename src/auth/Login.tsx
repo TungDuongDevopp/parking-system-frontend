@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import loginImage from '../assets/image_login.png';
-import logoImage from '../assets/logo.png';
+import logoImage from '../assets/logo-purple.png';
 import { login } from '../services/authService';
 import type { LoginRequest } from '../types/Account/login';
 import { useAuth } from './AuthContext';
@@ -19,6 +19,7 @@ const loginFieldAliases = {
 
 const Login = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { refreshSession } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -53,6 +54,11 @@ const Login = () => {
                 setFormError('Không thể xác minh vai trò tài khoản sau khi đăng nhập.');
                 return;
             }
+            const quotationId = Number(searchParams.get('quotationId'))
+            if (user?.roles.includes('Customer') && Number.isSafeInteger(quotationId) && quotationId > 0) {
+                navigate(`/pricing?quotationId=${quotationId}&buyNow=1`, { replace: true });
+                return;
+            }
             navigate(homePath, { replace: true });
         } catch (error) {
             console.error(error);
@@ -69,7 +75,7 @@ const Login = () => {
     };
 
     return (
-        <main className="main-container">
+        <main className="main-container public-auth-page login-auth-page">
             <section className="image-content" aria-label="Parking facility">
                 <img src={loginImage} alt="Modern parking facility on a sunny day" />
                 <div className="image-caption">
@@ -99,7 +105,7 @@ const Login = () => {
                             name="username"
                             type="text"
                             autoComplete="username"
-                            placeholder="you@example.com"
+                            placeholder=""
                             value={username}
                             onChange={(event) => {
                                 setUsername(event.target.value);
@@ -118,7 +124,7 @@ const Login = () => {
                                 name="password"
                                 type={isPasswordVisible ? 'text' : 'password'}
                                 autoComplete="current-password"
-                                placeholder="Enter your password"
+                                placeholder=""
                                 value={password}
                                 onChange={(event) => {
                                     setPassword(event.target.value);
@@ -164,7 +170,7 @@ const Login = () => {
                         </div>
 
                         <button className="login-button" type="submit" disabled={isSubmitting}>
-                            <span>{isSubmitting ? 'Signing in...' : 'Log in'}</span>
+                            <span>{isSubmitting ? 'Signing in...' : 'Sign In'}</span>
                             {!isSubmitting && (
                                 <svg viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M5 12h13M13 6l6 6-6 6" />
@@ -174,7 +180,9 @@ const Login = () => {
                         {formError && <p className="form-error" role="alert">{formError}</p>}
 
                         <p className="register-prompt">
-                            Don't have an account? <a href="/register">Sign up</a>
+                            Don't have an account? <Link to={`/register${searchParams.has('quotationId')
+                                ? `?quotationId=${encodeURIComponent(searchParams.get('quotationId') ?? '')}`
+                                : ''}`}>Sign up</Link>
                         </p>
                     </form>
 

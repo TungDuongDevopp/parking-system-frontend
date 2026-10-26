@@ -37,3 +37,16 @@ export interface ParkingAreaChangeStatus{
     id: number,
     status: number
 }
+
+export interface ParkingAreaLookupDto {
+    id: number
+    parkingCode: string
+    name: string
+    location: string
+    vehicleType: number
+    parkingMode: number
+    status: number
+    capacity: number
+    availableCapacity: number
+    unavailableCapacity: number
+}
