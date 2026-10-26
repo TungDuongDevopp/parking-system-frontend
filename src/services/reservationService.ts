@@ -1,7 +1,7 @@
 import type {
 ReservationDto,
 ReservationCreateRequest,
-ReservationLookUp
+ReservationLookUp,CanceledRequest
 } from '../types/Reservation/reservation'
 
 import type {ReservationQuery} from '../types/Reservation/reservationQuery'
@@ -33,7 +33,8 @@ export const getReservations = async (params: ReservationQuery): Promise<PagedRe
   return readAbpResult(response, 'Unable to load reservation.')  
 }
 export const getReservationById = async (id: number): Promise<ReservationDto> => {
-  const response = await apiClient(`/api/services/app/Reservation/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Reservation/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })
@@ -48,11 +49,12 @@ export const createReservation = async (data: ReservationCreateRequest): Promise
   return readAbpResult(response, 'Không thể đặt chỗ.')
 }
 
-export const cancelReservation = async (id:number ): Promise<ReservationDto> => {
+export const cancelReservation = async (id: number): Promise<ReservationDto> => {
+  const request: CanceledRequest = { id }
   const response = await apiClient('/api/services/app/Reservation/Canceled', {
     method: 'POST',
     authenticated: true,
-    body: JSON.stringify(id),
+    body: JSON.stringify(request),
   })
   return readAbpResult(response, 'Không thể hủy đặt chỗ.')
 }

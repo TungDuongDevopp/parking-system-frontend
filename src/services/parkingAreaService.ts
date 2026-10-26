@@ -66,9 +66,17 @@ export const changeParkingAreaStatus = async (data: ParkingAreaChangeStatus): Pr
 }
 
 export const getParkingAreaById = async (id: number): Promise<ParkingAreaDto> => {
-  const response = await apiClient(`/api/services/app/ParkingArea/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/ParkingArea/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })
   return readAbpResult(response, 'Không thể tải hồ sơ khu vực đỗ xe')
+}
+export const getAvailableParkingAreas = async (): Promise<import('../types/ParkingArea/parkingArea').ParkingAreaLookupDto[]> => {
+  const response = await apiClient('/api/services/app/ParkingArea/GetAvailableAreas', {
+    method: 'GET',
+    authenticated: true,
+  })
+  return readAbpResult(response, 'Unable to load available parking areas.')
 }

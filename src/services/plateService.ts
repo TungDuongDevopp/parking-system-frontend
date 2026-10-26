@@ -26,7 +26,8 @@ export const getPlates = async (params: PlateQuery): Promise<PagedResult<PlateDt
   return readAbpResult(response, 'Unable to load plate.')  
 }
 export const getPlateById = async (id: number): Promise<PlateDto> => {
-  const response = await apiClient(`/api/services/app/SubscriptionPlate/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/SubscriptionPlate/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })

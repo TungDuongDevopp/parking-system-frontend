@@ -64,7 +64,8 @@ export const changeParkingSpotStatus = async (data: ParkingSpotChangeStatus): Pr
 }
 
 export const getParkingSpotById = async (id: number): Promise<ParkingSpotDto> => {
-  const response = await apiClient(`/api/services/app/ParkingSpot/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/ParkingSpot/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })
@@ -76,4 +77,12 @@ export const getParkingAreaLookup = async(): Promise<ParkingSpotLookup[]> =>{
     authenticated:true
   })
    return readAbpResult(response, 'Không thể tải danh sách khu vực đỗ xe')
+}
+export const getAvailableSpots = async (parkingAreaId: number): Promise<ParkingSpotDto[]> => {
+  const query = new URLSearchParams({ parkingAreaId: parkingAreaId.toString() })
+  const response = await apiClient(`/api/services/app/ParkingSpot/GetAvailableSpots?${query.toString()}`, {
+    method: 'GET',
+    authenticated: true,
+  })
+  return readAbpResult(response, 'Unable to load available parking spots.')
 }

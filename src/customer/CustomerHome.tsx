@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
 import { useAuth } from '../auth/AuthContext'
 
 const CustomerHome = () => {
-    const navigate = useNavigate()
     const { user, logout } = useAuth()
     const [logoutError, setLogoutError] = useState('')
     const [isSigningOut, setIsSigningOut] = useState(false)
@@ -16,7 +15,6 @@ const CustomerHome = () => {
         setIsSigningOut(true)
         try {
             await logout()
-            navigate('/login', { replace: true })
         } catch (error) {
             setLogoutError(error instanceof Error ? error.message : 'Unable to log out from the server.')
         } finally {

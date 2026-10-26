@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import loginImage from '../assets/image_login.png';
-import logoImage from '../assets/logo.png';
+import logoImage from '../assets/logo-purple.png';
 import { register } from '../services/authService';
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation';
 import { getAbpErrorFromException } from '../services/serviceResponse';
@@ -22,6 +22,7 @@ const registerFieldAliases = {
 
 const Register = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -65,7 +66,10 @@ const Register = () => {
 
         try {
             await register(account);
-            navigate('/login');
+            const quotationId = Number(searchParams.get('quotationId'));
+            navigate(Number.isSafeInteger(quotationId) && quotationId > 0
+                ? `/login?quotationId=${quotationId}`
+                : '/login');
         } catch (error) {
             console.error(error);
             const message = error instanceof Error ? error.message : 'Registration failed.';
@@ -81,7 +85,7 @@ const Register = () => {
     };
 
     return (
-        <main className="main-container register-page">
+        <main className="main-container register-page public-auth-page register-auth-page">
             <section className="image-content" aria-label="ParkingSystem introduction">
                 <img src={loginImage} alt="Modern parking facility on a sunny day" />
                 <div className="register-image-content">
@@ -276,7 +280,9 @@ const Register = () => {
                     </form>
 
                     <p className="register-prompt">
-                        Already have an account? <a href="/login">Log in</a>
+                        Already have an account? <Link to={`/login${searchParams.has('quotationId')
+                            ? `?quotationId=${encodeURIComponent(searchParams.get('quotationId') ?? '')}`
+                            : ''}`}>Sign in</Link>
                     </p>
                 </div>
             </section>

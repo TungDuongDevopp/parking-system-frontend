@@ -7,12 +7,16 @@ import Dashboard from './admin/Dashboard';
 import AdminRole from './admin/AdminRole';
 import AdminUser from './admin/AdminUser';
 import AdminCustomer from './admin/AdminCustomer';
-import CustomerHome from './customer/CustomerHome';
 import CustomerProfile from './customer/CustomerProfile';
+import CustomerFindParking from './customer/CustomerFindParking';
+import CustomerReservations from './customer/CustomerReservations';
+import CustomerSubscriptions from './customer/CustomerSubscriptions';
 import StaffHome from './staff/StaffHome';
 import StaffProfile from './staff/StaffProfile';
 import ProtectedRoute from './auth/ProtectedRoute';
-import AuthRedirect from './auth/AuthRedirect';
+import Homepage from './Homepage';
+import AboutPage from './AboutPage';
+import PricingPage from './PricingPage';
 import AdminStaff from './admin/AdminStaff';
 import AdminParkingArea from './admin/AdminParkingArea';
 import { AuthProvider } from './auth/AuthContext';
@@ -28,7 +32,9 @@ const App = () => {
         <BrowserRouter>
           <AuthProvider>
               <Routes>
-                <Route path = "/" element ={<AuthRedirect/>}></Route>
+                <Route path="/" element={<Homepage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/pricing" element={<PricingPage />} />
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/change-password" element={<ChangePassword />} />
@@ -139,12 +145,27 @@ const App = () => {
                 } />
                 <Route path="/customer" element={
                   <ProtectedRoute allowedRole='Customer'>
-                       <CustomerHome />
+                    <Navigate to="/" replace />
                   </ProtectedRoute>
                   } />
                 <Route path="/customer/profile" element={
                   <ProtectedRoute allowedRole='Customer'>
                     <CustomerProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/customer/find-parking" element={
+                  <ProtectedRoute allowedRole='Customer'>
+                    <CustomerFindParking />
+                  </ProtectedRoute>
+                } />
+                <Route path="/customer/reservations" element={
+                  <ProtectedRoute allowedRole='Customer'>
+                    <CustomerReservations />
+                  </ProtectedRoute>
+                } />
+                <Route path="/customer/subscriptions" element={
+                  <ProtectedRoute allowedRole='Customer'>
+                    <CustomerSubscriptions />
                   </ProtectedRoute>
                 } />
                 <Route path="/customer/profile/create" element={

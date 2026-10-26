@@ -1,6 +1,6 @@
 import '../../resources/css/sidebar.scss';
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
   IconLogout2,
   IconMoon,
@@ -19,7 +19,6 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
-  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const accountMenuRef = useRef<HTMLDivElement>(null);
   const sidebarRoles = user?.roles.filter(
@@ -82,7 +81,6 @@ const Sidebar = ({ onUsernameLoaded }: SidebarProps) => {
     try {
       await logout();
       setIsAccountMenuOpen(false);
-      navigate('/login', { replace: true });
     } catch (error) {
       setLogoutError(error instanceof Error ? error.message : 'Không thể đăng xuất khỏi máy chủ.');
     } finally {

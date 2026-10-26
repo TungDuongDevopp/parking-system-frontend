@@ -42,7 +42,8 @@ export const createSubscription = async (data: SubscriptionCreateRequest): Promi
   return readAbpResult(response, 'Không thể tạo gói gửi xe.')
 }
 export const getSubscriptionById = async (id: number): Promise<SubscriptionDto> => {
-  const response = await apiClient(`/api/services/app/Subscription/Get/${id}`, {
+  const query = new URLSearchParams({ Id: id.toString() })
+  const response = await apiClient(`/api/services/app/Subscription/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
   })
@@ -58,7 +59,7 @@ export const getMyCurrentSubscription = async(): Promise<SubscriptionDto>=>{
 export const getAvailableQuotation = async():Promise<QuotationDto[]>=>{
     const response = await apiClient(`/api/services/app/Subscription/GetAvailableQuotations`, {
     method: 'GET',
-    authenticated: true,
+    authenticated: false,
   })
   return readAbpResult(response, 'Không thể lấy bảng giá khả dụng.')
 }

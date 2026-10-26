@@ -4,7 +4,8 @@ customerId : number,
 customerName: string,
 parkingAreaId: number,
 parkingAreaCode : string,
-ParkingSpotId: number|null,
+parkingAreaName?: string|null,
+parkingSpotId: number|null,
 parkingSpotCode: string|null,
 reservedAt : string,
 status : string,
@@ -38,4 +39,7 @@ export interface  ReservationLookUp{
     customers : ReservationCustomerLookUp[],
     parkingAreas: ReservationParkingAreaLookUp[],
     parkingSpots: ReservationParkingSpotLookUp[]
+}
+export interface CanceledRequest{
+    id:number
 }

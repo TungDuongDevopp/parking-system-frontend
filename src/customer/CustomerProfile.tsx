@@ -1,7 +1,9 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
 import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
+import '../resources/css/homepage.scss'
+import Header from '../components/homePage/Header'
+import Footer from '../components/homePage/Footer'
 import type { CustomerDto, CustomerRequestUpdate } from '../types/Customer/customer'
 import { getMyProfile, updateCustomer } from '../services/customerService'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
@@ -134,21 +136,16 @@ const CustomerProfile = () => {
     }
 
     return (
-        <main className="customer-page customer-profile-page">
-            <header className="customer-profile-header">
-                <Link className="customer-profile-brand" to="/customer">
-                    <span className="brand-square">P</span>
-                    <span>Park<span>ing</span>System</span>
-                </Link>
-                <Link className="customer-profile-back" to="/customer">Back to parking</Link>
-            </header>
-            <section className="customer-profile-content">
-                <p className="section-kicker">YOUR ACCOUNT</p>
-                <h1>Profile</h1>
-                {isLoading && <p className="customer-profile-status" role="status">Loading profile...</p>}
-                {errorMessage && <p className="customer-profile-error" role="alert">{errorMessage}</p>}
-                {profile && !isLoading && (
-                    <section className="customer-profile-overview" aria-label="Customer profile details">
+        <div className="homepage customer-profile-shell">
+            <Header />
+            <main className="customer-profile-page">
+                <section className="customer-profile-content">
+                    <p className="section-kicker">YOUR ACCOUNT</p>
+                    <h1>Profile</h1>
+                    {isLoading && <p className="customer-profile-status" role="status">Loading profile...</p>}
+                    {errorMessage && <p className="customer-profile-error" role="alert">{errorMessage}</p>}
+                    {profile && !isLoading && (
+                        <section className="customer-profile-overview" aria-label="Customer profile details">
                         <div className="customer-profile-identity">
                             <span className="customer-profile-avatar" aria-hidden="true">
                                 {(isEditing ? draft?.name : profile.name)?.trim().charAt(0).toUpperCase() || 'C'}
@@ -250,10 +247,12 @@ const CustomerProfile = () => {
                                 </>
                             )}
                         </div>
-                    </section>
-                )}
-            </section>
-        </main>
+                        </section>
+                    )}
+                </section>
+            </main>
+            <Footer />
+        </div>
     )
 }
 

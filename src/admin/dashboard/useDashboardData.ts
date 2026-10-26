@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { getSubscriptions } from '../../services/subscriptionService'
 import {
   getDashboardSummary,
@@ -143,11 +143,28 @@ export const useStaffDashboardData = (retryKey: number) => {
 
     const loadDashboard = async () => {
       try {
-        const [summary, parkingAreas, recentActivities] = await Promise.all([
-          getDashboardSummary(),
+        const [parkingAreas, recentActivities] = await Promise.all([
           getParkingAreaOccupancy(),
           getRecentActivities({ maxCount: 10 }),
         ])
+        // Compute operational summary from parkingAreas - Staff cannot call GetDashboardSummary
+        const summary = {
+          totalCapacity: parkingAreas.reduce((acc, a) => acc + a.capacity, 0),
+          activeSessionsCount: parkingAreas.reduce((acc, a) => acc + a.activeSessionsCount, 0),
+          reservedCount: parkingAreas.reduce((acc, a) => acc + a.reservedCount, 0),
+          unavailableCapacity: parkingAreas.reduce((acc, a) => acc + a.unavailableCapacity, 0),
+          availableCapacity: parkingAreas.reduce((acc, a) => acc + a.availableCapacity, 0),
+          activeParkingAreasCount: parkingAreas.filter((a) => a.status === 1).length,
+          occupancyRate:
+            parkingAreas.reduce((acc, a) => acc + a.capacity, 0) > 0
+              ? Math.round(
+                  (parkingAreas.reduce((acc, a) => acc + a.activeSessionsCount + a.reservedCount, 0) /
+                    parkingAreas.reduce((acc, a) => acc + a.capacity, 0)) *
+                    100,
+                )
+              : 0,
+          activeSubscriptionsCount: 0, // Not visible to Staff
+        }
         if (isCurrent) setData({ summary, parkingAreas, recentActivities })
       } catch (loadError) {
         if (!isCurrent) return
