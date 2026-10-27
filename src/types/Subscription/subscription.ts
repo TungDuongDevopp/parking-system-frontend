@@ -12,13 +12,19 @@ export interface SubscriptionDto{
     customerId:number,
     customerName:string,
     vehicleType:number
-    vehicleTypeName:string
+    vehicleTypeName:string,
+    paymentId: number|null,
+    transactionCode: string|null,
+    paymentExpiresAt: string|null,
+    paymentStatus: number| null,
+    paymentMethod: number| null
 }
 
 export interface SubscriptionCreateRequest{
     startTime:string,
     quotationId:number,
-    plateNumbers:string[]
+    plateNumbers:string[],
+    paymentMethod: string
 }
 
 export interface SubscriptionCustomerLookup{

@@ -289,7 +289,7 @@ const AdminQuotation = ({ readOnly = false }: { readOnly?: boolean }) =>{
          setDeletingQuotationId(quotation.id)
          setErrorMessage('')
           try {
-               await deleteQuotation(quotation.id)
+               await deleteQuotation({ Id: quotation.id })
                if (quotations.length === 1 && safeCurrentPage > 1) setCurrentPage((page) => page - 1)
                else await loadQuotations()
              } catch (error) {
@@ -528,6 +528,7 @@ const AdminQuotation = ({ readOnly = false }: { readOnly?: boolean }) =>{
                             <table className="roles-table quotation-table">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         {sortHeader('vehicleType','Vehicle Type')}
                                         {sortHeader('duration','Duration')}
                                         {sortHeader('price','Price')}
@@ -537,6 +538,7 @@ const AdminQuotation = ({ readOnly = false }: { readOnly?: boolean }) =>{
                                 <tbody>
                                     {!isLoading && quotations.map((quotation)=>(
                                         <tr key={quotation.id}>
+                                            <td>{quotation.id}</td>
                                             <td>{quotation.vehicleTypeName}</td>
                                             <td>
                                                 {quotation.duration}{' '}

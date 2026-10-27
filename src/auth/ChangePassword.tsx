@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import '../resources/css/login.scss'
+import { useState, type FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import loginImage from '../assets/image_login.png'
+import logoImage from '../assets/logo-purple.png'
+import '../resources/css/login2.scss'
 import { changePassword } from '../services/authService'
 import type { ChangePassWordRequest } from '../types/Account/changePassword'
 import { mapAbpFieldErrors, mapMessageToFieldErrors, type FieldErrors } from '../services/fieldValidation'
@@ -14,10 +15,6 @@ const passwordFieldAliases = {
 	newPassword: ['newPassword'],
 	confirmPassword: ['confirmPassword'],
 } as const
-function LockIcon() {
-	return <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="10" width="13" height="10" rx="2" /><path d="M8 10V7.5a4 4 0 0 1 8 0V10" /></svg>
-}
-
 function ArrowIcon() {
 	return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
 }
@@ -40,7 +37,7 @@ function ChangePassword() {
 	const togglePasswordVisibility = (field: keyof typeof visiblePasswords) => {
 		setVisiblePasswords((current) => ({ ...current, [field]: !current[field] }))
 	}
-	const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		const nextErrors: FieldErrors<PasswordField> = {}
 		if (!currentPassword) nextErrors.currentPassword = 'Current password is required.'
@@ -88,34 +85,64 @@ function ChangePassword() {
 	}
 
 	return (
-		<main className="login-page">
-			<div className="login-glow login-glow-top" />
-			<div className="login-glow login-glow-bottom" />
-			<section className="login-shell" aria-labelledby="change-password-title">
-				<Link className="login-brand" to="/" aria-label="ParkingSystem - Trang chu">
-					<div className="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 20.5 24 12l14 8.5v14L24 42 10 34.5z" /><path d="M17 24.5 24 20l7 4.5v7L24 36l-7-4.5z" /><path d="M24 12v8M10 20.5l7 4M38 20.5l-7 4M24 36v6" /></svg></div>
-					<div><strong>Park<span>ing</span>System</strong><small>SMART PARKING PLATFORM</small></div>
-				</Link>
-				<div className="login-card change-password-card">
-					<div className="login-heading"><p className="eyebrow">ACCOUNT SECURITY</p><h1 id="change-password-title">Change your password</h1><p>Keep your ParkingSystem account secure.</p></div>
-					<form onSubmit={handleSubmit} noValidate>
-						<label className="field-label" htmlFor="current-password">Current password</label>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="current-password" name="currentPassword" type={visiblePasswords.current ? 'text' : 'password'} autoComplete="current-password" placeholder="Enter your current password" value={currentPassword} onChange={(event) => { setCurrentPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, currentPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.currentPassword)} aria-describedby={fieldErrors.currentPassword ? 'current-password-error' : undefined} className={fieldErrors.currentPassword ? 'has-error' : undefined} /><button className="password-toggle" type="button" aria-label={visiblePasswords.current ? 'Hide current password' : 'Show current password'} title={visiblePasswords.current ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('current')}><EyeIcon visible={visiblePasswords.current} /></button></div>
-						{fieldErrors.currentPassword && <p id="current-password-error" className="field-error" role="alert">{fieldErrors.currentPassword}</p>}
-						<label className="field-label" htmlFor="new-password">New password</label>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="new-password" name="newPassword" type={visiblePasswords.new ? 'text' : 'password'} autoComplete="new-password" placeholder="Enter a new password" value={newPassword} onChange={(event) => { setNewPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, newPassword: undefined, confirmPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.newPassword)} aria-describedby={fieldErrors.newPassword ? 'new-password-error' : undefined} className={fieldErrors.newPassword ? 'has-error' : undefined} /><button className="password-toggle" type="button" aria-label={visiblePasswords.new ? 'Hide new password' : 'Show new password'} title={visiblePasswords.new ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('new')}><EyeIcon visible={visiblePasswords.new} /></button></div>
-						{fieldErrors.newPassword && <p id="new-password-error" className="field-error" role="alert">{fieldErrors.newPassword}</p>}
-						<label className="field-label" htmlFor="confirm-password">Confirm new password</label>
-						<div className="input-wrap"><span className="input-icon"><LockIcon /></span><input id="confirm-password" name="confirmPassword" type={visiblePasswords.confirm ? 'text' : 'password'} autoComplete="new-password" placeholder="Re-enter your new password" value={confirmPassword} onChange={(event) => { setConfirmPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, confirmPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.confirmPassword)} aria-describedby={fieldErrors.confirmPassword ? 'confirm-password-error' : undefined} className={fieldErrors.confirmPassword ? 'has-error' : undefined} /><button className="password-toggle" type="button" aria-label={visiblePasswords.confirm ? 'Hide confirmation password' : 'Show confirmation password'} title={visiblePasswords.confirm ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('confirm')}><EyeIcon visible={visiblePasswords.confirm} /></button></div>
-						{fieldErrors.confirmPassword && <p id="confirm-password-error" className="field-error" role="alert">{fieldErrors.confirmPassword}</p>}
-						<button className="login-button" type="submit" disabled={isSubmitted}><span>{isSubmitted ? 'Changing password...' : 'Update password'}</span>{!isSubmitted && <ArrowIcon />}</button>
-						<Link className="cancel-button" to="/">Cancel</Link>
-						{isSubmitted && <p className="form-message" role="status">Changing your password...</p>}
-						{formError && <p className="form-message form-error" role="alert">{formError}</p>}
-					</form>
-					<p className="register-prompt"><Link to="/login">Back to sign in</Link></p>
+		<main className="main-container public-auth-page change-password-page">
+			<section className="image-content" aria-label="ParkingSystem introduction">
+				<img src={loginImage} alt="Modern parking facility on a sunny day" />
+				<div className="image-caption">
+					<span className="image-caption-tag">ACCOUNT SECURITY</span>
+					<h2>Keep your account secure.</h2>
+					<p>Update your password regularly to protect your ParkingSystem account.</p>
 				</div>
-				<p className="login-footer">© 2026 ParkingSystem <span>•</span> Secure access for modern parking teams</p>
+			</section>
+
+			<section className="login-panel" aria-labelledby="change-password-title">
+				<div className="login-panel-inner">
+					<div className="login-brand">
+						<img src={logoImage} alt="" />
+						<span>Parking<span className="brand-accent">System</span></span>
+					</div>
+
+					<div className="title">
+						<span className="title-eyebrow">ACCOUNT SECURITY</span>
+						<h1 id="change-password-title">Change your password</h1>
+						<p>Keep your ParkingSystem account secure.</p>
+					</div>
+
+					<form className="login-form change-password-form" onSubmit={handleSubmit} noValidate>
+						<label htmlFor="current-password">Current password</label>
+						<div className="password-field">
+							<input id="current-password" name="currentPassword" type={visiblePasswords.current ? 'text' : 'password'} autoComplete="current-password" placeholder="Enter your current password" value={currentPassword} onChange={(event) => { setCurrentPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, currentPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.currentPassword)} aria-describedby={fieldErrors.currentPassword ? 'current-password-error' : undefined} className={fieldErrors.currentPassword ? 'has-error' : undefined} />
+							<button className="password-toggle" type="button" aria-label={visiblePasswords.current ? 'Hide current password' : 'Show current password'} title={visiblePasswords.current ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('current')}><EyeIcon visible={visiblePasswords.current} /></button>
+						</div>
+						{fieldErrors.currentPassword && <p id="current-password-error" className="field-error" role="alert">{fieldErrors.currentPassword}</p>}
+
+						<label htmlFor="new-password">New password</label>
+						<div className="password-field">
+							<input id="new-password" name="newPassword" type={visiblePasswords.new ? 'text' : 'password'} autoComplete="new-password" placeholder="Enter a new password" value={newPassword} onChange={(event) => { setNewPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, newPassword: undefined, confirmPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.newPassword)} aria-describedby={fieldErrors.newPassword ? 'new-password-error' : undefined} className={fieldErrors.newPassword ? 'has-error' : undefined} />
+							<button className="password-toggle" type="button" aria-label={visiblePasswords.new ? 'Hide new password' : 'Show new password'} title={visiblePasswords.new ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('new')}><EyeIcon visible={visiblePasswords.new} /></button>
+						</div>
+						{fieldErrors.newPassword && <p id="new-password-error" className="field-error" role="alert">{fieldErrors.newPassword}</p>}
+
+						<label htmlFor="confirm-password">Confirm new password</label>
+						<div className="password-field">
+							<input id="confirm-password" name="confirmPassword" type={visiblePasswords.confirm ? 'text' : 'password'} autoComplete="new-password" placeholder="Re-enter your new password" value={confirmPassword} onChange={(event) => { setConfirmPassword(event.target.value); setFieldErrors((errors) => ({ ...errors, confirmPassword: undefined })) }} aria-invalid={Boolean(fieldErrors.confirmPassword)} aria-describedby={fieldErrors.confirmPassword ? 'confirm-password-error' : undefined} className={fieldErrors.confirmPassword ? 'has-error' : undefined} />
+							<button className="password-toggle" type="button" aria-label={visiblePasswords.confirm ? 'Hide confirmation password' : 'Show confirmation password'} title={visiblePasswords.confirm ? 'Hide password' : 'Show password'} onClick={() => togglePasswordVisibility('confirm')}><EyeIcon visible={visiblePasswords.confirm} /></button>
+						</div>
+						{fieldErrors.confirmPassword && <p id="confirm-password-error" className="field-error" role="alert">{fieldErrors.confirmPassword}</p>}
+
+						<button className="login-button" type="submit" disabled={isSubmitted}>
+							<span>{isSubmitted ? 'Changing password...' : 'Update password'}</span>
+							{!isSubmitted && <ArrowIcon />}
+						</button>
+						{isSubmitted && <p className="form-message" role="status">Changing your password...</p>}
+						{formError && <p className="form-error" role="alert">{formError}</p>}
+					</form>
+
+					<p className="register-prompt change-password-links">
+						<Link to="/login">Back to sign in</Link>
+						<Link to="/">Return to home</Link>
+					</p>
+				</div>
 			</section>
 		</main>
 	)

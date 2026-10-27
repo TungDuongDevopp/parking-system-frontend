@@ -118,7 +118,7 @@ const CustomerReservations = () => {
         setDetailsError('')
         setIsDetailsLoading(true)
         try {
-            const reservation = await getReservationById(id)
+            const reservation = await getReservationById({ Id: id })
             if (requestId === detailsRequestId.current) setSelectedReservation(reservation)
         } catch (error) {
             if (requestId === detailsRequestId.current) {

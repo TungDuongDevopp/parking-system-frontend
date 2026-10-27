@@ -235,7 +235,7 @@ const AdminUser = () => {
 		setErrorMessage('')
 
 		try {
-			await deleteUser(user.id)
+			await deleteUser({ Id: user.id })
 			await loadUsers()
 		} catch (error) {
 			setErrorMessage(error instanceof Error ? error.message : 'Không thể xóa user.')
@@ -280,6 +280,7 @@ const AdminUser = () => {
 						<table className="roles-table users-table">
 							<thead>
 								<tr>
+									<th>ID</th>
 									<th>
 										User name
 										<button className="sort-button" type="button" aria-label="Sort by user name" onClick={() => handleSort('userName')}>
@@ -300,6 +301,7 @@ const AdminUser = () => {
 							<tbody>
 								{!isLoading && users.map((user) => (
 									<tr key={user.id}>
+										<td>{user.id}</td>
 										<td>{user.userName}</td>
 										<td>{user.fullName}</td>
 										<td>{user.emailAddress}</td>

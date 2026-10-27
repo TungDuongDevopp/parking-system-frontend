@@ -40,6 +40,7 @@ const subscriptionStatuses =[
   { value: 1, label: 'In Use' },
   { value: 2, label: 'Expired' },
   { value: 3, label: 'Canceled' },
+  {value: 4, label: 'Paid Waiting'}
 ]
 type SortDirection = 'asc' | 'desc' | null
 type SubscriptionSortField = 

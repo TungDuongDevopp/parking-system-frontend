@@ -6,6 +6,7 @@ import type { SessionDto,
      SessionLookUpDto
  } from "../types/Session/session";
 import type { PagedResult } from '../types/Apb/abp';
+import type { EntityDto } from '../types/Apb/entity';
 import { apiClient } from './apiClient';
 import { readAbpResult} from './serviceResponse';
 
@@ -38,8 +39,8 @@ export const getSessions = async (params: SessionQuery): Promise<PagedResult<Ses
   const response = await apiClient(endpoint, { method: 'GET', authenticated: true })
   return readAbpResult(response, 'Unable to load session.')  
 }
-export const getSessionById = async (id: number): Promise<SessionDto> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const getSessionById = async (entity: EntityDto): Promise<SessionDto> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/ParkingSession/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,

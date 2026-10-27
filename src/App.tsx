@@ -26,6 +26,8 @@ import AdminSubscription from './admin/AdminSubscription';
 import AdminPlate from './admin/AdminPlate';
 import AdminReservation from './admin/AdminReservation';
 import AdminSession from './admin/AdminSession';
+import AdminPayment from './admin/AdminPayment';
+import AdminTransaction from './admin/AdminTransaction';
 const App = () => {
   
     return (
@@ -81,6 +83,16 @@ const App = () => {
                  <Route path="/admin/subscriptions" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminSubscription/>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/payments" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminPayment/>
+                  </ProtectedRoute>
+                } />
+                 <Route path="/admin/transactions" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminTransaction/>
                   </ProtectedRoute>
                 } />
                 <Route path="/admin/plates" element={

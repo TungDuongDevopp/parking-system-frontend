@@ -6,6 +6,7 @@ import type{
 
 import type{PlateQuery}from '../types/Plate/plateQuery';
 import type { PagedResult } from '../types/Apb/abp';
+import type { EntityDto } from '../types/Apb/entity';
 import { apiClient } from './apiClient';
 import { readAbpResult} from './serviceResponse';
 
@@ -25,8 +26,8 @@ export const getPlates = async (params: PlateQuery): Promise<PagedResult<PlateDt
   const response = await apiClient(endpoint, { method: 'GET', authenticated: true })
   return readAbpResult(response, 'Unable to load plate.')  
 }
-export const getPlateById = async (id: number): Promise<PlateDto> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const getPlateById = async (entity: EntityDto): Promise<PlateDto> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/SubscriptionPlate/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,

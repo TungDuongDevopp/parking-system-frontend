@@ -230,7 +230,7 @@ function AdminRole() {
 		setErrorMessage('')
 
 		try {
-			await deleteRole(role.id)
+			await deleteRole({ Id: role.id })
 			await loadRoles()
 		} catch (error) {
 			setErrorMessage(error instanceof Error ? error.message : 'Không thể xóa role.')
@@ -280,6 +280,7 @@ function AdminRole() {
 						<table className="roles-table role-list-table">
 							<thead>
 								<tr>
+									<th>ID</th>
 									<th>
 										Role Name
 										<button
@@ -308,6 +309,7 @@ function AdminRole() {
 							<tbody>
 								{!isLoading && sortedRoles.map((role) => (
 									<tr key={role.id}>
+										<td>{role.id}</td>
 										<td>{role.name}</td>
 										<td>{role.displayName}</td>
 										<td>

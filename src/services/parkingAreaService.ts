@@ -6,6 +6,7 @@ import type{
 } from '../types/ParkingArea/parkingArea';
 
 import type { PagedResult } from '../types/Apb/abp';
+import type { EntityDto } from '../types/Apb/entity';
 import { apiClient } from './apiClient';
 import { readAbpResult,readAbpVoid } from './serviceResponse';
 import type { ParkingAreaQuery } from '../types/ParkingArea/parkingAreaQuery';
@@ -48,8 +49,8 @@ export const updateParkingArea = async (data: ParkingAreaUpdateRequest): Promise
   return readAbpResult(response, 'Không thể cập nhật khu vực đỗ xe.')
 }
 
-export const deleteParkingArea = async (id: number): Promise<void> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const deleteParkingArea = async (entity: EntityDto): Promise<void> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/ParkingArea/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,
@@ -65,8 +66,8 @@ export const changeParkingAreaStatus = async (data: ParkingAreaChangeStatus): Pr
   return readAbpResult(response, 'Không thể thay đổi trạng thái khu vực đỗ xe.')
 }
 
-export const getParkingAreaById = async (id: number): Promise<ParkingAreaDto> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const getParkingAreaById = async (entity: EntityDto): Promise<ParkingAreaDto> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/ParkingArea/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,

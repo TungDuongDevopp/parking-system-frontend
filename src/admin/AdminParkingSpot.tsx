@@ -295,7 +295,7 @@ const AdminParkingSpot = ({ readOnly = false }: { readOnly?: boolean }) => {
     setDeletingSpotId(spot.id)
     setErrorMessage('')
     try {
-      await deleteParkingSpot(spot.id)
+      await deleteParkingSpot({ Id: spot.id })
       if (parkingSpots.length === 1 && safeCurrentPage > 1) setCurrentPage((page) => page - 1)
       else await loadSpots()
     } catch (error) {
@@ -430,6 +430,7 @@ const AdminParkingSpot = ({ readOnly = false }: { readOnly?: boolean }) => {
             <table className={`roles-table parkingSpots-table${readOnly ? ' parkingSpots-table-readonly' : ''}`}>
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>
                     Spot code
                     <button className="sort-button" type="button" aria-label="Sort by spot code" onClick={() => handleSort('spotCode')}>
@@ -456,6 +457,7 @@ const AdminParkingSpot = ({ readOnly = false }: { readOnly?: boolean }) => {
               <tbody>
                 {!isLoading && parkingSpots.map((spot) => (
                   <tr key={spot.id}>
+                    <td>{spot.id}</td>
                     <td>{spot.spotCode}</td>
                     <td>{spot.parkingAreaId}</td>
                     <td>{spot.parkingAreaCode}</td>

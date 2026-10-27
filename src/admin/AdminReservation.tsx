@@ -284,15 +284,17 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
         <th key={field} aria-sort={sortField === field && sortDirection
             ? sortDirection === 'asc' ? 'ascending' : 'descending'
             : 'none'}>
-            {label}
-            <button
-                className="sort-button"
-                type="button"
-                aria-label={`Sort by ${label}`}
-                onClick={() => handleSort(field)}
-            >
-                {sortIcon(field)}
-            </button>
+            <span className="reservation-sort-header">
+                <span className="reservation-sort-label">{label}</span>
+                <button
+                    className="sort-button"
+                    type="button"
+                    aria-label={`Sort by ${label}`}
+                    onClick={() => handleSort(field)}
+                >
+                    {sortIcon(field)}
+                </button>
+            </span>
         </th>
     )
 
@@ -440,6 +442,7 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
                             <table className="roles-table reservation-table">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         {sortHeader('customerName', 'Customer Name')}
                                         {sortHeader('parkingAreaCode', 'Parking Area Code')}
                                         {sortHeader('parkingSpotCode', 'Parking Spot Code')}
@@ -453,6 +456,7 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
                                 <tbody>
                                     {!isLoading && reservations.map((reservation) => (
                                         <tr key={reservation.id}>
+                                            <td>{reservation.id}</td>
                                             <td>{reservation.customerName}</td>
                                             <td>{reservation.parkingAreaCode}</td>
                                             <td>{reservation.parkingSpotCode || '-'}</td>

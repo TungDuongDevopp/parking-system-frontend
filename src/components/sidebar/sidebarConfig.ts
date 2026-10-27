@@ -102,13 +102,13 @@ export const SideBarMenus: Item[] = [
    
     {
         label: "Payment",
-        path: "/payments",
+        path: "/admin/payments",
         icon: IconCreditCard,
-        roles: ["Admin", "Staff"],
+        roles: ["Admin"],
     },
     {
         label: "Transaction",
-        path: "/transactions",
+        path: "/admin/transactions",
         icon: IconReceipt,
         roles: ["Admin"],
     }

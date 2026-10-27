@@ -8,6 +8,7 @@ import type{
  } from "../types/Quotation/quotation"
  import type{SubscriptionQuery} from "../types/Subscription/subscriptionQuery"
 import type { PagedResult } from '../types/Apb/abp';
+import type { EntityDto } from '../types/Apb/entity';
 import { apiClient } from './apiClient';
 import { readAbpResult} from './serviceResponse';
 
@@ -41,8 +42,8 @@ export const createSubscription = async (data: SubscriptionCreateRequest): Promi
   })
   return readAbpResult(response, 'Không thể tạo gói gửi xe.')
 }
-export const getSubscriptionById = async (id: number): Promise<SubscriptionDto> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const getSubscriptionById = async (entity: EntityDto): Promise<SubscriptionDto> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Subscription/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,

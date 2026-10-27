@@ -599,6 +599,7 @@ const StaffHome = () => {
                 <table className="ps-table">
                   <thead>
                     <tr>
+                      <th>Session ID</th>
                       <th>Ticket</th>
                       <th>Plate number</th>
                       <th>Activity</th>
@@ -613,6 +614,7 @@ const StaffHome = () => {
                       const time = activity.localEventTime || activity.eventTime
                       return (
                         <tr key={`${activity.parkingSessionId}-${activity.activityType}`}>
+                          <td>{activity.parkingSessionId}</td>
                           <td><Link to="/staff/sessions">{activity.ticketCode}</Link></td>
                           <td>{activity.plateNumber ?? '—'}</td>
                           <td>{checkIn ? 'Check-in' : 'Check-out'}</td>

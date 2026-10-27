@@ -475,6 +475,7 @@ const AdminSession = ({ readOnly = false }: { readOnly?: boolean }) =>{
                         <table className={`roles-table session-table${readOnly ? ' session-table-readonly' : ''}`}>
                                 <thead>
                                     <tr>
+                                       <th>ID</th>
                                        {sortHeader('ticketCode', 'Ticket Code')}
                                        {sortHeader('customerId', 'Plate Number')}
                                        {sortHeader('parkingAreaId', 'Parking Area Code')}
@@ -490,6 +491,7 @@ const AdminSession = ({ readOnly = false }: { readOnly?: boolean }) =>{
                                 <tbody>
                                     {!isLoading && sessions.map((session)=>(
                                         <tr key={session.id}>
+                                            <td>{session.id}</td>
                                             <td>{session.ticketCode}</td>
                                             <td>{session.plateNumber ?? '—'}</td>
                                             <td>{session.parkingAreaCode}</td>

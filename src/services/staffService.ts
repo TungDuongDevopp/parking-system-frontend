@@ -7,6 +7,7 @@ import type {
   AvailableUser,
 } from '../types/Staff/staff'
 import type { PagedResult } from '../types/Apb/abp'
+import type { EntityDto } from '../types/Apb/entity'
 import { apiClient } from './apiClient'
 import { readAbpResult, readAbpVoid } from './serviceResponse'
 import type { StaffQuery } from '../types/Staff/staffQuery'
@@ -50,8 +51,8 @@ export const updateStaff = async (data: StaffRequestUpdate): Promise<StaffDto> =
   return readAbpResult(response, 'Không thể cập nhật nhân viên.')
 }
 
-export const deleteStaff = async (id: number): Promise<void> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const deleteStaff = async (entity: EntityDto): Promise<void> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Staff/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,
@@ -85,8 +86,8 @@ export const changeStaffProfile = async (data: StaffChangeProfileRequest): Promi
   return readAbpResult(response, 'Không thể cập nhật hồ sơ nhân viên.')
 }
 
-export const getStaffById = async (id: number): Promise<StaffDto> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const getStaffById = async (entity: EntityDto): Promise<StaffDto> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Staff/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,
