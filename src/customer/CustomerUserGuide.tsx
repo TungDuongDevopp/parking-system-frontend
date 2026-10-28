@@ -18,6 +18,7 @@ import Header from '../components/homePage/Header'
 import Footer from '../components/homePage/Footer'
 import '../resources/css/homepage.scss'
 import '../resources/css/customer-guide.scss'
+import guideIllustration from '../assets/guide-parking-illustration.png'
 
 const guideCategories = [
   {
@@ -37,7 +38,7 @@ const guideCategories = [
   },
   {
     id: 'subscriptions',
-    title: 'Subscription & Payments',
+    title: 'Subscriptions & Payments',
     description: 'Browse plans, purchase a parking subscription, and check its status.',
     icon: IconCreditCard,
     topics: ['Browse available plans', 'Purchase a subscription', 'Subscription status and expiration', 'Payment status'],
@@ -203,14 +204,22 @@ const CustomerUserGuide = () => {
           ) : (
             <>
               <header className="customer-guide-hero">
-                <span className="customer-guide-eyebrow">CUSTOMER HELP CENTER</span>
-                <h1>User Guide</h1>
-                <p className="customer-guide-subtitle">Everything you need to know to use ParkingSystem.</p>
-                <p className="customer-guide-welcome">Welcome! Browse a topic or search for the steps you need.</p>
-                <div className="customer-guide-hero-mark" aria-hidden="true">
-                  <IconMapPin size={22} />
-                  <span>P</span>
+                <div className="customer-guide-hero-copy">
+                  <span className="customer-guide-eyebrow">CUSTOMER HELP CENTER</span>
+                  <h1>User Guide</h1>
+                  <p className="customer-guide-subtitle">Everything you need to know to use ParkingSystem.</p>
+                  <p className="customer-guide-welcome">
+                    <IconMapPin size={16} aria-hidden="true" />
+                    Welcome! Browse a topic or search for the steps you need.
+                  </p>
                 </div>
+                <img
+                  className="customer-guide-hero-art"
+                  src={guideIllustration}
+                  alt=""
+                  width={220}
+                  height={220}
+                />
               </header>
               <label className="customer-guide-search">
                 <IconSearch size={20} aria-hidden="true" />

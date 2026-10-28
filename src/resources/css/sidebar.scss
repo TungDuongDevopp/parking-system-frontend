@@ -8,7 +8,7 @@ body:has(.sidebar-container) {
   min-width: 0;
   min-height: 100dvh;
   overflow-x: clip;
-  background: var(--ps-bg, #f0f6ff);
+  background: var(--ps-bg, #f4f0ff);
   transition: background-color 200ms ease;
 }
 
@@ -20,21 +20,21 @@ body:has(.sidebar-container) {
 }
 
 .sidebar-container {
-  --sidebar-card-background: #263f60;
-  --sidebar-dropdown-background: #ddebff;
-  --sidebar-dropdown-text: #263f60;
-  --sidebar-dropdown-hover: #cfe0fa;
-  --sidebar-primary: #2563eb;
-  --sidebar-active-background: #365d91;
-  --sidebar-hover-background: #304d70;
-  --sidebar-text-primary: #e2edff;
-  --sidebar-icon: #8bb8f5;
-  --sidebar-text-secondary: #a9c2e2;
-  --sidebar-active-foreground: #e2edff;
-  --sidebar-border: #395575;
-  --sidebar-filter-border: #395575;
-  --sidebar-scroll-thumb: #55769c;
-  --sidebar-scroll-thumb-hover: #7295bd;
+  --sidebar-card-background: #372660;
+  --sidebar-dropdown-background: #e7ddff;
+  --sidebar-dropdown-text: #372660;
+  --sidebar-dropdown-hover: #dccffa;
+  --sidebar-primary: #6025eb;
+  --sidebar-active-background: #513691;
+  --sidebar-hover-background: #433070;
+  --sidebar-text-primary: #ebe2ff;
+  --sidebar-icon: #ab8bf5;
+  --sidebar-text-secondary: #baa9e2;
+  --sidebar-active-foreground: #ebe2ff;
+  --sidebar-border: #4b3975;
+  --sidebar-filter-border: #4b3975;
+  --sidebar-scroll-thumb: #6a559c;
+  --sidebar-scroll-thumb-hover: #8972bd;
   --sidebar-focus-ring: rgb(139 184 245 / 55%);
 
   box-sizing: border-box;
@@ -57,25 +57,25 @@ body:has(.sidebar-container) {
 }
 
 #root:has(.sidebar-container[data-theme="dark"]) {
-  background: var(--ps-bg, #0b1423);
+  background: var(--ps-bg, #120b23);
 }
 
 .sidebar-container[data-theme="dark"] {
-  --sidebar-card-background: #172942;
-  --sidebar-dropdown-background: #172942;
-  --sidebar-dropdown-text: #e2ecff;
-  --sidebar-dropdown-hover: #203a5d;
-  --sidebar-primary: #3b82f6;
-  --sidebar-active-background: #1b3f6b;
-  --sidebar-hover-background: #203a5d;
-  --sidebar-text-primary: #e2ecff;
-  --sidebar-icon: #9cb2d0;
-  --sidebar-text-secondary: #9cb2d0;
-  --sidebar-active-foreground: #e2ecff;
-  --sidebar-border: #253752;
-  --sidebar-filter-border: #253752;
-  --sidebar-scroll-thumb: #3d5878;
-  --sidebar-scroll-thumb-hover: #58769a;
+  --sidebar-card-background: #241742;
+  --sidebar-dropdown-background: #241742;
+  --sidebar-dropdown-text: #ebe2ff;
+  --sidebar-dropdown-hover: #32205d;
+  --sidebar-primary: #733bf6;
+  --sidebar-active-background: #331b6b;
+  --sidebar-hover-background: #32205d;
+  --sidebar-text-primary: #ebe2ff;
+  --sidebar-icon: #ac9cd0;
+  --sidebar-text-secondary: #ac9cd0;
+  --sidebar-active-foreground: #ebe2ff;
+  --sidebar-border: #322552;
+  --sidebar-filter-border: #322552;
+  --sidebar-scroll-thumb: #4f3d78;
+  --sidebar-scroll-thumb-hover: #6c589a;
   --sidebar-focus-ring: rgb(96 165 250 / 55%);
 
   box-shadow: 0 8px 24px rgb(2 6 23 / 30%);
