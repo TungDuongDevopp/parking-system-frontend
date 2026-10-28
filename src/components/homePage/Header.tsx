@@ -38,7 +38,7 @@ const Header = () => {
                             Find Parking
                         </Link>
                     </li>
-                    <li><span>User Guide</span></li>
+                    <li><Link to="/customer/guide">User Guide</Link></li>
                 </ul>
             </nav>
             <div className="action-btn">

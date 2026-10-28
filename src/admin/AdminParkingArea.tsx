@@ -559,11 +559,11 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
                   <thead>
                     <tr>
                       <th>ID</th>
-                      {sortHeader('parkingCode', 'Parking code')}
+                      {sortHeader('parkingCode', 'Code')}
                       {sortHeader('vehicleType', 'Vehicle type')}
                       {sortHeader('capacity', 'Capacity')}
-                      {sortHeader('currentOccupancy', 'Current occupancy')}
-                      {sortHeader('parkingMode', 'Parking mode')}
+                      {sortHeader('currentOccupancy', 'Occupancy')}
+                      {sortHeader('parkingMode', 'Mode')}
                       {sortHeader('location', 'Location')}
                       {sortHeader('status', 'Status')}
                       {!readOnly && <th>Actions</th>}

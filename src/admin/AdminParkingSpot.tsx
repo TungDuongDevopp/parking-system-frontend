@@ -432,19 +432,19 @@ const AdminParkingSpot = ({ readOnly = false }: { readOnly?: boolean }) => {
                 <tr>
                   <th>ID</th>
                   <th>
-                    Spot code
+                    Code
                     <button className="sort-button" type="button" aria-label="Sort by spot code" onClick={() => handleSort('spotCode')}>
                       {sortIcon('spotCode')}
                     </button>
                   </th>
                   <th>
-                    Parking area ID
+                    Area ID
                     <button className="sort-button" type="button" aria-label="Sort by parking area ID" onClick={() => handleSort('parkingAreaId')}>
                       {sortIcon('parkingAreaId')}
                     </button>
                   </th>
-                  <th>Parking area code</th>
-                  <th>Parking area name</th>
+                  <th>Area code</th>
+                  <th>Area name</th>
                   <th>
                     Status
                     <button className="sort-button" type="button" aria-label="Sort by status" onClick={() => handleSort('status')}>

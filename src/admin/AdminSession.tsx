@@ -478,8 +478,8 @@ const AdminSession = ({ readOnly = false }: { readOnly?: boolean }) =>{
                                        <th>ID</th>
                                        {sortHeader('ticketCode', 'Ticket Code')}
                                        {sortHeader('customerId', 'Plate Number')}
-                                       {sortHeader('parkingAreaId', 'Parking Area Code')}
-                                       {sortHeader('parkingSpotId', 'Parking Spot Code')}
+                                       {sortHeader('parkingAreaId', 'Area Code')}
+                                       {sortHeader('parkingSpotId', 'Spot Code')}
                                        {sortHeader('fee', 'Fee')}
                                        {!readOnly && sortHeader('checkInStaffId', 'Check-in Staff')}
                                        {!readOnly && sortHeader('checkOutStaffId', 'Check-out Staff')}

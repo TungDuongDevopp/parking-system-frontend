@@ -11,6 +11,7 @@ import CustomerProfile from './customer/CustomerProfile';
 import CustomerFindParking from './customer/CustomerFindParking';
 import CustomerReservations from './customer/CustomerReservations';
 import CustomerSubscriptions from './customer/CustomerSubscriptions';
+import CustomerUserGuide from './customer/CustomerUserGuide';
 import StaffHome from './staff/StaffHome';
 import StaffProfile from './staff/StaffProfile';
 import ProtectedRoute from './auth/ProtectedRoute';
@@ -180,6 +181,8 @@ const App = () => {
                     <CustomerSubscriptions />
                   </ProtectedRoute>
                 } />
+                <Route path="/customer/guide" element={<CustomerUserGuide />} />
+                <Route path="/customer/guide/:categoryId" element={<CustomerUserGuide />} />
                 <Route path="/customer/profile/create" element={
                   <ProtectedRoute allowedRole='Customer'>
                     <Navigate to="/customer/profile" replace />

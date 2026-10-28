@@ -498,10 +498,10 @@ const AdminPayment = () => {
                 <tr>
                   {sortableHeader('id', 'ID')}
                   {sortableHeader('amount', 'Amount')}
-                  {sortableHeader('paymentMethod', 'Payment Method')}
-                  {sortableHeader('paymentType', 'Payment Type')}
-                  {sortableHeader('subscriptionId', 'Subscription Id')}
-                  {sortableHeader('parkingSessionId', 'Parking Session Id')}
+                  {sortableHeader('paymentMethod', 'Method')}
+                  {sortableHeader('paymentType', 'Type')}
+                  {sortableHeader('subscriptionId', 'Sub Id')}
+                  {sortableHeader('parkingSessionId', 'Session Id')}
                   {sortableHeader('paidAt', 'Paid At')}
                   {sortableHeader('expiresAt', 'Expires At')}
                   {sortableHeader('paymentStatus', 'Status')}

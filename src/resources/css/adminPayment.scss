@@ -1,11 +1,202 @@
-.payment-card .roles-toolbar {
+.payment-card .roles-toolbar,
+.transaction-card .roles-toolbar {
   gap: 12px;
 }
 
+.transaction-card {
+  border: 1px solid #e3ebf3;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.transaction-card .roles-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.transaction-card .filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border: 1px solid #d8e1ee;
+  border-radius: 10px;
+  color: #41586f;
+  background: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.transaction-card .filter-trigger:hover {
+  border-color: #bfd0ea;
+  background: #f3f8ff;
+}
+
+.transaction-card .pagination .page-button:disabled {
+  color: #64748b;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.dashboard-dark .transaction-card .pagination .page-button:disabled {
+  color: #aebdd0;
+}
+
+.roles-table.transaction-table,
 .roles-table.payment-table {
   width: 100%;
   min-width: 1280px;
   table-layout: fixed;
+}
+
+.roles-table.transaction-table th,
+.roles-table.transaction-table td,
+.roles-table.payment-table th,
+.roles-table.payment-table td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  vertical-align: middle;
+}
+
+.roles-table.transaction-table th .transaction-sort-header,
+.roles-table.payment-table th .transaction-sort-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.roles-table.transaction-table th .sort-button,
+.roles-table.payment-table th .sort-button {
+  display: inline-grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  flex: 0 0 22px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: #8ea1b6;
+  background: transparent;
+  cursor: pointer;
+}
+
+.roles-table.transaction-table th .sort-button:hover,
+.roles-table.payment-table th .sort-button:hover {
+  color: #2f6fe8;
+  background: rgba(47, 111, 232, 0.08);
+}
+
+.roles-table.transaction-table th:nth-child(1),
+.roles-table.transaction-table td:nth-child(1) {
+  width: 9%;
+}
+
+.roles-table.transaction-table th:nth-child(2),
+.roles-table.transaction-table td:nth-child(2) {
+  width: 14%;
+}
+
+.roles-table.transaction-table th:nth-child(3),
+.roles-table.transaction-table td:nth-child(3) {
+  width: 18%;
+}
+
+.roles-table.transaction-table th:nth-child(4),
+.roles-table.transaction-table td:nth-child(4) {
+  width: 12%;
+}
+
+.roles-table.transaction-table th:nth-child(5),
+.roles-table.transaction-table td:nth-child(5) {
+  width: 15%;
+}
+
+.roles-table.transaction-table th:nth-child(6),
+.roles-table.transaction-table td:nth-child(6) {
+  width: 17%;
+}
+
+.roles-table.transaction-table th:nth-child(7),
+.roles-table.transaction-table td:nth-child(7) {
+  width: 15%;
+}
+
+.transaction-status,
+.payment-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.transaction-status.pending,
+.payment-status.pending {
+  color: #946200;
+  background: #fff1c2;
+}
+
+.transaction-status.success,
+.payment-status.paid {
+  color: #187344;
+  background: #d9f6e5;
+}
+
+.transaction-status.failed,
+.payment-status.failed {
+  color: #b42336;
+  background: #ffe0e3;
+}
+
+.transaction-status.unknown,
+.payment-status.expired,
+.payment-status.unknown {
+  color: #657184;
+  background: #e8edf2;
+}
+
+.dashboard-dark .transaction-status.pending,
+.dashboard-dark .payment-status.pending {
+  color: #f7d77d;
+  background: rgba(148, 98, 0, .24);
+}
+
+.dashboard-dark .transaction-status.success,
+.dashboard-dark .payment-status.paid {
+  color: #8de0ad;
+  background: rgba(24, 115, 68, .25);
+}
+
+.dashboard-dark .transaction-status.failed,
+.dashboard-dark .payment-status.failed {
+  color: #ff9aa5;
+  background: rgba(180, 35, 54, .25);
+}
+
+.dashboard-dark .transaction-status.unknown,
+.dashboard-dark .payment-status.expired,
+.dashboard-dark .payment-status.unknown {
+  color: #c0cad6;
+  background: rgba(101, 113, 132, .28);
+}
+
+.table-empty-state {
+  padding: 24px 16px;
+  color: #64748b;
+  text-align: center;
+}
+
+.roles-table.transaction-table .table-empty-state {
+  height: 96px;
 }
 
 .roles-table.payment-table th:first-child,

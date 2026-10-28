@@ -1,4 +1,4 @@
-@import './design-system.scss';
+@use './design-system.scss';
 
 .roles-table-wrap,
 .ps-table-wrap,
@@ -159,8 +159,8 @@
 .parkingAreas-table { min-width: 1200px; }
 .parkingAreas-table:has(thead th:nth-child(7):last-child) { min-width: 980px; }
 .parkingAreas-table th, .parkingAreas-table td { padding-right: 12px; padding-left: 12px; vertical-align: middle; }
-.parkingAreas-table th:nth-child(1), .parkingAreas-table td:nth-child(1) { width: 16%; }
-.parkingAreas-table th:nth-child(2), .parkingAreas-table td:nth-child(2) { width: 15%; }
+.parkingAreas-table th:nth-child(1), .parkingAreas-table td:nth-child(1) { width: 6%; }
+.parkingAreas-table th:nth-child(2), .parkingAreas-table td:nth-child(2) { width: 25%; }
 .parkingAreas-table th:nth-child(3), .parkingAreas-table td:nth-child(3) { width: 8%; }
 .parkingAreas-table th:nth-child(4), .parkingAreas-table td:nth-child(4) { width: 11%; }
 .parkingAreas-table th:nth-child(5), .parkingAreas-table td:nth-child(5) { width: 12%; }
@@ -168,9 +168,9 @@
 .parkingAreas-table th:nth-child(7), .parkingAreas-table td:nth-child(7) { width: 12%; }
 .parkingAreas-table th:nth-child(8), .parkingAreas-table td:nth-child(8) { width: 16%; }
 .parkingAreas-table:has(thead th:nth-child(7):last-child) th:nth-child(1),
-.parkingAreas-table:has(thead th:nth-child(7):last-child) td:nth-child(1) { width: 17%; }
+.parkingAreas-table:has(thead th:nth-child(7):last-child) td:nth-child(1) { width: 6%; }
 .parkingAreas-table:has(thead th:nth-child(7):last-child) th:nth-child(2),
-.parkingAreas-table:has(thead th:nth-child(7):last-child) td:nth-child(2) { width: 16%; }
+.parkingAreas-table:has(thead th:nth-child(7):last-child) td:nth-child(2) { width: 24%; }
 .parkingAreas-table:has(thead th:nth-child(7):last-child) th:nth-child(3),
 .parkingAreas-table:has(thead th:nth-child(7):last-child) td:nth-child(3) { width: 9%; }
 .parkingAreas-table:has(thead th:nth-child(7):last-child) th:nth-child(4),
@@ -199,18 +199,19 @@
 .role-list-table th:nth-child(3), .role-list-table td:nth-child(3) { width: 30%; }
 .parkingSpots-table { min-width: 1100px; }
 .parkingSpots-table th, .parkingSpots-table td { padding-right: 14px; padding-left: 14px; vertical-align: middle; }
-.parkingSpots-table th:nth-child(1), .parkingSpots-table td:nth-child(1) { width: 15%; }
-.parkingSpots-table th:nth-child(2), .parkingSpots-table td:nth-child(2) { width: 10%; }
-.parkingSpots-table th:nth-child(3), .parkingSpots-table td:nth-child(3) { width: 17%; }
+.parkingSpots-table th:nth-child(1), .parkingSpots-table td:nth-child(1) { width: 8%; }
+.parkingSpots-table th:nth-child(2), .parkingSpots-table td:nth-child(2) { width: 21%; }
+.parkingSpots-table th:nth-child(3), .parkingSpots-table td:nth-child(3) { width: 7%; }
 .parkingSpots-table th:nth-child(4), .parkingSpots-table td:nth-child(4) { width: 20%; }
-.parkingSpots-table th:nth-child(5), .parkingSpots-table td:nth-child(5) { width: 18%; }
-.parkingSpots-table th:nth-child(6), .parkingSpots-table td:nth-child(6) { width: 20%; }
+.parkingSpots-table th:nth-child(5), .parkingSpots-table td:nth-child(5) { width: 24%; }
+.parkingSpots-table th:nth-child(6), .parkingSpots-table td:nth-child(6) { width: 12%; }
+.parkingSpots-table th:nth-child(7), .parkingSpots-table td:nth-child(7) { width: 8%; }
 .parkingSpots-table-readonly { min-width: 900px; }
-.parkingSpots-table-readonly th:nth-child(1), .parkingSpots-table-readonly td:nth-child(1) { width: 20%; }
-.parkingSpots-table-readonly th:nth-child(2), .parkingSpots-table-readonly td:nth-child(2) { width: 12%; }
-.parkingSpots-table-readonly th:nth-child(3), .parkingSpots-table-readonly td:nth-child(3) { width: 20%; }
-.parkingSpots-table-readonly th:nth-child(4), .parkingSpots-table-readonly td:nth-child(4) { width: 25%; }
-.parkingSpots-table-readonly th:nth-child(5), .parkingSpots-table-readonly td:nth-child(5) { width: 23%; }
+.parkingSpots-table-readonly th:nth-child(1), .parkingSpots-table-readonly td:nth-child(1) { width: 12%; }
+.parkingSpots-table-readonly th:nth-child(2), .parkingSpots-table-readonly td:nth-child(2) { width: 24%; }
+.parkingSpots-table-readonly th:nth-child(3), .parkingSpots-table-readonly td:nth-child(3) { width: 8%; }
+.parkingSpots-table-readonly th:nth-child(4), .parkingSpots-table-readonly td:nth-child(4) { width: 27%; }
+.parkingSpots-table-readonly th:nth-child(5), .parkingSpots-table-readonly td:nth-child(5) { width: 29%; }
 .parkingSpots-table .staff-status-control { width: 100%; min-width: 0; }
 .parkingSpots-table .staff-status-control select { width: 100%; min-width: 0; }
 .parking-spot-actions { flex-direction: row; align-items: center; gap: 8px; }

@@ -444,8 +444,8 @@ const AdminReservation = ({ readOnly = false }: { readOnly?: boolean })=>{
                                     <tr>
                                         <th>ID</th>
                                         {sortHeader('customerName', 'Customer Name')}
-                                        {sortHeader('parkingAreaCode', 'Parking Area Code')}
-                                        {sortHeader('parkingSpotCode', 'Parking Spot Code')}
+                                        {sortHeader('parkingAreaCode', 'Area Code')}
+                                        {sortHeader('parkingSpotCode', 'Spot Code')}
                                         <th>Vehicle Type</th>
                                         <th>Phone Contact</th>
                                         {sortHeader('reservedAt', 'Reserved At')}
