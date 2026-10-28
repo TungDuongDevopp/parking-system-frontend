@@ -4,82 +4,92 @@
   --ps-font: 'Plus Jakarta Sans', sans-serif;
   --ps-font-display: 'Plus Jakarta Sans', sans-serif;
 
-  --ps-bg: #f0f6ff;
-  --ps-bg-accent: #e3f0ff;
+  /* Dreamy purple palette */
+  --ps-purple: #8b5cf6;
+  --ps-purple-hover: #7c3aed;
+  --ps-purple-deep: #5b21b6;
+  --ps-navy: #211a35;
+  --ps-lavender: #f3eeff;
+  --ps-lavender-strong: #e9dfff;
+
+  --ps-bg: #faf8ff;
+  --ps-bg-accent: #f3eeff;
   --ps-surface: #ffffff;
-  --ps-surface-muted: #f5f9ff;
-  --ps-ink: #1e3a5f;
-  --ps-text: #1e3a5f;
-  --ps-text-secondary: #64748b;
-  --ps-text-muted: #64748b;
-  --ps-border: #d8e6f5;
-  --ps-border-strong: #bdd2eb;
-  --ps-accent: #2563eb;
-  --ps-accent-hover: #1d4ed8;
-  --ps-accent-soft: #e3f0ff;
-  --ps-accent-ink: #1e3a5f;
-  --ps-info: #2563eb;
-  --ps-info-soft: #e3f0ff;
-  --ps-success: #067647;
-  --ps-success-soft: #e4f6ee;
-  --ps-warning: #b45309;
-  --ps-warning-soft: #fef3c7;
-  --ps-danger: #b42318;
-  --ps-danger-soft: #fde8e6;
-  --ps-violet: #5b4db0;
-  --ps-violet-soft: #eeeafb;
-  --ps-occupied: #2563eb;
-  --ps-reserved: #60a5fa;
-  --ps-available: #d8e6f5;
-  --ps-blocked: #8b939e;
-  --ps-shadow: 0 1px 2px rgba(30, 58, 95, .04), 0 10px 24px -18px rgba(30, 58, 95, .2);
-  --ps-glass-surface: rgba(255, 255, 255, .42);
-  --ps-glass-row: rgba(255, 255, 255, .24);
-  --ps-glass-border: rgba(255, 255, 255, .72);
-  --ps-glass-highlight: rgba(255, 255, 255, .82);
-  --ps-glass-shadow: 0 8px 22px -20px rgba(30, 58, 95, .2);
-  --ps-radius: 12px;
-  --ps-radius-sm: 8px;
+  --ps-surface-muted: #f7f3ff;
+  --ps-ink: #241b35;
+  --ps-text: #241b35;
+  --ps-text-secondary: #655b75;
+  --ps-text-muted: #958ba5;
+  --ps-border: #e8e1f2;
+  --ps-border-strong: #d6c9ec;
+  --ps-accent: #8b5cf6;
+  --ps-accent-hover: #7c3aed;
+  --ps-accent-soft: #f3eeff;
+  --ps-accent-ink: #5b21b6;
+  --ps-info: #7c3aed;
+  --ps-info-soft: #f3eeff;
+  --ps-success: #16a34a;
+  --ps-success-soft: #e8f7ee;
+  --ps-warning: #d97706;
+  --ps-warning-soft: #fef4e2;
+  --ps-danger: #dc2626;
+  --ps-danger-soft: #fdecec;
+  --ps-violet: #5b21b6;
+  --ps-violet-soft: #e9dfff;
+  --ps-occupied: #8b5cf6;
+  --ps-reserved: #c4b0fb;
+  --ps-available: #e8e1f2;
+  --ps-blocked: #958ba5;
+  --ps-shadow: 0 1px 2px rgba(36, 27, 53, .04), 0 12px 28px -20px rgba(91, 33, 182, .22);
+  --ps-shadow-hover: 0 2px 4px rgba(36, 27, 53, .05), 0 18px 34px -20px rgba(91, 33, 182, .3);
+  --ps-glass-surface: #ffffff;
+  --ps-glass-row: #f7f3ff;
+  --ps-glass-border: #e8e1f2;
+  --ps-glass-highlight: rgba(255, 255, 255, .9);
+  --ps-glass-shadow: 0 1px 2px rgba(36, 27, 53, .04), 0 12px 28px -22px rgba(91, 33, 182, .2);
+  --ps-radius: 14px;
+  --ps-radius-sm: 10px;
   --ps-sidebar: 244px;
-  --ps-focus: 0 0 0 3px rgba(37, 99, 235, .25);
+  --ps-focus: 0 0 0 3px rgba(139, 92, 246, .28);
 }
 
 .dashboard-dark {
-  --ps-bg: #0b1423;
-  --ps-bg-accent: #172942;
-  --ps-surface: #111e32;
-  --ps-surface-muted: #172942;
-  --ps-ink: #e2ecff;
-  --ps-text: #e2ecff;
-  --ps-text-secondary: #9cb2d0;
-  --ps-text-muted: #9cb2d0;
-  --ps-border: #253752;
-  --ps-border-strong: #355071;
-  --ps-accent: #3b82f6;
-  --ps-accent-hover: #60a5fa;
-  --ps-accent-soft: #1b3f6b;
-  --ps-accent-ink: #e2ecff;
-  --ps-info: #60a5fa;
-  --ps-info-soft: #1b3f6b;
+  --ps-bg: #16111f;
+  --ps-bg-accent: #241b35;
+  --ps-surface: #1d1629;
+  --ps-surface-muted: #241b35;
+  --ps-ink: #f1ebff;
+  --ps-text: #f1ebff;
+  --ps-text-secondary: #b9aecb;
+  --ps-text-muted: #958ba5;
+  --ps-border: #2f2542;
+  --ps-border-strong: #43365c;
+  --ps-accent: #a78bfa;
+  --ps-accent-hover: #c4b5fd;
+  --ps-accent-soft: rgba(139, 92, 246, .18);
+  --ps-accent-ink: #e9dfff;
+  --ps-info: #c4b5fd;
+  --ps-info-soft: rgba(139, 92, 246, .18);
   --ps-success: #4ade80;
-  --ps-success-soft: rgba(6, 118, 71, .22);
+  --ps-success-soft: rgba(22, 163, 74, .2);
   --ps-warning: #fbbf24;
-  --ps-warning-soft: rgba(180, 83, 9, .22);
+  --ps-warning-soft: rgba(217, 119, 6, .2);
   --ps-danger: #f87171;
-  --ps-danger-soft: rgba(180, 35, 24, .2);
+  --ps-danger-soft: rgba(220, 38, 38, .2);
   --ps-violet: #c4b5fd;
-  --ps-violet-soft: rgba(91, 77, 176, .22);
-  --ps-occupied: #3b82f6;
-  --ps-reserved: #60a5fa;
-  --ps-available: #253752;
-  --ps-blocked: #6b7380;
-  --ps-shadow: 0 1px 0 rgba(255, 255, 255, .04), 0 16px 32px -24px rgba(0, 0, 0, .7);
-  --ps-glass-surface: rgba(17, 30, 50, .76);
-  --ps-glass-row: rgba(23, 41, 66, .58);
-  --ps-glass-border: rgba(156, 178, 208, .18);
-  --ps-glass-highlight: rgba(226, 236, 255, .12);
+  --ps-violet-soft: rgba(139, 92, 246, .2);
+  --ps-occupied: #a78bfa;
+  --ps-reserved: #6d4fb8;
+  --ps-available: #2f2542;
+  --ps-blocked: #6f6582;
+  --ps-shadow: 0 1px 0 rgba(255, 255, 255, .03), 0 16px 32px -24px rgba(0, 0, 0, .7);
+  --ps-shadow-hover: 0 1px 0 rgba(255, 255, 255, .04), 0 20px 36px -22px rgba(0, 0, 0, .8);
+  --ps-glass-surface: #1d1629;
+  --ps-glass-row: #241b35;
+  --ps-glass-border: #2f2542;
+  --ps-glass-highlight: rgba(241, 235, 255, .06);
   --ps-glass-shadow: 0 16px 34px -24px rgba(0, 0, 0, .72);
-  --ps-focus: 0 0 0 3px rgba(59, 130, 246, .3);
+  --ps-focus: 0 0 0 3px rgba(167, 139, 250, .35);
 }
 
 html,
@@ -376,9 +386,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .ps-table th {
   padding: 0 12px 10px;
   color: var(--ps-text-muted);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: .06em;
+  letter-spacing: .04em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -399,8 +409,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   border: 1px solid var(--ps-glass-border);
   border-radius: var(--ps-radius);
   background: var(--ps-glass-surface);
-  box-shadow: var(--ps-glass-shadow), inset 0 1px 0 var(--ps-glass-highlight);
-  backdrop-filter: blur(14px);
+  box-shadow: var(--ps-glass-shadow);
 }
 
 .ps-table tbody tr {
@@ -409,20 +418,37 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .ps-table tbody tr:hover td {
   background: var(--ps-glass-row);
-  box-shadow: inset 0 1px 0 var(--ps-glass-highlight);
 }
 
 .ps-btn,
 .ps-segmented button {
-  box-shadow: inset 0 1px 0 var(--ps-glass-highlight), 0 4px 12px -9px var(--ps-accent);
-  backdrop-filter: blur(10px);
-  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
-.ps-btn:hover:not(:disabled),
-.ps-segmented button:hover {
-  transform: translateY(-1px);
-  box-shadow: inset 0 1px 0 var(--ps-glass-highlight), 0 8px 16px -10px var(--ps-accent);
+.ps-btn:hover:not(:disabled) {
+  background: var(--ps-surface-muted);
+}
+
+.ps-btn-primary {
+  box-shadow: 0 6px 14px -8px rgba(124, 58, 237, .55);
+}
+
+.ps-btn-primary:hover:not(:disabled) {
+  background: var(--ps-accent-hover);
+}
+
+.ps-segmented button:hover:not(.active) {
+  color: var(--ps-accent-ink);
+}
+
+.ps-kpi,
+.ps-surface {
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.ps-kpi:hover {
+  border-color: var(--ps-border-strong);
+  box-shadow: var(--ps-shadow-hover);
 }
 
 .ps-badge {
