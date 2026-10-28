@@ -18,6 +18,7 @@ import { getParkingAreas } from '../services/parkingAreaService'
 import { getParkingSpots } from '../services/parkingSpotService'
 import { getReservations } from '../services/reservationService'
 import { checkIn } from '../services/sessionService'
+import StaffCheckout from './StaffCheckout'
 import type { ParkingAreaDto } from '../types/ParkingArea/parkingArea'
 import type { RecentActivityDto } from '../types/Dashboard/dashboard'
 import type { ParkingSpotDto } from '../types/ParkingSpot/parkingSpot'
@@ -50,6 +51,7 @@ const StaffHome = () => {
   const [username, setUsername] = useState('Staff')
   const [retryKey, setRetryKey] = useState(0)
   const [isCheckInFormOpen, setIsCheckInFormOpen] = useState(false)
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isCheckInLookupsLoading, setIsCheckInLookupsLoading] = useState(false)
   const [checkInLookupError, setCheckInLookupError] = useState('')
   const [checkInParkingAreas, setCheckInParkingAreas] = useState<ParkingAreaDto[]>([])
@@ -394,9 +396,13 @@ const StaffHome = () => {
                   >
                     <IconLogin2 size={16} /> Check-in
                   </button>
-                  <Link className="ps-btn staff-checkout-link staff-workspace-action" to="/staff/sessions">
-                    <IconLogout2 size={16} /> Check-out / sessions
-                  </Link>
+                  <button
+                    className="ps-btn staff-checkout-link staff-workspace-action"
+                    type="button"
+                    onClick={() => setIsCheckoutOpen(true)}
+                  >
+                    <IconLogout2 size={16} /> Check-out / checkout
+                  </button>
                 </div>
               </article>
 
@@ -903,6 +909,7 @@ const StaffHome = () => {
           </div>
         )}
       </main>
+      {isCheckoutOpen && <StaffCheckout onClose={() => setIsCheckoutOpen(false)} />}
     </div>
   )
 }

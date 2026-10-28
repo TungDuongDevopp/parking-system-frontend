@@ -11,6 +11,7 @@ import CustomerProfile from './customer/CustomerProfile';
 import CustomerFindParking from './customer/CustomerFindParking';
 import CustomerReservations from './customer/CustomerReservations';
 import CustomerSubscriptions from './customer/CustomerSubscriptions';
+import CustomerSubscriptionCheckout from './customer/CustomerSubscriptionCheckout';
 import CustomerUserGuide from './customer/CustomerUserGuide';
 import StaffHome from './staff/StaffHome';
 import StaffProfile from './staff/StaffProfile';
@@ -179,6 +180,11 @@ const App = () => {
                 <Route path="/customer/subscriptions" element={
                   <ProtectedRoute allowedRole='Customer'>
                     <CustomerSubscriptions />
+                  </ProtectedRoute>
+                } />
+                <Route path="/customer/subscriptions/:subscriptionId/payment" element={
+                  <ProtectedRoute allowedRole='Customer'>
+                    <CustomerSubscriptionCheckout />
                   </ProtectedRoute>
                 } />
                 <Route path="/customer/guide" element={<CustomerUserGuide />} />

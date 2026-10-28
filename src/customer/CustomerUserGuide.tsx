@@ -17,7 +17,9 @@ import {
 import Header from '../components/homePage/Header'
 import Footer from '../components/homePage/Footer'
 import '../resources/css/homepage.scss'
+import '../resources/css/customer-portal.scss'
 import '../resources/css/customer-guide.scss'
+import guideIllustration from '../assets/guide-parking-illustration.png'
 
 const guideCategories = [
   {
@@ -37,7 +39,7 @@ const guideCategories = [
   },
   {
     id: 'subscriptions',
-    title: 'Subscription & Payments',
+    title: 'Subscriptions & Payments',
     description: 'Browse plans, purchase a parking subscription, and check its status.',
     icon: IconCreditCard,
     topics: ['Browse available plans', 'Purchase a subscription', 'Subscription status and expiration', 'Payment status'],
@@ -45,10 +47,10 @@ const guideCategories = [
     steps: [
       { title: 'Browse plans', text: 'Open Pricing and choose the vehicle type to see the available plans.' },
       { title: 'Purchase a plan', text: 'Select a plan, enter its required vehicle plate number or numbers, choose a start time, and submit the purchase.' },
-      { title: 'Check the subscription', text: 'Open My Subscriptions to review the plan, start and end times, price, and current status.' },
+      { title: 'Check the subscription', text: 'Open My Subscriptions to review the plan, start and end times, price, and current status. For a Pending subscription, select Thanh toán to preview the available payment methods; checkout is currently a mockup.' },
       { title: 'Understand the status', text: 'Subscriptions are shown as Pending, In Use, Expired, or Canceled. Refresh the list to load the latest server status.' },
     ],
-    note: 'The customer portal does not currently provide a subscription renewal action or transaction-history page. To continue after expiry, choose an available plan again.',
+    note: 'Payment methods are for display only and do not process transactions yet. The customer portal does not currently provide a subscription renewal action or transaction-history page. To continue after expiry, choose an available plan again.',
     link: { to: '/pricing', label: 'Browse pricing' },
   },
   {
@@ -203,14 +205,22 @@ const CustomerUserGuide = () => {
           ) : (
             <>
               <header className="customer-guide-hero">
-                <span className="customer-guide-eyebrow">CUSTOMER HELP CENTER</span>
-                <h1>User Guide</h1>
-                <p className="customer-guide-subtitle">Everything you need to know to use ParkingSystem.</p>
-                <p className="customer-guide-welcome">Welcome! Browse a topic or search for the steps you need.</p>
-                <div className="customer-guide-hero-mark" aria-hidden="true">
-                  <IconMapPin size={22} />
-                  <span>P</span>
+                <div className="customer-guide-hero-copy">
+                  <span className="customer-guide-eyebrow">CUSTOMER HELP CENTER</span>
+                  <h1>User Guide</h1>
+                  <p className="customer-guide-subtitle">Everything you need to know to use ParkingSystem.</p>
+                  <p className="customer-guide-welcome">
+                    <IconMapPin size={16} aria-hidden="true" />
+                    Welcome! Browse a topic or search for the steps you need.
+                  </p>
                 </div>
+                <img
+                  className="customer-guide-hero-art"
+                  src={guideIllustration}
+                  alt=""
+                  width={220}
+                  height={220}
+                />
               </header>
               <label className="customer-guide-search">
                 <IconSearch size={20} aria-hidden="true" />

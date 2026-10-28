@@ -13,8 +13,8 @@ body,
 body {
     margin: 0;
     font-family: var(--ps-font);
-    color: #153653;
-    background: #edf5fb;
+    color: #281553;
+    background: #f1edfb;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -34,12 +34,12 @@ body {
     min-width: 0;
     overflow: hidden;
     border-radius: 18px;
-    background: #247ab7;
+    background: #5024b7;
 
     &::after {
         position: absolute;
         inset: 35% 0 0;
-        background: linear-gradient(180deg, transparent 0%, rgba(8, 34, 58, 0.72) 100%);
+        background: linear-gradient(180deg, transparent 0%, rgba(23, 8, 58, 0.72) 100%);
         content: '';
         pointer-events: none;
     }
@@ -69,7 +69,7 @@ body {
             padding: 0 11px;
             border: 1px solid rgba(255, 255, 255, 0.42);
             border-radius: 999px;
-            background: rgba(12, 56, 91, 0.34);
+            background: rgba(36, 12, 91, 0.34);
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1.25px;
@@ -102,12 +102,12 @@ body {
     justify-content: center;
     align-items: center;
     padding: clamp(16px, 3vh, 40px) clamp(18px, 3vw, 46px);
-    border: 1px solid rgba(209, 226, 239, 0.8);
+    border: 1px solid rgba(218, 209, 239, 0.8);
     border-radius: 18px;
     background:
-        radial-gradient(ellipse at top right, rgba(211, 236, 253, 0.52), transparent 42%),
+        radial-gradient(ellipse at top right, rgba(224, 211, 253, 0.52), transparent 42%),
         #fff;
-    box-shadow: 0 18px 55px rgba(34, 84, 119, 0.08);
+    box-shadow: 0 18px 55px rgba(59, 34, 119, 0.08);
 }
 
 .login-panel-inner {
@@ -135,7 +135,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 12px;
-    color: #133c5e;
+    color: #29135e;
     font-family: var(--ps-font-display);
     font-size: clamp(20px, 2vw, 24px);
     font-weight: 800;
@@ -148,7 +148,7 @@ body {
     }
 
     .brand-accent {
-        color: #168bd5;
+        color: #4f16d5;
     }
 }
 
@@ -158,7 +158,7 @@ body {
     .title-eyebrow {
         display: block;
         width: 100%;
-        color: #2186c8;
+        color: #5321c8;
         font-size: 10px;
         font-weight: 700;
         letter-spacing: 1.7px;
@@ -167,7 +167,7 @@ body {
 
     h1 {
         margin: 10px 0 8px;
-        color: #143653;
+        color: #271453;
         font-family: var(--ps-font-display);
         font-size: clamp(26px, 2.4vw, 32px);
         font-weight: 700;
@@ -177,7 +177,7 @@ body {
 
     p {
         margin: 0;
-        color: #7890a3;
+        color: #8578a3;
         font-size: 13px;
         line-height: 1.6;
     }
@@ -189,7 +189,7 @@ body {
 
     > label {
         margin: 0 0 8px;
-        color: #284a64;
+        color: #3a2864;
         font-size: 12px;
         font-weight: 600;
     }
@@ -199,23 +199,23 @@ body {
         width: 100%;
         height: 49px;
         padding: 0 15px;
-        border: 1px solid #dce7ef;
+        border: 1px solid #e2dcef;
         border-radius: 9px;
         outline: none;
-        background: #fbfdff;
-        color: #163653;
+        background: #fcfbff;
+        color: #281653;
         font: inherit;
         font-size: 13px;
         transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
 
         &::placeholder {
-            color: #a0b0bd;
+            color: #a9a0bd;
         }
 
         &:focus {
-            border-color: #4da6e4;
+            border-color: #7a4de4;
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(65, 157, 218, 0.13);
+            box-shadow: 0 0 0 3px rgba(111, 65, 218, 0.13);
         }
     }
 
@@ -243,16 +243,16 @@ body {
             border: 0;
             border-radius: 6px;
             background: transparent;
-            color: #8197a9;
+            color: #8d81a9;
             cursor: pointer;
 
             &:hover {
-                background: #edf6fc;
-                color: #247fb8;
+                background: #f2edfc;
+                color: #5024b8;
             }
 
             &:focus-visible {
-                outline: 2px solid #278fd0;
+                outline: 2px solid #5a27d0;
                 outline-offset: 2px;
             }
 
@@ -277,7 +277,7 @@ body {
         font-size: 11px;
 
         a {
-            color: #247fb8;
+            color: #5024b8;
             font-weight: 600;
             text-decoration: none;
 
@@ -290,14 +290,14 @@ body {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #637d91;
+            color: #716391;
             cursor: pointer;
 
             input {
                 width: 15px;
                 height: 15px;
                 margin: 0;
-                accent-color: #258fd0;
+                accent-color: #5825d0;
             }
         }
     }
@@ -310,8 +310,8 @@ body {
         gap: 10px;
         border: 0;
         border-radius: 9px;
-        background: linear-gradient(100deg, #63bffd, #2563EB);
-        box-shadow: 0 7px 16px rgba(31, 119, 181, 0.2);
+        background: linear-gradient(100deg, #9163fd, #6025eb);
+        box-shadow: 0 7px 16px rgba(76, 31, 181, 0.2);
         color: #fff;
         font: inherit;
         font-size: 14px;
@@ -321,12 +321,12 @@ body {
 
         &:hover {
             transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(31, 119, 181, 0.27);
+            box-shadow: 0 10px 20px rgba(76, 31, 181, 0.27);
             filter: brightness(1.04);
         }
 
         &:focus-visible {
-            outline: 3px solid rgba(37, 139, 208, 0.28);
+            outline: 3px solid rgba(88, 37, 208, 0.28);
             outline-offset: 3px;
         }
 
@@ -369,12 +369,12 @@ body {
 
     .register-prompt {
         margin: 21px 0 0;
-        color: #71889a;
+        color: #7d719a;
         font-size: 12px;
         text-align: center;
 
         a {
-            color: #197dbd;
+            color: #4a19bd;
             font-weight: 700;
             text-decoration: none;
 
@@ -387,13 +387,13 @@ body {
 
 .login-footer {
     margin: clamp(24px, 5vh, 48px) 0 0;
-    color: #91a2ae;
+    color: #9a91ae;
     font-size: 10px;
     line-height: 1.7;
     text-align: center;
 
     a {
-        color: #56758d;
+        color: #67568d;
         text-decoration: underline;
         text-underline-offset: 2px;
     }
@@ -405,7 +405,7 @@ body {
 
         &::after {
             inset: 0;
-            background: linear-gradient(90deg, rgba(8, 34, 58, 0.64), rgba(8, 34, 58, 0.08) 78%);
+            background: linear-gradient(90deg, rgba(23, 8, 58, 0.64), rgba(23, 8, 58, 0.08) 78%);
         }
     }
 
@@ -435,7 +435,7 @@ body {
             }
 
             span span {
-                color: #8bd3ff;
+                color: #ae8bff;
             }
         }
 
@@ -467,12 +467,12 @@ body {
 
     .register-panel .register-prompt {
         margin: 14px 0 0;
-        color: #71889a;
+        color: #7d719a;
         font-size: 11px;
         text-align: center;
 
         a {
-            color: #197dbd;
+            color: #4a19bd;
             font-weight: 700;
             text-decoration: none;
 
@@ -510,7 +510,7 @@ body {
             > label {
                 display: block;
                 margin: 0 0 8px;
-                color: #284a64;
+                color: #3a2864;
                 font-size: 13px;
                 font-weight: 600;
             }
@@ -520,23 +520,23 @@ body {
                 width: 100%;
                 height: 50px;
                 padding: 0 14px;
-                border: 1px solid #dce7ef;
+                border: 1px solid #e2dcef;
                 border-radius: 8px;
                 outline: none;
-                background: #fbfdff;
-                color: #163653;
+                background: #fcfbff;
+                color: #281653;
                 font: inherit;
                 font-size: 13px;
                 transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
 
                 &::placeholder {
-                    color: #a0b0bd;
+                    color: #a9a0bd;
                 }
 
                 &:focus {
-                    border-color: #4da6e4;
+                    border-color: #7a4de4;
                     background: #fff;
-                    box-shadow: 0 0 0 3px rgba(65, 157, 218, 0.13);
+                    box-shadow: 0 0 0 3px rgba(111, 65, 218, 0.13);
                 }
             }
 
@@ -567,7 +567,7 @@ body {
             align-items: flex-start;
             gap: 8px;
             margin: 18px 0;
-            color: #617c91;
+            color: #6f6191;
             font-size: 12px;
             line-height: 1.5;
             cursor: pointer;
@@ -581,11 +581,11 @@ body {
                 width: 14px;
                 height: 14px;
                 margin: 1px 0 0;
-                accent-color: #258bd0;
+                accent-color: #5825d0;
             }
 
             a {
-                color: #197dbd;
+                color: #4a19bd;
                 font-weight: 600;
                 text-decoration: underline;
                 text-underline-offset: 2px;
@@ -749,7 +749,7 @@ body {
         margin: 0;
         padding: 40px 20px;
         overflow: hidden auto;
-        background: #0f172b;
+        background: #170f2b;
     }
 
     .main-container.public-auth-page > .image-content {
@@ -798,7 +798,7 @@ body {
         flex-direction: row;
         gap: 12px;
         margin: 0 0 22px;
-        color: #e2e8f0;
+        color: #e6e2f0;
         font-size: 20px;
     }
 
@@ -809,7 +809,7 @@ body {
     }
 
     .main-container.public-auth-page .login-brand > span > span {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     .main-container.public-auth-page .title {
@@ -819,7 +819,7 @@ body {
 
     .main-container.public-auth-page .title h1 {
         margin: 8px 0;
-        color: #e2e8f0;
+        color: #e6e2f0;
         font-size: clamp(27px, 4vw, 34px);
         font-weight: 750;
         letter-spacing: -.035em;
@@ -827,12 +827,12 @@ body {
     }
 
     .main-container.public-auth-page .title .title-eyebrow {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     .main-container.public-auth-page .title > p:last-child {
         margin: 8px 0 0;
-        color: #9eabc2;
+        color: #a99ec2;
         font-size: 14px;
         line-height: 1.5;
     }
@@ -840,7 +840,7 @@ body {
     .main-container.public-auth-page .login-form > label,
     .main-container.public-auth-page .register-form .register-field > label {
         margin: 0 0 8px;
-        color: #e2e8f0;
+        color: #e6e2f0;
         font-size: 13px;
         font-weight: 600;
     }
@@ -851,68 +851,68 @@ body {
     .main-container.public-auth-page .register-form .register-field .password-field input {
         height: 49px;
         padding: 0 15px;
-        border: 1px solid rgba(148, 163, 184, .24);
+        border: 1px solid rgba(159, 148, 184, .24);
         border-radius: 9px;
-        color: #e2e8f0;
-        background: #1e293b;
+        color: #e6e2f0;
+        background: #271e3b;
     }
 
     .main-container.public-auth-page .login-form > input:focus,
     .main-container.public-auth-page .login-form .password-field input:focus,
     .main-container.public-auth-page .register-form .register-field > input:focus,
     .main-container.public-auth-page .register-form .register-field .password-field input:focus {
-        border-color: #a855f7;
-        background: #1e293b;
-        box-shadow: 0 0 0 3px rgba(168, 85, 247, .18);
+        border-color: #8655f7;
+        background: #271e3b;
+        box-shadow: 0 0 0 3px rgba(134, 85, 247, .18);
     }
 
     .main-container.public-auth-page .login-form .password-field .password-toggle {
-        color: #aab4c6;
+        color: #b2aac6;
     }
 
     .main-container.public-auth-page .login-form .password-field .password-toggle:hover {
-        color: #e9d5ff;
-        background: rgba(168, 85, 247, .16);
+        color: #e2d5ff;
+        background: rgba(134, 85, 247, .16);
     }
 
     .main-container.public-auth-page .login-form .form-options a,
     .main-container.public-auth-page .register-prompt a {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     .main-container.public-auth-page .login-form .remember-option {
-        color: #9eabc2;
+        color: #a99ec2;
     }
 
     .main-container.public-auth-page .login-form .remember-option input,
     .main-container.public-auth-page .register-form .register-terms input {
-        accent-color: #a947f0;
+        accent-color: #7a47f0;
     }
 
     .main-container.public-auth-page .login-form .login-button {
         min-height: 49px;
         border-radius: 9px;
         color: #fff;
-        background: linear-gradient(100deg, #b13ef4, #8b35e8);
+        background: linear-gradient(100deg, #753ef4, #6b35e8);
         box-shadow: none;
     }
 
     .main-container.public-auth-page .login-form .login-button:hover {
-        background: linear-gradient(100deg, #a12ce8, #762bd2);
-        box-shadow: 0 8px 24px rgba(177, 62, 244, .2);
+        background: linear-gradient(100deg, #642ce8, #5d2bd2);
+        box-shadow: 0 8px 24px rgba(117, 62, 244, .2);
     }
 
     .main-container.public-auth-page .login-form .register-prompt,
     .main-container.public-auth-page .register-prompt {
-        color: #94a3b8;
+        color: #9f94b8;
     }
 
     .main-container.public-auth-page .login-footer {
-        color: #8391a7;
+        color: #8e83a7;
     }
 
     .main-container.public-auth-page .login-footer a {
-        color: #b9c4d5;
+        color: #c1b9d5;
     }
 
     .main-container.public-auth-page .field-error,
@@ -939,11 +939,11 @@ body {
 
     .main-container.public-auth-page.register-page .register-form .register-terms {
         margin: 22px 0;
-        color: #aab4c6;
+        color: #b2aac6;
     }
 
     .main-container.public-auth-page.register-page .register-form .register-terms a {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     @media (max-width: 700px) {
@@ -980,7 +980,7 @@ body {
 
     .change-password-form .form-message {
         margin: 8px 0 0;
-        color: #9eabc2;
+        color: #a99ec2;
         font-size: 12px;
         text-align: center;
     }
@@ -1002,7 +1002,7 @@ body {
         margin: 0;
         padding: 40px 20px;
         overflow: hidden auto;
-        background: #0f172b;
+        background: #170f2b;
     }
 
     .public-auth-page > .image-content {
@@ -1020,8 +1020,8 @@ body {
         &::after {
             inset: 0;
             background:
-                radial-gradient(ellipse at 28% 12%, rgba(124, 58, 237, .48), transparent 42%),
-                linear-gradient(115deg, rgba(15, 23, 43, .55), rgba(15, 23, 43, .92) 74%);
+                radial-gradient(ellipse at 28% 12%, rgba(112, 58, 237, .48), transparent 42%),
+                linear-gradient(115deg, rgba(23, 15, 43, .55), rgba(23, 15, 43, .92) 74%);
         }
 
         > img {
@@ -1058,7 +1058,7 @@ body {
         flex-direction: row;
         gap: 12px;
         margin: 0 0 22px;
-        color: #e2e8f0;
+        color: #e6e2f0;
         font-size: 20px;
     }
 
@@ -1070,7 +1070,7 @@ body {
 
     .public-auth-page .brand-accent,
     .public-auth-page .login-brand > span > span {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     .public-auth-page .title {
@@ -1080,7 +1080,7 @@ body {
 
     .public-auth-page .title h1 {
         margin: 8px 0;
-        color: #e2e8f0;
+        color: #e6e2f0;
         font-size: clamp(27px, 4vw, 34px);
         font-weight: 750;
         letter-spacing: -.035em;
@@ -1088,12 +1088,12 @@ body {
     }
 
     .public-auth-page .title .title-eyebrow {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     .public-auth-page .title > p:last-child {
         margin: 8px 0 0;
-        color: #9eabc2;
+        color: #a99ec2;
         font-size: 14px;
         line-height: 1.5;
     }
@@ -1101,7 +1101,7 @@ body {
     .public-auth-page .login-form > label,
     .public-auth-page .register-form .register-field > label {
         margin: 0 0 8px;
-        color: #e2e8f0;
+        color: #e6e2f0;
         font-size: 13px;
         font-weight: 600;
     }
@@ -1112,26 +1112,26 @@ body {
     .public-auth-page .register-form .register-field .password-field input {
         height: 49px;
         padding: 0 15px;
-        border: 1px solid rgba(148, 163, 184, .24);
+        border: 1px solid rgba(159, 148, 184, .24);
         border-radius: 9px;
-        color: #e2e8f0;
-        background: #1e293b;
+        color: #e6e2f0;
+        background: #271e3b;
     }
 
     .public-auth-page .login-form > input::placeholder,
     .public-auth-page .login-form .password-field input::placeholder,
     .public-auth-page .register-form .register-field > input::placeholder,
     .public-auth-page .register-form .register-field .password-field input::placeholder {
-        color: #8793a8;
+        color: #9187a8;
     }
 
     .public-auth-page .login-form > input:focus,
     .public-auth-page .login-form .password-field input:focus,
     .public-auth-page .register-form .register-field > input:focus,
     .public-auth-page .register-form .register-field .password-field input:focus {
-        border-color: #a855f7;
-        background: #1e293b;
-        box-shadow: 0 0 0 3px rgba(168, 85, 247, .18);
+        border-color: #8655f7;
+        background: #271e3b;
+        box-shadow: 0 0 0 3px rgba(134, 85, 247, .18);
     }
 
     .public-auth-page .login-form > input {
@@ -1139,11 +1139,11 @@ body {
     }
 
     .public-auth-page .login-form .password-field .password-toggle {
-        color: #aab4c6;
+        color: #b2aac6;
 
         &:hover {
-            color: #e9d5ff;
-            background: rgba(168, 85, 247, .16);
+            color: #e2d5ff;
+            background: rgba(134, 85, 247, .16);
         }
     }
 
@@ -1153,39 +1153,39 @@ body {
     }
 
     .public-auth-page .login-form .remember-option {
-        color: #9eabc2;
+        color: #a99ec2;
     }
 
     .public-auth-page .login-form .remember-option input {
-        accent-color: #a947f0;
+        accent-color: #7a47f0;
     }
 
     .public-auth-page .login-form .form-options a {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     .public-auth-page .login-form .login-button {
         min-height: 49px;
         border-radius: 9px;
-        background: linear-gradient(100deg, #b13ef4, #8b35e8);
+        background: linear-gradient(100deg, #753ef4, #6b35e8);
         box-shadow: none;
         font-size: 14px;
 
         &:hover {
-            background: linear-gradient(100deg, #a12ce8, #762bd2);
-            box-shadow: 0 8px 24px rgba(177, 62, 244, .2);
+            background: linear-gradient(100deg, #642ce8, #5d2bd2);
+            box-shadow: 0 8px 24px rgba(117, 62, 244, .2);
         }
     }
 
     .public-auth-page .login-form .register-prompt,
     .public-auth-page .register-prompt {
         margin: 22px 0 0;
-        color: #94a3b8;
+        color: #9f94b8;
         font-size: 15px;
         text-align: center;
 
         a {
-            color: #c026ff;
+            color: #6726ff;
             font-weight: 600;
             text-decoration: none;
         }
@@ -1193,10 +1193,10 @@ body {
 
     .public-auth-page .login-footer {
         margin-top: 22px;
-        color: #8391a7;
+        color: #8e83a7;
 
         a {
-            color: #b9c4d5;
+            color: #c1b9d5;
         }
     }
 
@@ -1232,15 +1232,15 @@ body {
 
     .register-auth-page .register-form .register-terms {
         margin: 22px 0;
-        color: #aab4c6;
+        color: #b2aac6;
     }
 
     .register-auth-page .register-form .register-terms input {
-        accent-color: #a947f0;
+        accent-color: #7a47f0;
     }
 
     .register-auth-page .register-form .register-terms a {
-        color: #c084fc;
+        color: #a884fc;
     }
 
     .register-auth-page .register-form .register-prompt {
@@ -1388,7 +1388,7 @@ body {
     margin: 0;
     padding: 40px 20px;
     overflow: hidden auto;
-    background: #0f172b;
+    background: #170f2b;
 }
 
 .main-container.public-auth-page > .image-content {
@@ -1407,8 +1407,8 @@ body {
 .main-container.public-auth-page > .image-content::after {
     inset: 0;
     background:
-        radial-gradient(ellipse at 28% 12%, rgba(124, 58, 237, .48), transparent 42%),
-        linear-gradient(115deg, rgba(15, 23, 43, .55), rgba(15, 23, 43, .92) 74%);
+        radial-gradient(ellipse at 28% 12%, rgba(112, 58, 237, .48), transparent 42%),
+        linear-gradient(115deg, rgba(23, 15, 43, .55), rgba(23, 15, 43, .92) 74%);
 }
 
 .main-container.public-auth-page > .image-content .image-caption,
@@ -1440,7 +1440,7 @@ body {
     flex-direction: row;
     gap: 12px;
     margin: 0 0 22px;
-    color: #e2e8f0;
+    color: #e6e2f0;
     font-size: 20px;
 }
 
@@ -1451,7 +1451,7 @@ body {
 }
 
 .main-container.public-auth-page .login-brand > span > span {
-    color: #c084fc;
+    color: #a884fc;
 }
 
 .main-container.public-auth-page .title {
@@ -1461,7 +1461,7 @@ body {
 
 .main-container.public-auth-page .title h1 {
     margin: 8px 0;
-    color: #e2e8f0;
+    color: #e6e2f0;
     font-size: clamp(27px, 4vw, 34px);
     font-weight: 750;
     letter-spacing: -.035em;
@@ -1469,12 +1469,12 @@ body {
 }
 
 .main-container.public-auth-page .title .title-eyebrow {
-    color: #c084fc;
+    color: #a884fc;
 }
 
 .main-container.public-auth-page .title > p:last-child {
     margin: 8px 0 0;
-    color: #9eabc2;
+    color: #a99ec2;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -1482,7 +1482,7 @@ body {
 .main-container.public-auth-page .login-form > label,
 .main-container.public-auth-page .register-form .register-field > label {
     margin: 0 0 8px;
-    color: #e2e8f0;
+    color: #e6e2f0;
     font-size: 13px;
     font-weight: 600;
 }
@@ -1493,68 +1493,68 @@ body {
 .main-container.public-auth-page .register-form .register-field .password-field input {
     height: 49px;
     padding: 0 15px;
-    border: 1px solid rgba(148, 163, 184, .24);
+    border: 1px solid rgba(159, 148, 184, .24);
     border-radius: 9px;
-    color: #e2e8f0;
-    background: #1e293b;
+    color: #e6e2f0;
+    background: #271e3b;
 }
 
 .main-container.public-auth-page .login-form > input:focus,
 .main-container.public-auth-page .login-form .password-field input:focus,
 .main-container.public-auth-page .register-form .register-field > input:focus,
 .main-container.public-auth-page .register-form .register-field .password-field input:focus {
-    border-color: #a855f7;
-    background: #1e293b;
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, .18);
+    border-color: #8655f7;
+    background: #271e3b;
+    box-shadow: 0 0 0 3px rgba(134, 85, 247, .18);
 }
 
 .main-container.public-auth-page .login-form .password-field .password-toggle {
-    color: #aab4c6;
+    color: #b2aac6;
 }
 
 .main-container.public-auth-page .login-form .password-field .password-toggle:hover {
-    color: #e9d5ff;
-    background: rgba(168, 85, 247, .16);
+    color: #e2d5ff;
+    background: rgba(134, 85, 247, .16);
 }
 
 .main-container.public-auth-page .login-form .form-options a,
 .main-container.public-auth-page .register-prompt a {
-    color: #c084fc;
+    color: #a884fc;
 }
 
 .main-container.public-auth-page .login-form .remember-option {
-    color: #9eabc2;
+    color: #a99ec2;
 }
 
 .main-container.public-auth-page .login-form .remember-option input,
 .main-container.public-auth-page .register-form .register-terms input {
-    accent-color: #a947f0;
+    accent-color: #7a47f0;
 }
 
 .main-container.public-auth-page .login-form .login-button {
     min-height: 49px;
     border-radius: 9px;
     color: #fff;
-    background: linear-gradient(100deg, #b13ef4, #8b35e8);
+    background: linear-gradient(100deg, #753ef4, #6b35e8);
     box-shadow: none;
 }
 
 .main-container.public-auth-page .login-form .login-button:hover {
-    background: linear-gradient(100deg, #a12ce8, #762bd2);
-    box-shadow: 0 8px 24px rgba(177, 62, 244, .2);
+    background: linear-gradient(100deg, #642ce8, #5d2bd2);
+    box-shadow: 0 8px 24px rgba(117, 62, 244, .2);
 }
 
 .main-container.public-auth-page .login-form .register-prompt,
 .main-container.public-auth-page .register-prompt {
-    color: #94a3b8;
+    color: #9f94b8;
 }
 
 .main-container.public-auth-page .login-footer {
-    color: #8391a7;
+    color: #8e83a7;
 }
 
 .main-container.public-auth-page .login-footer a {
-    color: #b9c4d5;
+    color: #c1b9d5;
 }
 
 .main-container.public-auth-page .field-error,
@@ -1581,11 +1581,11 @@ body {
 
 .main-container.public-auth-page.register-page .register-form .register-terms {
     margin: 22px 0;
-    color: #aab4c6;
+    color: #b2aac6;
 }
 
 .main-container.public-auth-page.register-page .register-form .register-terms a {
-    color: #c084fc;
+    color: #a884fc;
 }
 
 @media (max-width: 700px) {

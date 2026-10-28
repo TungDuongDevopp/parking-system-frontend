@@ -5,6 +5,7 @@ import Footer from '../components/homePage/Footer'
 import { cancelReservation, getReservationById, getReservations } from '../services/reservationService'
 import type { ReservationDto } from '../types/Reservation/reservation'
 import '../resources/css/homepage.scss'
+import '../resources/css/customer-portal.scss'
 
 const pageSize = 10
 const statusOptions = [
@@ -159,7 +160,7 @@ const CustomerReservations = () => {
     }
 
     return (
-        <div className="homepage">
+        <div className="homepage customer-portal-shell">
             <Header />
             <main className="homepage-main customer-reservations-page">
                 <section className="customer-reservations-content" aria-labelledby="reservations-heading">

@@ -9,6 +9,7 @@ import { createReservation } from '../services/reservationService'
 import type { ParkingAreaLookupDto } from '../types/ParkingArea/parkingArea'
 import type { ParkingSpotDto } from '../types/ParkingSpot/parkingSpot'
 import '../resources/css/homepage.scss'
+import '../resources/css/customer-portal.scss'
 
 const formatNumber = (value: number) => new Intl.NumberFormat().format(value)
 const toLocalDateTimeInput = (date: Date) => {
@@ -170,7 +171,7 @@ const CustomerFindParking = () => {
     }
 
     return (
-        <div className="homepage">
+        <div className="homepage customer-portal-shell">
             <Header />
             <main className="homepage-main find-parking-page">
                 <section className="find-parking-content" aria-labelledby="find-parking-heading">
@@ -230,9 +231,8 @@ const CustomerFindParking = () => {
                             {visibleAreas.map((area) => {
                                 const available = Math.max(0, area.availableCapacity)
                                 const capacity = Math.max(0, area.capacity)
-                                const unavailable = Math.max(0, capacity - available)
-                                const unavailablePercent = capacity
-                                    ? Math.min(100, (unavailable / capacity) * 100)
+                                const availablePercent = capacity
+                                    ? Math.min(100, (available / capacity) * 100)
                                     : 0
                                 const isIndividual = area.parkingMode === 0
                                 const isExpanded = expandedAreaId === area.id
@@ -286,107 +286,90 @@ const CustomerFindParking = () => {
                                     <article className="find-parking-card" key={area.id}>
                                         <div className="find-parking-card-heading">
                                             <h2>{area.name}</h2>
-                                            <span className="find-parking-availability-badge">
+                                            <span className={`find-parking-availability-badge ${available > 0 ? 'is-available' : 'is-full'}`}>
                                                 {available > 0 ? 'Available' : 'Full'}
                                             </span>
                                         </div>
-                                        <p className="find-parking-mode">
-                                            {isIndividual ? 'Individual Spot' : 'Capacity Based'}
-                                        </p>
-
-                                        {isIndividual ? (
-                                            <>
-                                                <div className="find-parking-individual-summary">
-                                                    <strong>{formatNumber(available)} / {formatNumber(capacity)}</strong>
-                                                    <span>Available spaces</span>
-                                                </div>
-                                                <button
-                                                    className="find-parking-card-button"
-                                                    type="button"
-                                                    aria-expanded={isExpanded}
-                                                    onClick={() => void toggleAreaSpots(area)}
-                                                >
-                                                    {isExpanded ? 'Hide Spots' : 'View Spots'}
-                                                </button>
-                                                {isExpanded && (
-                                                    <div className="find-parking-spots">
-                                                        {bookingForm}
-                                                        {loadingSpotsAreaId === area.id ? (
-                                                            <p role="status">Loading spots...</p>
-                                                        ) : spotsError ? (
-                                                            <p className="find-parking-inline-error" role="alert">{spotsError}</p>
-                                                        ) : (
-                                                            <>
-                                                                <div className="find-parking-spot-legend">
-                                                                    <span><i className="available" />Available</span>
-                                                                    <span><i className="reserved" />Reserved</span>
-                                                                    <span><i className="occupied" />Occupied</span>
-                                                                    <span><i className="unavailable" />Unavailable</span>
-                                                                </div>
-                                                                <div className="find-parking-spot-grid">
-                                                                    {(parkingSpots[area.id] ?? []).map((spot) => (
-                                                                        spot.status === 1 ? (
-                                                                            <button
-                                                                                className="find-parking-spot status-1"
-                                                                                key={spot.id}
-                                                                                type="button"
-                                                                                title="Click to reserve this spot"
-                                                                                aria-label={`Reserve ${spot.spotCode}`}
-                                                                                onClick={() => openBooking(area.id, spot.id)}
-                                                                            >
-                                                                                <span>{spot.spotCode.split('-').at(-1)}</span>
-                                                                                <span className="find-parking-spot-tooltip">Click to reserve</span>
-                                                                            </button>
-                                                                        ) : (
-                                                                            <span
-                                                                                className={`find-parking-spot status-${spot.status}`}
-                                                                                key={spot.id}
-                                                                                title={`${spot.spotCode} · ${spot.parkingSpotStatusName}`}
-                                                                            >
-                                                                                {spot.spotCode.split('-').at(-1)}
-                                                                            </span>
-                                                                        )
-                                                                    ))}
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <div className="find-parking-capacity">
-                                                <div className="find-parking-capacity-heading">
-                                                    <strong>{formatNumber(available)} / {formatNumber(capacity)} available</strong>
-                                                </div>
-                                                <div
-                                                    className="find-parking-capacity-track"
-                                                    role="progressbar"
-                                                    aria-label={`Unavailable capacity at ${area.name}`}
-                                                    aria-valuemin={0}
-                                                    aria-valuemax={Math.max(1, capacity)}
-                                                    aria-valuenow={unavailable}
-                                                >
-                                                    <span style={{ width: `${unavailablePercent}%` }} />
-                                                </div>
-                                                <p>{formatNumber(unavailable)} spaces currently unavailable</p>
-                                            </div>
-                                        )}
-                                        {!isIndividual && available > 0 && (
-                                            <button
-                                                className="find-parking-card-button find-parking-reserve-button"
-                                                type="button"
-                                                onClick={() => openBooking(area.id)}
+                                        <div className="find-parking-card-metric">
+                                            <span>{formatNumber(available)} / {formatNumber(capacity)}</span>
+                                            <div
+                                                className="find-parking-capacity-track"
+                                                role="progressbar"
+                                                aria-label={`Available capacity at ${area.name}`}
+                                                aria-valuemin={0}
+                                                aria-valuemax={Math.max(1, capacity)}
+                                                aria-valuenow={available}
                                             >
-                                                Reserve Now
-                                            </button>
+                                                <span style={{ width: `${availablePercent}%` }} />
+                                            </div>
+                                        </div>
+                                        {isIndividual && isExpanded && (
+                                            <div className="find-parking-spots">
+                                                {bookingForm}
+                                                {loadingSpotsAreaId === area.id ? (
+                                                    <p role="status">Loading spots...</p>
+                                                ) : spotsError ? (
+                                                    <p className="find-parking-inline-error" role="alert">{spotsError}</p>
+                                                ) : (
+                                                    <>
+                                                        <div className="find-parking-spot-legend">
+                                                            <span><i className="available" />Available</span>
+                                                            <span><i className="reserved" />Reserved</span>
+                                                            <span><i className="occupied" />Occupied</span>
+                                                            <span><i className="unavailable" />Unavailable</span>
+                                                        </div>
+                                                        <div className="find-parking-spot-grid">
+                                                            {(parkingSpots[area.id] ?? []).map((spot) => (
+                                                                spot.status === 1 ? (
+                                                                    <button
+                                                                        className="find-parking-spot status-1"
+                                                                        key={spot.id}
+                                                                        type="button"
+                                                                        title="Click to reserve this spot"
+                                                                        aria-label={`Reserve ${spot.spotCode}`}
+                                                                        onClick={() => openBooking(area.id, spot.id)}
+                                                                    >
+                                                                        <span>{spot.spotCode.split('-').at(-1)}</span>
+                                                                        <span className="find-parking-spot-tooltip">Click to reserve</span>
+                                                                    </button>
+                                                                ) : (
+                                                                    <span
+                                                                        className={`find-parking-spot status-${spot.status}`}
+                                                                        key={spot.id}
+                                                                        title={`${spot.spotCode} · ${spot.parkingSpotStatusName}`}
+                                                                    >
+                                                                        {spot.spotCode.split('-').at(-1)}
+                                                                    </span>
+                                                                )
+                                                            ))}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
                                         )}
                                         {!isIndividual && bookingForm}
                                         {reservationMessages[area.id] && (
-                                            <div className="find-parking-booking-success" role="status">
-                                                <p>{reservationMessages[area.id]}</p>
-                                                <Link to="/customer/reservations">View My Reservations</Link>
-                                            </div>
+                                        <div className="find-parking-booking-success" role="status">
+                                            <p>{reservationMessages[area.id]}</p>
+                                            <Link to="/customer/reservations">View My Reservations</Link>
+                                        </div>
                                         )}
+                                        {isIndividual || available > 0 ? (
+                                        <button
+                                            className={`find-parking-card-button${isIndividual ? '' : ' find-parking-reserve-button'}`}
+                                            type="button"
+                                            aria-expanded={isIndividual ? isExpanded : undefined}
+                                            onClick={() => {
+                                                if (isIndividual) {
+                                                    void toggleAreaSpots(area)
+                                                } else {
+                                                    openBooking(area.id)
+                                                }
+                                            }}
+                                        >
+                                            {isIndividual ? (isExpanded ? 'Hide Spots' : 'View Spots') : 'Reserve Now'}
+                                        </button>
+                                        ) : null}
                                     </article>
                                 )
                             })}

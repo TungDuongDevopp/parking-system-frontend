@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import '../resources/css/dashboard.scss'
 import '../resources/css/customer-profile.scss'
 import '../resources/css/homepage.scss'
+import '../resources/css/customer-portal.scss'
 import Header from '../components/homePage/Header'
 import Footer from '../components/homePage/Footer'
 import type { CustomerDto, CustomerRequestUpdate } from '../types/Customer/customer'
@@ -136,7 +137,7 @@ const CustomerProfile = () => {
     }
 
     return (
-        <div className="homepage customer-profile-shell">
+        <div className="homepage customer-profile-shell customer-portal-shell">
             <Header />
             <main className="customer-profile-page">
                 <section className="customer-profile-content">
