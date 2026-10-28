@@ -177,7 +177,7 @@ const AdminCustomer = () => {
 		setDeletingCustomerId(customer.id)
 		setErrorMessage('')
 		try {
-			await deleteCustomer(customer.id)
+			await deleteCustomer({ Id: customer.id })
 			if (customers.length === 1 && safeCurrentPage > 1) setCurrentPage((page) => page - 1)
 			else await loadCustomers()
 		} catch (error) {
@@ -210,9 +210,10 @@ const AdminCustomer = () => {
 					<div className="roles-table-wrap">
 						{isLoading && <p className="roles-status" role="status">Loading customers...</p>}{errorMessage && <p className="roles-status form-error" role="alert">{errorMessage}</p>}
 						<table className="roles-table customers-table"><thead><tr>
+								<th>ID</th>
 								{(['name', 'phoneNumber', 'email'] as SortField[]).map((field) => <th key={field}>{field === 'name' ? 'Name' : field === 'phoneNumber' ? 'Phone number' : 'Email address'}<button className="sort-button" type="button" aria-label={`Sort by ${field}`} onClick={() => handleSort(field)}>{sortIcon(field)}</button></th>)}<th>Actions</th>
 							</tr></thead><tbody>
-								{!isLoading && customers.map((customer) => <tr key={customer.id}><td>{customer.name}</td><td>{customer.phoneNumber || '—'}</td><td>{customer.email}</td><td><div className="role-actions"><button className="edit-action" type="button" onClick={() => openEditCustomerModal(customer)}><ActionIcon type="edit" />Edit</button><button className="delete-action" type="button" onClick={() => void handleDeleteCustomer(customer)} disabled={deletingCustomerId !== null}><ActionIcon type="delete" />{deletingCustomerId === customer.id ? 'Deleting...' : 'Delete'}</button></div></td></tr>)}
+								{!isLoading && customers.map((customer) => <tr key={customer.id}><td>{customer.id}</td><td>{customer.name}</td><td>{customer.phoneNumber || '—'}</td><td>{customer.email}</td><td><div className="role-actions"><button className="edit-action" type="button" onClick={() => openEditCustomerModal(customer)}><ActionIcon type="edit" />Edit</button><button className="delete-action" type="button" onClick={() => void handleDeleteCustomer(customer)} disabled={deletingCustomerId !== null}><ActionIcon type="delete" />{deletingCustomerId === customer.id ? 'Deleting...' : 'Delete'}</button></div></td></tr>)}
 							</tbody></table>
 						{!isLoading && !errorMessage && customers.length === 0 && <p className="empty-roles">No customers found.</p>}
 					</div>

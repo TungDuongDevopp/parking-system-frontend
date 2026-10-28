@@ -6,6 +6,7 @@ ReservationLookUp,CanceledRequest
 
 import type {ReservationQuery} from '../types/Reservation/reservationQuery'
 import type { PagedResult } from '../types/Apb/abp';
+import type { EntityDto } from '../types/Apb/entity';
 import { apiClient } from './apiClient';
 import { readAbpResult} from './serviceResponse';
 
@@ -32,8 +33,8 @@ export const getReservations = async (params: ReservationQuery): Promise<PagedRe
   const response = await apiClient(endpoint, { method: 'GET', authenticated: true })
   return readAbpResult(response, 'Unable to load reservation.')  
 }
-export const getReservationById = async (id: number): Promise<ReservationDto> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const getReservationById = async (entity: EntityDto): Promise<ReservationDto> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Reservation/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,

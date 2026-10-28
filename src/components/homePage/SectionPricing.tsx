@@ -113,6 +113,7 @@ const SectionPricing = ({ detailed = false }: SectionPricingProps) => {
                 quotationId: selectedQuotation.id,
                 startTime: parsedStartTime.toISOString(),
                 plateNumbers: plates,
+                paymentMethod: 'Cash',
             })
             navigate('/customer/subscriptions')
         } catch (error) {

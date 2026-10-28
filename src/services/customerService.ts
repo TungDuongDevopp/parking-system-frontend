@@ -1,4 +1,5 @@
 import type { PagedResult } from '../types/Apb/abp'
+import type { EntityDto } from '../types/Apb/entity'
 import type { CustomerDto, CustomerRequestUpdate } from '../types/Customer/customer'
 import type { CustomerQuery } from '../types/Customer/customerQuery'
 import { apiClient } from './apiClient'
@@ -19,8 +20,8 @@ export const getCustomers = async (params: CustomerQuery): Promise<PagedResult<C
   return readAbpResult(response, 'Unable to load customers.')
 }
 
-export const deleteCustomer = async (id: number): Promise<void> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const deleteCustomer = async (entity: EntityDto): Promise<void> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Customer/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,

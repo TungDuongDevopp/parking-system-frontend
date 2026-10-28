@@ -1,4 +1,5 @@
 import type { PagedResult } from '../types/Apb/abp'
+import type { EntityDto } from '../types/Apb/entity'
 import type { UserRequestCreate, UserRequestUpdate, UserDto } from '../types/User/user'
 import type { UserQuery } from '../types/User/userQuery'
 import { apiClient } from './apiClient'
@@ -29,8 +30,8 @@ export const createUser = async (data: UserRequestCreate): Promise<UserDto> => {
   return readAbpResult(response, 'Không thể tạo user.')
 }
 
-export const deleteUser = async (id: number): Promise<void> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const deleteUser = async (entity: EntityDto): Promise<void> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/User/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,

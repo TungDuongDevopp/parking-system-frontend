@@ -385,7 +385,7 @@ const AdminStaff = () => {
     setDeletingStaffId(staff.id)
     setErrorMessage('')
     try {
-      await deleteStaff(staff.id)
+      await deleteStaff({ Id: staff.id })
       if (staffs.length === 1 && safeCurrentPage > 1) setCurrentPage((page) => page - 1)
       else await loadStaffs()
     } catch (error) {
@@ -564,6 +564,7 @@ const AdminStaff = () => {
             <table className="roles-table staffs-table">
               <thead>
                 <tr>
+                  <th>ID</th>
                   {sortHeader('name', 'Name')}
                   {sortHeader('phoneNumber', 'Phone number')}
                   {sortHeader('email', 'Email')}
@@ -576,6 +577,7 @@ const AdminStaff = () => {
               <tbody>
                 {!isLoading && staffs.map((staff) => (
                   <tr key={staff.id}>
+                    <td>{staff.id}</td>
                     <td>{staff.name}</td>
                     <td>{staff.phoneNumber}</td>
                     <td>{staff.email}</td>

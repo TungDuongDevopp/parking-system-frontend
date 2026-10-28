@@ -11,6 +11,7 @@ import CustomerProfile from './customer/CustomerProfile';
 import CustomerFindParking from './customer/CustomerFindParking';
 import CustomerReservations from './customer/CustomerReservations';
 import CustomerSubscriptions from './customer/CustomerSubscriptions';
+import CustomerUserGuide from './customer/CustomerUserGuide';
 import StaffHome from './staff/StaffHome';
 import StaffProfile from './staff/StaffProfile';
 import ProtectedRoute from './auth/ProtectedRoute';
@@ -26,6 +27,8 @@ import AdminSubscription from './admin/AdminSubscription';
 import AdminPlate from './admin/AdminPlate';
 import AdminReservation from './admin/AdminReservation';
 import AdminSession from './admin/AdminSession';
+import AdminPayment from './admin/AdminPayment';
+import AdminTransaction from './admin/AdminTransaction';
 const App = () => {
   
     return (
@@ -81,6 +84,16 @@ const App = () => {
                  <Route path="/admin/subscriptions" element={
                   <ProtectedRoute allowedRole='Admin'>
                     <AdminSubscription/>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/payments" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminPayment/>
+                  </ProtectedRoute>
+                } />
+                 <Route path="/admin/transactions" element={
+                  <ProtectedRoute allowedRole='Admin'>
+                    <AdminTransaction/>
                   </ProtectedRoute>
                 } />
                 <Route path="/admin/plates" element={
@@ -168,6 +181,8 @@ const App = () => {
                     <CustomerSubscriptions />
                   </ProtectedRoute>
                 } />
+                <Route path="/customer/guide" element={<CustomerUserGuide />} />
+                <Route path="/customer/guide/:categoryId" element={<CustomerUserGuide />} />
                 <Route path="/customer/profile/create" element={
                   <ProtectedRoute allowedRole='Customer'>
                     <Navigate to="/customer/profile" replace />

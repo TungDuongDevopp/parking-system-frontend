@@ -381,7 +381,7 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
     setDeletingAreaId(area.id)
     setErrorMessage('')
     try {
-      await deleteParkingArea(area.id)
+      await deleteParkingArea({ Id: area.id })
       if (parkingAreas.length === 1 && safeCurrentPage > 1) setCurrentPage((page) => page - 1)
       else await loadAreas()
     } catch (error) {
@@ -558,11 +558,12 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
             <table className="roles-table parkingAreas-table">
                   <thead>
                     <tr>
-                      {sortHeader('parkingCode', 'Parking code')}
+                      <th>ID</th>
+                      {sortHeader('parkingCode', 'Code')}
                       {sortHeader('vehicleType', 'Vehicle type')}
                       {sortHeader('capacity', 'Capacity')}
-                      {sortHeader('currentOccupancy', 'Current occupancy')}
-                      {sortHeader('parkingMode', 'Parking mode')}
+                      {sortHeader('currentOccupancy', 'Occupancy')}
+                      {sortHeader('parkingMode', 'Mode')}
                       {sortHeader('location', 'Location')}
                       {sortHeader('status', 'Status')}
                       {!readOnly && <th>Actions</th>}
@@ -571,6 +572,7 @@ const AdminParkingArea = ({ readOnly = false }: { readOnly?: boolean }) =>{
                   <tbody>
                     {!isLoading && parkingAreas.map((area)=> (
                       <tr key={area.id}>
+                          <td>{area.id}</td>
                           <td>{area.parkingCode}</td>
                           <td>{area.vehicleTypeName}</td>
                           <td>{area.capacity}</td>

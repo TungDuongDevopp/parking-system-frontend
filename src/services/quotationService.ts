@@ -7,6 +7,7 @@ QuotationUpdateRequest
 import type{QuotationQuery} from '../types/Quotation/quotationQuery';
 
 import type { PagedResult } from '../types/Apb/abp';
+import type { EntityDto } from '../types/Apb/entity';
 import { apiClient } from './apiClient';
 import { readAbpResult,readAbpVoid } from './serviceResponse';
 
@@ -47,16 +48,16 @@ export const updateQuotation= async (data: QuotationUpdateRequest): Promise<Quot
   return readAbpResult(response, 'Không thể cập nhật bảng giá.')
 }
 
-export const deleteQuotation = async (id: number): Promise<void> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const deleteQuotation = async (entity: EntityDto): Promise<void> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Quotation/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,
   })
   await readAbpVoid(response, 'Không thể xóa bảng giá.')
 }
-export const getQuotationById = async (id: number): Promise<QuotationDto> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const getQuotationById = async (entity: EntityDto): Promise<QuotationDto> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Quotation/Get?${query.toString()}`, {
     method: 'GET',
     authenticated: true,

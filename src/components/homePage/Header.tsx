@@ -38,7 +38,7 @@ const Header = () => {
                             Find Parking
                         </Link>
                     </li>
-                    <li><span>User Guide</span></li>
+                    <li><Link to="/customer/guide">User Guide</Link></li>
                 </ul>
             </nav>
             <div className="action-btn">
@@ -49,6 +49,7 @@ const Header = () => {
                             <Link to="/customer/profile">My Profile</Link>
                             <Link to="/customer/reservations">My Reservations</Link>
                             <Link to="/customer/subscriptions">My Subscriptions</Link>
+                            <Link to="/change-password">Change password</Link>
                             <button type="button" onClick={handleLogout} disabled={isSigningOut}>
                                 {isSigningOut ? 'Logging out...' : 'Logout'}
                             </button>

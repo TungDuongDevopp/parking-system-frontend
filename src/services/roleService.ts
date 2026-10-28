@@ -1,4 +1,5 @@
 import type { PagedResult } from '../types/Apb/abp'
+import type { EntityDto } from '../types/Apb/entity'
 import type { Role, RoleRequest } from '../types/Role/role'
 import { apiClient } from './apiClient'
 import { readAbpResult, readAbpVoid } from './serviceResponse'
@@ -37,8 +38,8 @@ export const createRole = async (data: RoleRequest): Promise<Role> => {
   return readAbpResult(response, 'Không thể tạo role.')
 }
 
-export const deleteRole = async (id: number): Promise<void> => {
-  const query = new URLSearchParams({ Id: id.toString() })
+export const deleteRole = async (entity: EntityDto): Promise<void> => {
+  const query = new URLSearchParams({ Id: entity.Id.toString() })
   const response = await apiClient(`/api/services/app/Role/Delete?${query.toString()}`, {
     method: 'DELETE',
     authenticated: true,

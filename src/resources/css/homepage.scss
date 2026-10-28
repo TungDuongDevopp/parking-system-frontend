@@ -1,7 +1,7 @@
 .homepage,
-.homepage:not(.customer-profile-shell) *,
-.homepage:not(.customer-profile-shell) *::before,
-.homepage:not(.customer-profile-shell) *::after {
+.homepage:not(.customer-profile-shell):where(:not(.customer-guide-shell)) *,
+.homepage:not(.customer-profile-shell):where(:not(.customer-guide-shell)) *::before,
+.homepage:not(.customer-profile-shell):where(:not(.customer-guide-shell)) *::after {
     box-sizing: border-box;
     border: 0 solid;
     margin: 0;

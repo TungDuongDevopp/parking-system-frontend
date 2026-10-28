@@ -255,6 +255,7 @@ const Dashboard = () => {
               <table className="ps-table admin-ops-table">
                 <thead>
                   <tr>
+                    <th>ID</th>
                     <th>Area</th>
                     <th>Type</th>
                     <th>Mode</th>
@@ -272,6 +273,7 @@ const Dashboard = () => {
                     const hot = area.status === 1 && area.occupancyPercentage >= 85
                     return (
                       <tr key={area.id}>
+                        <td>{area.id}</td>
                         <td>
                           <strong className="admin-ops-name">{area.name}</strong>
                           <span className="ps-mono">{area.parkingCode}</span>

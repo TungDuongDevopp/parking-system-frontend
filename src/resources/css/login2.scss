@@ -974,6 +974,23 @@ body {
         }
     }
 
+    .main-container.public-auth-page .change-password-form > label:not(:first-child) {
+        margin-top: 16px;
+    }
+
+    .change-password-form .form-message {
+        margin: 8px 0 0;
+        color: #9eabc2;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .change-password-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
     .main-container.public-auth-page {
         position: relative;
         display: grid;

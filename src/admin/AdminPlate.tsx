@@ -184,7 +184,7 @@ const AdminPlate = ({ readOnly = false }: { readOnly?: boolean })=>{
                     const subscriptionIds = [...new Set(result.items.map((plate) => plate.subscriptionId))]
                     const statusResults = await Promise.all(subscriptionIds.map(async (subscriptionId) => {
                         try {
-                            const subscription = await getSubscriptionById(subscriptionId)
+                            const subscription = await getSubscriptionById({ Id: subscriptionId })
                             return [subscriptionId, subscription.status] as const
                         } catch {
                             return [subscriptionId, null] as const
@@ -330,6 +330,7 @@ const AdminPlate = ({ readOnly = false }: { readOnly?: boolean })=>{
                     <table className="roles-table subscription-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 {sortHeader('subscriptionId','Subscription Id')}
                                 {sortHeader('plateNumber','Plate Number')}
                                 <th>Vehicle Type</th>
@@ -339,6 +340,7 @@ const AdminPlate = ({ readOnly = false }: { readOnly?: boolean })=>{
                         <tbody>
                             {!isLoading && plates.map((plate)=>(
                                  <tr key={plate.id}>
+                                    <td>{plate.id}</td>
                                     <td>{plate.subscriptionId}</td>
                                     <td>{plate.plateNumber}</td>
                                     <td>{plate.vehicleTypeName}</td>
