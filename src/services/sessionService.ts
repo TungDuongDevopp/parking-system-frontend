@@ -3,12 +3,15 @@ import type { SessionDto,
      CheckInRequest,
      CheckInResponse,
      CheckOutResponse,
-     SessionLookUpDto
+     SessionLookUpDto,ActiveSessionDto,
+     CheckOutRequest
  } from "../types/Session/session";
 import type { PagedResult } from '../types/Apb/abp';
 import type { EntityDto } from '../types/Apb/entity';
 import { apiClient } from './apiClient';
 import { readAbpResult} from './serviceResponse';
+import { getParkingAreaById } from './parkingAreaService';
+import { getParkingSpotById } from './parkingSpotService';
 
 export const getSessions = async (params: SessionQuery): Promise<PagedResult<SessionDto>> =>{
   const query = new URLSearchParams()
@@ -57,11 +60,11 @@ export const checkIn = async(data: CheckInRequest): Promise<CheckInResponse> =>{
   return readAbpResult(response, 'Không thể checkIn.')
 }
 
-export const checkOut = async(id: number): Promise<CheckOutResponse> =>{
-    const response = await apiClient('/api/services/app/ParkingSession/CheckIn', {
+export const checkOut = async(data: CheckOutRequest): Promise<CheckOutResponse> =>{
+    const response = await apiClient('/api/services/app/ParkingSession/CheckOut', {
     method: 'POST',
     authenticated: true,
-    body: JSON.stringify(id),
+    body: JSON.stringify(data),
   })
   return readAbpResult(response, 'Không thể checkOut.')
 }
@@ -71,4 +74,35 @@ export const getSessionLookUp = async (): Promise<SessionLookUpDto> => {
     authenticated: true,
   })
   return readAbpResult(response, 'Không thể tra cứu thông tin phiên gửi.')
+}
+
+export const getActiveSession = async (params: ActiveSessionDto): Promise<SessionDto> => {
+  const query = new URLSearchParams()
+  if (params.id !== undefined && params.id !== null) query.set('Id', params.id.toString())
+  if (params.plateNumber !== undefined && params.plateNumber !== null) {
+    query.set('PlateNumber', params.plateNumber)
+  }
+
+  const queryString = query.toString()
+  const endpoint = queryString ? `/api/services/app/ParkingSession/GetActiveSession?${queryString}`
+    : `/api/services/app/ParkingSession/GetActiveSession`
+   const response = await apiClient(endpoint, {
+    method: 'GET',
+    authenticated: true,
+
+  })
+   const session = await readAbpResult<SessionDto>(response, 'Không thể lấy phiên đang hoạt động.')
+
+   const [parkingArea, parkingSpot] = await Promise.all([
+     session.parkingAreaCode ? Promise.resolve(null) : getParkingAreaById({ Id: session.parkingAreaId }).catch(() => null),
+     session.parkingSpotCode || session.parkingSpotId == null
+       ? Promise.resolve(null)
+       : getParkingSpotById({ Id: session.parkingSpotId }).catch(() => null),
+   ])
+
+   return {
+     ...session,
+     parkingAreaCode: session.parkingAreaCode || parkingArea?.parkingCode || '',
+     parkingSpotCode: session.parkingSpotCode || parkingSpot?.spotCode || null,
+   }
 }

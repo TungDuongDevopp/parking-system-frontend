@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { IconChevronLeft, IconChevronRight, IconRefresh } from '@tabler/icons-react'
 import Header from '../components/homePage/Header'
 import Footer from '../components/homePage/Footer'
 import { getSubscriptions } from '../services/subscriptionService'
 import type { SubscriptionDto } from '../types/Subscription/subscription'
 import '../resources/css/homepage.scss'
+import '../resources/css/customer-portal.scss'
+import '../resources/css/subscription-checkout.scss'
 
 const pageSize = 10
 const statusOptions = [
@@ -35,6 +38,7 @@ const getStatusClass = (status: number) => {
 }
 
 const CustomerSubscriptions = () => {
+    const navigate = useNavigate()
     const [subscriptions, setSubscriptions] = useState<SubscriptionDto[]>([])
     const [statusFilter, setStatusFilter] = useState<number | undefined>()
     const [page, setPage] = useState(1)
@@ -73,7 +77,7 @@ const CustomerSubscriptions = () => {
     }, [page, pageCount])
 
     return (
-        <div className="homepage">
+        <div className="homepage customer-portal-shell">
             <Header />
             <main className="homepage-main customer-subscriptions-page">
                 <section className="customer-subscriptions-content" aria-labelledby="subscriptions-heading">
@@ -133,6 +137,13 @@ const CustomerSubscriptions = () => {
                         <div className="customer-subscriptions-state">
                             <h2>No subscriptions found</h2>
                             <p>Subscriptions you create will appear here.</p>
+                            <button
+                                type="button"
+                                className="customer-subscriptions-buy-action"
+                                onClick={() => navigate('/pricing')}
+                            >
+                                Buy a plan
+                            </button>
                         </div>
                     ) : (
                         <div className="customer-subscription-list">
@@ -169,6 +180,18 @@ const CustomerSubscriptions = () => {
                                             }).format(subscription.price)}</dd>
                                         </div>
                                     </dl>
+                                    {subscription.status === 0 && (
+                                        <button
+                                            type="button"
+                                            className="customer-subscription-pay-action"
+                                            onClick={() => navigate(
+                                                `/customer/subscriptions/${subscription.id}/payment`,
+                                                { state: { subscription } },
+                                            )}
+                                        >
+                                            Thanh toán
+                                        </button>
+                                    )}
                                 </article>
                             ))}
                         </div>

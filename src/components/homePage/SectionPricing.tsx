@@ -3,6 +3,9 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
 import { createSubscription, getAvailableQuotation } from '../../services/subscriptionService'
 import type { QuotationDto } from '../../types/Quotation/quotation'
+import bicycleIcon from '../../assets/vehicle/bicycle-svgrepo-com.svg'
+import motorcycleIcon from '../../assets/vehicle/motorcycle-svgrepo-com.svg'
+import carIcon from '../../assets/vehicle/car-sports-svgrepo-com.svg'
 
 const vehicleTypes = [
     { id: 1, label: 'Bicycle' },
@@ -24,6 +27,12 @@ const currencyFormatter = new Intl.NumberFormat('vi-VN', {
 
 const getDurationLabel = (quotation: QuotationDto) =>
     `${quotation.duration} ${quotation.durationUnitType}`
+
+const getVehicleIcon = (vehicleType: number) => {
+    if (vehicleType <= 2) return bicycleIcon
+    if (vehicleType <= 4) return motorcycleIcon
+    return carIcon
+}
 
 const toLocalDateTimeInput = (date: Date) => {
     const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000)
@@ -200,7 +209,13 @@ const SectionPricing = ({ detailed = false }: SectionPricingProps) => {
                                 {detailed ? `${vehicleName} parking` : 'Monthly parking'}
                             </p>
                             {detailed && quotation && (
-                                <p className="pricing-plan-name">{getDurationLabel(quotation)}</p>
+                                <div className="pricing-vehicle-icon-wrap">
+                                    <img
+                                        className="pricing-vehicle-icon"
+                                        src={getVehicleIcon(quotation.vehicleType)}
+                                        alt={vehicleName}
+                                    />
+                                </div>
                             )}
                             <p className="pricing-amount">
                                 <strong>

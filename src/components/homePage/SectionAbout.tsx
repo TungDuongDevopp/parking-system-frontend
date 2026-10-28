@@ -1,13 +1,13 @@
+import aboutUsImage from '../../assets/about-us.png'
+
 const SectionAbout = () => (
     <section id="about" className="about-section" aria-labelledby="about-heading">
         <h2 id="about-heading">Câu chuyện của chúng tôi (Cho đến hiện tại)</h2>
 
         <div className="about-layout">
-            <div
-                className="about-image-placeholder"
-                role="img"
-                aria-label="Ảnh minh họa câu chuyện ParkOS"
-            />
+            <div className="about-image-placeholder">
+                <img src={aboutUsImage} alt="Minh họa câu chuyện ParkOS" />
+            </div>
 
             <div className="about-story">
                 <article className="about-story-block">

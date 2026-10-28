@@ -395,8 +395,10 @@
 
     .pricing-vehicle-tabs button:hover,
     .pricing-vehicle-tabs button.is-active {
-      color: #f8f5ff;
-      background: #2b2735;
+      border: 1px solid #c9b2fe;
+      color: #5b21b6;
+      background: #ede9fe;
+      box-shadow: 0 5px 14px -8px rgba(91, 33, 182, .65);
     }
 
     .pricing-cards {
@@ -485,9 +487,10 @@
       gap: 14px;
       margin-top: 16px;
       padding: 15px;
-      border: 1px solid rgba(168, 132, 252, .24);
+      border: 1px solid #ded2f4;
       border-radius: 12px;
-      background: rgba(23, 15, 43, .58);
+      background: linear-gradient(145deg, #fff 0%, #faf8ff 65%, #f3efff 100%);
+      box-shadow: 0 10px 24px -20px rgba(91, 33, 182, .38);
       text-align: left;
     }
 
@@ -495,7 +498,7 @@
     .pricing-plate-input > label {
       display: grid;
       gap: 7px;
-      color: #d2cbe1;
+      color: #655b75;
       font-size: 12px;
       font-weight: 650;
     }
@@ -505,11 +508,11 @@
       min-width: 0;
       min-height: 40px;
       padding: 0 10px;
-      border: 1px solid rgba(159, 148, 184, .28);
+      border: 1px solid #d9cee9;
       border-radius: 8px;
-      color: #f0e9ff;
-      background: #281d41;
-      color-scheme: dark;
+      color: #241b35;
+      background: #fff;
+      color-scheme: light;
       font: inherit;
       font-size: 13px;
     }
@@ -528,7 +531,7 @@
 
     .pricing-purchase-form legend {
       margin-bottom: 10px;
-      color: #e8e2f5;
+      color: #241b35;
       font-size: 13px;
       font-weight: 700;
     }
@@ -588,9 +591,14 @@
     }
 
     .pricing-purchase-actions button + button {
-      border-color: rgba(159, 148, 184, .28);
-      color: #d2cbe1;
-      background: transparent;
+      border-color: #d9cee9;
+      color: #5b21b6;
+      background: #fff;
+    }
+
+    .pricing-purchase-actions button + button:hover:not(:disabled) {
+      border-color: #cbb8ff;
+      background: #ede9fe;
     }
 
     .pricing-purchase-actions button:disabled {

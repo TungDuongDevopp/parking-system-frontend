@@ -17,6 +17,7 @@ import {
 import Header from '../components/homePage/Header'
 import Footer from '../components/homePage/Footer'
 import '../resources/css/homepage.scss'
+import '../resources/css/customer-portal.scss'
 import '../resources/css/customer-guide.scss'
 import guideIllustration from '../assets/guide-parking-illustration.png'
 
@@ -46,10 +47,10 @@ const guideCategories = [
     steps: [
       { title: 'Browse plans', text: 'Open Pricing and choose the vehicle type to see the available plans.' },
       { title: 'Purchase a plan', text: 'Select a plan, enter its required vehicle plate number or numbers, choose a start time, and submit the purchase.' },
-      { title: 'Check the subscription', text: 'Open My Subscriptions to review the plan, start and end times, price, and current status.' },
+      { title: 'Check the subscription', text: 'Open My Subscriptions to review the plan, start and end times, price, and current status. For a Pending subscription, select Thanh toán to preview the available payment methods; checkout is currently a mockup.' },
       { title: 'Understand the status', text: 'Subscriptions are shown as Pending, In Use, Expired, or Canceled. Refresh the list to load the latest server status.' },
     ],
-    note: 'The customer portal does not currently provide a subscription renewal action or transaction-history page. To continue after expiry, choose an available plan again.',
+    note: 'Payment methods are for display only and do not process transactions yet. The customer portal does not currently provide a subscription renewal action or transaction-history page. To continue after expiry, choose an available plan again.',
     link: { to: '/pricing', label: 'Browse pricing' },
   },
   {

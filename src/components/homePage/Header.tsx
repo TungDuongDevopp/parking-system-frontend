@@ -1,5 +1,5 @@
 import logo from '../../assets/logo-purple.png'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../../auth/AuthContext'
 import { getRoleHomePath } from '../../auth/roles'
@@ -30,15 +30,15 @@ const Header = () => {
             </Link>
             <nav className="nav">
                 <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/about">About</Link></li>
-                    <li><Link to="/pricing">Pricing</Link></li>
+                    <li><NavLink to="/" end>Home</NavLink></li>
+                    <li><NavLink to="/about">About</NavLink></li>
+                    <li><NavLink to="/pricing">Pricing</NavLink></li>
                     <li>
-                        <Link to={isCustomer ? '/customer/find-parking' : '/login'}>
+                        <NavLink to={isCustomer ? '/customer/find-parking' : '/login'}>
                             Find Parking
-                        </Link>
+                        </NavLink>
                     </li>
-                    <li><Link to="/customer/guide">User Guide</Link></li>
+                    <li><NavLink to="/customer/guide">User Guide</NavLink></li>
                 </ul>
             </nav>
             <div className="action-btn">

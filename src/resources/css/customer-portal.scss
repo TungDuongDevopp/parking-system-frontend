@@ -1,0 +1,1096 @@
+.customer-guide-shell,
+.customer-portal-shell {
+  --guide-bg: #faf8ff;
+  --guide-surface: #fff;
+  --guide-lavender: #f3eeff;
+  --guide-lavender-strong: #e9dfff;
+  --guide-border: #e8e1f2;
+  --guide-border-strong: #d6c9ec;
+  --guide-ink: #241b35;
+  --guide-text: #655b75;
+  --guide-muted: #958ba5;
+  --guide-purple: #8b5cf6;
+  --guide-purple-hover: #7c3aed;
+  --guide-purple-deep: #5b21b6;
+  --guide-shadow: 0 1px 2px rgba(36, 27, 53, .04), 0 12px 28px -20px rgba(91, 33, 182, .22);
+  --guide-shadow-hover: 0 2px 4px rgba(36, 27, 53, .05), 0 20px 36px -20px rgba(91, 33, 182, .32);
+}
+
+.customer-portal-shell {
+  min-height: 100vh;
+  color: var(--guide-ink);
+  background: var(--guide-bg);
+}
+
+.customer-portal-shell .nav-container {
+  position: relative;
+  border-bottom: 1px solid var(--guide-border);
+  background: rgba(255, 255, 255, .92);
+}
+
+.customer-portal-shell .nav-content {
+  min-height: 76px;
+}
+
+.customer-portal-shell .nav li,
+.customer-portal-shell .nav a {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .nav a:hover,
+.customer-portal-shell .nav a:focus-visible {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .nav a.active {
+  color: var(--guide-purple-deep);
+  font-weight: 700;
+}
+
+.customer-portal-shell .nav a {
+  transition: color 150ms ease;
+}
+
+.customer-portal-shell .action-btn .btn {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .action-btn .btn-signup {
+  border-color: var(--guide-purple);
+  color: #fff;
+  background: var(--guide-purple);
+}
+
+.customer-portal-shell .action-btn .btn-signup span {
+  color: #fff;
+}
+
+.customer-portal-shell .homepage-account summary {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-ink);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .homepage-account-menu {
+  border-color: var(--guide-border);
+  background: var(--guide-lavender);
+  box-shadow: var(--guide-shadow);
+}
+
+.customer-portal-shell .homepage-account-menu a {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .homepage-account-menu a:hover {
+  color: #fff;
+  background: var(--guide-purple-hover);
+}
+
+.customer-portal-shell .homepage-footer {
+  border-top: 1px solid var(--guide-border);
+  background: #fff;
+}
+
+.customer-portal-shell .homepage-footer,
+.customer-portal-shell .homepage-footer p,
+.customer-portal-shell .homepage-footer a {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .homepage-footer h2 {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .homepage-footer a:hover {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .homepage-main {
+  flex: 1;
+  color: var(--guide-ink);
+  background:
+    radial-gradient(900px 360px at 85% -10%, rgba(196, 176, 251, .2), transparent 70%),
+    var(--guide-bg);
+}
+
+.homepage.customer-portal-shell.about-page .about-section > h2 {
+  color: var(--guide-ink);
+}
+
+.homepage.customer-portal-shell.about-page .about-image-placeholder {
+  position: sticky;
+  top: 32px;
+  min-height: 380px;
+  border-color: var(--guide-border);
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(196, 176, 251, .48), transparent 58%),
+    linear-gradient(145deg, #f3eeff, #fff);
+  box-shadow: var(--guide-shadow);
+}
+
+.homepage.customer-portal-shell.about-page .about-image-placeholder img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  object-fit: cover;
+}
+
+.homepage.customer-portal-shell.about-page .about-story-block h3,
+.homepage.customer-portal-shell.about-page .about-story-block strong {
+  color: var(--guide-ink);
+}
+
+.homepage.customer-portal-shell.about-page .about-story-block p {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .find-parking-page,
+.customer-portal-shell .customer-reservations-page,
+.customer-portal-shell .customer-subscriptions-page {
+  padding: 40px 0 64px;
+}
+
+.customer-portal-shell .pricing-section {
+  width: min(100% - 40px, 1120px);
+  padding: 32px 0 64px;
+}
+
+.customer-portal-shell.homepage .pricing-section .pricing-header h2 {
+  color: #3b0764;
+  font-weight: 850;
+  text-shadow: 0 1px 0 rgba(59, 7, 100, .12);
+}
+
+.customer-portal-shell .pricing-header p {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .pricing-vehicle-tabs button {
+  border: 1px solid transparent;
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .pricing-vehicle-tabs button:hover,
+.customer-portal-shell .pricing-vehicle-tabs button.is-active {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .pricing-cards {
+  gap: 16px;
+}
+
+.customer-portal-shell .pricing-card {
+  border-color: var(--guide-border);
+  border-radius: 16px;
+  background: var(--guide-lavender);
+  box-shadow: var(--guide-shadow);
+}
+
+.customer-portal-shell .pricing-card.is-featured {
+  border-color: var(--guide-border-strong);
+  background: var(--guide-lavender-strong);
+}
+
+.customer-portal-shell .pricing-card h3,
+.customer-portal-shell .pricing-plan-name {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .pricing-description,
+.customer-portal-shell .pricing-amount strong {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .pricing-vehicle-icon-wrap {
+  min-height: 46px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.customer-portal-shell .pricing-vehicle-icon {
+  width: 52px;
+  height: 38px;
+  object-fit: contain;
+  filter: invert(19%) sepia(24%) saturate(1514%) hue-rotate(220deg) brightness(87%) contrast(91%);
+}
+
+.customer-portal-shell .pricing-cta,
+.customer-portal-shell .pricing-purchase-actions button {
+  border: 1px solid var(--guide-purple-hover);
+  color: #fff;
+  background: var(--guide-purple-hover);
+}
+
+.customer-portal-shell .pricing-cta:hover:not(:disabled),
+.customer-portal-shell .pricing-purchase-actions button:hover:not(:disabled) {
+  border-color: var(--guide-purple-deep);
+  background: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .pricing-purchase-form {
+  border-color: var(--guide-border);
+  background: #fbfaff;
+}
+
+.customer-portal-shell .pricing-purchase-form > label,
+.customer-portal-shell .pricing-plate-input > label {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .pricing-purchase-form input {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-ink);
+  background: #fff;
+  color-scheme: light;
+}
+
+.customer-portal-shell .pricing-purchase-form input:focus {
+  border-color: var(--guide-purple);
+  outline: 2px solid rgba(139, 92, 246, .16);
+}
+
+.customer-portal-shell .pricing-purchase-form legend {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .pricing-plate-input > div > button,
+.customer-portal-shell .pricing-add-plate {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .pricing-plate-input > div > button:hover,
+.customer-portal-shell .pricing-add-plate:hover {
+  border-color: var(--guide-purple);
+  background: var(--guide-lavender-strong);
+}
+
+.customer-portal-shell .pricing-purchase-error {
+  color: #b4233c;
+}
+
+.customer-portal-shell .pricing-purchase-actions button + button {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .pricing-purchase-actions button + button:hover:not(:disabled) {
+  border-color: var(--guide-purple);
+  background: var(--guide-lavender-strong);
+}
+
+.customer-portal-shell .pricing-status {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .find-parking-heading h1,
+.customer-portal-shell .customer-reservations-heading h1,
+.customer-portal-shell .customer-subscriptions-heading h1 {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .find-parking-heading p,
+.customer-portal-shell .customer-reservations-heading p,
+.customer-portal-shell .customer-subscriptions-heading p {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .find-parking-toolbar {
+  grid-template-columns: minmax(0, 1fr) 50px;
+}
+
+.customer-portal-shell .find-parking-search,
+.customer-portal-shell .customer-reservations-search {
+  border-color: var(--guide-border);
+  color: var(--guide-purple);
+  background: #fff;
+  box-shadow: var(--guide-shadow);
+}
+
+.customer-portal-shell .find-parking-search:focus-within,
+.customer-portal-shell .customer-reservations-search:focus-within {
+  border-color: var(--guide-purple);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, .14);
+}
+
+.customer-portal-shell .find-parking-search input,
+.customer-portal-shell .customer-reservations-search input {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .find-parking-search input::placeholder,
+.customer-portal-shell .customer-reservations-search input::placeholder {
+  color: var(--guide-muted);
+}
+
+.customer-portal-shell .find-parking-filter-button {
+  border: 1px solid var(--guide-border);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+  box-shadow: var(--guide-shadow);
+}
+
+.customer-portal-shell .find-parking-filter-button:hover,
+.customer-portal-shell .find-parking-filter-button.is-active {
+  border-color: var(--guide-border-strong);
+  background: var(--guide-lavender-strong);
+}
+
+.customer-portal-shell .find-parking-filter,
+.customer-portal-shell .find-parking-booking-form label {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .find-parking-filter select,
+.customer-portal-shell .find-parking-booking-form input {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-ink);
+  background: #fff;
+  color-scheme: light;
+}
+
+.customer-portal-shell .find-parking-grid {
+  gap: 16px;
+}
+
+.customer-portal-shell .find-parking-card,
+.customer-portal-shell .customer-reservation-card,
+.customer-portal-shell .customer-subscription-card {
+  border: 1px solid var(--guide-border);
+  border-radius: 16px;
+  background: var(--guide-lavender);
+  box-shadow: var(--guide-shadow);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.customer-portal-shell .find-parking-card:hover,
+.customer-portal-shell .customer-reservation-card:hover,
+.customer-portal-shell .customer-subscription-card:hover {
+  border-color: var(--guide-border-strong);
+  box-shadow: var(--guide-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.customer-portal-shell .find-parking-card-heading h2,
+.customer-portal-shell .customer-reservation-card-heading h2,
+.customer-portal-shell .customer-subscription-card h2 {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .find-parking-availability-badge {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.customer-portal-shell .find-parking-availability-badge.is-full {
+  color: #9f1239;
+  background: #ffe4e6;
+}
+
+.customer-portal-shell .find-parking-mode,
+.customer-portal-shell .find-parking-individual-summary span,
+.customer-portal-shell .find-parking-capacity > p,
+.customer-portal-shell .find-parking-spot-legend span,
+.customer-portal-shell .customer-reservation-card-heading p,
+.customer-portal-shell .customer-reservation-details dt,
+.customer-portal-shell .customer-reservation-detail-list dt,
+.customer-portal-shell .customer-subscription-card > header p,
+.customer-portal-shell .customer-subscription-card dt {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .find-parking-individual-summary strong {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .find-parking-card-button,
+.customer-portal-shell .find-parking-booking-actions button,
+.customer-portal-shell .customer-reservations-search button,
+.customer-portal-shell .customer-reservations-refresh,
+.customer-portal-shell .customer-subscriptions-refresh,
+.customer-portal-shell .customer-reservations-error button,
+.customer-portal-shell .customer-subscriptions-error button,
+.customer-portal-shell .pricing-error button {
+  border: 1px solid var(--guide-purple-hover);
+  color: #fff;
+  background: var(--guide-purple-hover);
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.customer-portal-shell .find-parking-card-button:hover,
+.customer-portal-shell .find-parking-booking-actions button:hover:not(:disabled),
+.customer-portal-shell .customer-reservations-search button:hover,
+.customer-portal-shell .customer-reservations-refresh:hover:not(:disabled),
+.customer-portal-shell .customer-subscriptions-refresh:hover:not(:disabled),
+.customer-portal-shell .customer-reservations-error button:hover,
+.customer-portal-shell .customer-subscriptions-error button:hover,
+.customer-portal-shell .pricing-error button:hover {
+  border-color: var(--guide-purple-deep);
+  background: var(--guide-purple-deep);
+  box-shadow: 0 6px 16px -10px rgba(91, 33, 182, .65);
+}
+
+.customer-portal-shell .find-parking-booking-form {
+  border-color: var(--guide-border);
+  background: #fbfaff;
+}
+
+.customer-portal-shell .find-parking-booking-form input:focus,
+.customer-portal-shell .find-parking-filter select:focus {
+  border-color: var(--guide-purple);
+  outline: 2px solid rgba(139, 92, 246, .16);
+}
+
+.customer-portal-shell .find-parking-booking-actions button + button,
+.customer-portal-shell .customer-reservations-refresh,
+.customer-portal-shell .customer-subscriptions-refresh,
+.customer-portal-shell .customer-reservations-error button,
+.customer-portal-shell .customer-subscriptions-error button,
+.customer-portal-shell .pricing-error button {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+  box-shadow: none;
+}
+
+.customer-portal-shell .find-parking-booking-actions button + button:hover:not(:disabled),
+.customer-portal-shell .customer-reservations-refresh:hover:not(:disabled),
+.customer-portal-shell .customer-subscriptions-refresh:hover:not(:disabled),
+.customer-portal-shell .customer-reservations-error button:hover,
+.customer-portal-shell .customer-subscriptions-error button:hover,
+.customer-portal-shell .pricing-error button:hover {
+  border-color: var(--guide-purple);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender-strong);
+}
+
+.customer-portal-shell .find-parking-booking-form [role="alert"],
+.customer-portal-shell .find-parking-inline-error,
+.customer-portal-shell .customer-reservations-error,
+.customer-portal-shell .customer-subscriptions-error {
+  color: #b4233c;
+}
+
+.customer-portal-shell .find-parking-booking-success {
+  color: #15803d;
+}
+
+.customer-portal-shell .find-parking-booking-success a {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .find-parking-capacity {
+  border: 1px solid var(--guide-border);
+  background: #fbfaff;
+}
+
+.customer-portal-shell .find-parking-capacity-heading strong {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .find-parking-capacity-track {
+  background: var(--guide-lavender-strong);
+}
+
+.customer-portal-shell .find-parking-capacity-track span {
+  background: var(--guide-purple);
+}
+
+.customer-portal-shell .find-parking-spots {
+  border-color: var(--guide-border);
+}
+
+.customer-portal-shell .find-parking-spot-legend i.available,
+.customer-portal-shell .find-parking-spot.status-1 {
+  background: #86efac;
+}
+
+.customer-portal-shell .find-parking-spot-legend i.reserved,
+.customer-portal-shell .find-parking-spot.status-2 {
+  background: #fcd34d;
+}
+
+.customer-portal-shell .find-parking-spot-legend i.occupied,
+.customer-portal-shell .find-parking-spot.status-3 {
+  background: #fda4af;
+}
+
+.customer-portal-shell .find-parking-spot-legend i.unavailable,
+.customer-portal-shell .find-parking-spot.status-4 {
+  background: #d8d1e3;
+}
+
+.customer-portal-shell .find-parking-spot {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell button.find-parking-spot:hover,
+.customer-portal-shell button.find-parking-spot:focus-visible {
+  background: var(--guide-purple);
+}
+
+.customer-portal-shell button.find-parking-spot:focus-visible {
+  outline-color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .find-parking-spot-tooltip {
+  color: #fff;
+  background: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .find-parking-spot-tooltip::after {
+  border-top-color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .find-parking-status,
+.customer-portal-shell .customer-reservations-state,
+.customer-portal-shell .customer-reservations-empty,
+.customer-portal-shell .customer-subscriptions-state {
+  border: 1px solid var(--guide-border);
+  border-radius: 16px;
+  color: var(--guide-text);
+  background: #fff;
+}
+
+.customer-portal-shell .customer-reservations-state h2,
+.customer-portal-shell .customer-reservations-empty h2,
+.customer-portal-shell .customer-subscriptions-state h2 {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .customer-reservations-empty p {
+  margin-top: 7px;
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .find-parking-status[role="alert"],
+.customer-portal-shell .customer-reservations-state.customer-reservations-error,
+.customer-portal-shell .customer-subscriptions-state.customer-subscriptions-error,
+.customer-portal-shell .customer-reservation-cancel-error,
+.customer-portal-shell .customer-reservation-modal-error {
+  color: #b4233c;
+}
+
+.customer-portal-shell .find-parking-error button,
+.customer-portal-shell .customer-reservation-modal > header button,
+.customer-portal-shell .customer-reservations-pagination button {
+  border: 1px solid var(--guide-border-strong);
+  border-radius: 10px;
+  color: var(--guide-purple-deep);
+  background: #fff;
+}
+
+.customer-portal-shell .find-parking-error button:hover,
+.customer-portal-shell .customer-reservation-modal > header button:hover,
+.customer-portal-shell .customer-reservations-pagination button:hover:not(:disabled) {
+  border-color: var(--guide-purple);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .customer-reservation-card-footer {
+  border-color: var(--guide-border);
+}
+
+.customer-portal-shell .customer-reservation-card-footer button {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .customer-reservation-card-footer button:hover:not(:disabled) {
+  border-color: var(--guide-purple);
+  background: var(--guide-lavender-strong);
+}
+
+.customer-portal-shell .customer-reservation-card-footer button.customer-reservation-cancel {
+  border-color: #fecdd3;
+  color: #9f1239;
+  background: #fff1f2;
+}
+
+.customer-portal-shell .customer-reservation-card-footer button.customer-reservation-cancel:hover:not(:disabled) {
+  border-color: #fda4af;
+  background: #ffe4e6;
+}
+
+.customer-portal-shell .customer-reservations-pagination > div > span {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .customer-reservations-pagination button:disabled,
+.customer-portal-shell .customer-subscriptions-pagination button:disabled {
+  color: var(--guide-muted);
+  background: #f8f6fb;
+}
+
+.customer-portal-shell .customer-reservation-modal-backdrop {
+  background: rgba(36, 27, 53, .42);
+}
+
+.customer-portal-shell .customer-reservation-modal {
+  border-color: var(--guide-border);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(36, 27, 53, .2);
+}
+
+.customer-portal-shell .customer-reservation-modal > header span {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell .customer-reservation-modal > header h2 {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .customer-reservation-modal-state {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .customer-reservations-toolbar {
+  margin-bottom: 18px;
+}
+
+.customer-portal-shell .customer-reservations-filters button,
+.customer-portal-shell .customer-subscriptions-filters button {
+  border-color: var(--guide-border);
+  color: var(--guide-text);
+  background: #fff;
+}
+
+.customer-portal-shell .customer-reservations-filters button:hover,
+.customer-portal-shell .customer-reservations-filters button.is-active,
+.customer-portal-shell .customer-subscriptions-filters button:hover,
+.customer-portal-shell .customer-subscriptions-filters button.is-active {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .customer-reservation-details dd,
+.customer-portal-shell .customer-reservation-detail-list dd,
+.customer-portal-shell .customer-subscription-card dd {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell .customer-reservation-status,
+.customer-portal-shell .customer-subscription-status {
+  color: var(--guide-text);
+  background: #f1edf7;
+}
+
+.customer-portal-shell .customer-reservation-status.reserved,
+.customer-portal-shell .customer-subscription-status.in-use {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.customer-portal-shell .customer-reservation-status.completed {
+  color: #475569;
+  background: #f1f5f9;
+}
+
+.customer-portal-shell .customer-reservation-status.cancelled,
+.customer-portal-shell .customer-reservation-status.invalid,
+.customer-portal-shell .customer-subscription-status.expired,
+.customer-portal-shell .customer-subscription-status.canceled {
+  color: #9f1239;
+  background: #ffe4e6;
+}
+
+.customer-portal-shell .customer-reservation-status.expired,
+.customer-portal-shell .customer-subscription-status.pending {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.customer-portal-shell .customer-subscriptions-pagination {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell .customer-subscriptions-pagination button {
+  border-color: var(--guide-border);
+  color: var(--guide-purple-deep);
+  background: #fff;
+}
+
+.customer-portal-shell .customer-subscriptions-pagination button:hover:not(:disabled) {
+  border-color: var(--guide-purple);
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .customer-subscriptions-pagination button:disabled {
+  color: var(--guide-muted);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-page {
+  background:
+    radial-gradient(900px 360px at 85% -10%, rgba(196, 176, 251, .2), transparent 70%),
+    var(--guide-bg);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-content .section-kicker {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-content > h1,
+.customer-portal-shell.customer-profile-shell .customer-profile-contact-heading h2 {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-overview {
+  border-color: var(--guide-border);
+  background: #fff;
+  box-shadow: var(--guide-shadow);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-identity {
+  color: #fff;
+  background: linear-gradient(145deg, #6d4ac8, #3e286b 78%);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-identity::before {
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(226, 213, 255, .22), transparent 58%),
+    repeating-linear-gradient(135deg, transparent 0 34px, rgba(226, 213, 255, .055) 35px 36px, transparent 37px 70px);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-avatar {
+  border-color: rgba(226, 213, 255, .7);
+  color: var(--guide-purple-deep);
+  background: #f3eeff;
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-identity-label,
+.customer-portal-shell.customer-profile-shell .customer-profile-name-label {
+  color: #e2d5ff;
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-identity-rule {
+  background: #c4b5fd;
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-contact-heading > span,
+.customer-portal-shell.customer-profile-shell .customer-profile-field-icon {
+  color: var(--guide-purple-deep);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-field-icon {
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-details dt {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-details dd {
+  color: var(--guide-ink);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-details > div {
+  border-color: var(--guide-border);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-form label {
+  color: var(--guide-text);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-form input:focus,
+.customer-portal-shell.customer-profile-shell .customer-profile-form select:focus {
+  border-color: var(--guide-purple);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, .14);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-submit {
+  border-radius: 10px;
+  background: var(--guide-purple);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-submit:hover {
+  background: var(--guide-purple-hover);
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-cancel {
+  border-color: var(--guide-border-strong);
+  border-radius: 10px;
+  color: var(--guide-purple-deep);
+  background: #fff;
+}
+
+.customer-portal-shell.customer-profile-shell .customer-profile-cancel:hover {
+  background: var(--guide-lavender);
+}
+
+.customer-portal-shell .customer-subscriptions-refresh,
+.customer-portal-shell .customer-reservations-refresh {
+  min-height: 42px;
+}
+
+.customer-portal-shell :is(button, a, input, select):focus-visible {
+  outline: 3px solid rgba(139, 92, 246, .35);
+  outline-offset: 2px;
+}
+
+@media (max-width: 860px) {
+  .customer-portal-shell .find-parking-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .customer-portal-shell .nav-content {
+    min-height: 68px;
+  }
+
+  .customer-portal-shell .find-parking-page,
+  .customer-portal-shell .customer-reservations-page,
+  .customer-portal-shell .customer-subscriptions-page {
+    padding: 28px 0 48px;
+  }
+
+  .customer-portal-shell .find-parking-content,
+  .customer-portal-shell .customer-reservations-content,
+  .customer-portal-shell .customer-subscriptions-content {
+    width: min(100% - 28px, 1120px);
+  }
+
+  .customer-portal-shell .find-parking-toolbar {
+    grid-template-columns: minmax(0, 1fr) 46px;
+    gap: 8px;
+  }
+
+  .customer-portal-shell .customer-reservation-details,
+  .customer-portal-shell .customer-reservation-detail-list,
+  .customer-portal-shell .customer-subscription-card dl {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .customer-portal-shell .customer-reservation-card,
+  .customer-portal-shell .customer-subscription-card {
+    padding: 17px;
+  }
+}
+
+.homepage.customer-portal-shell .find-parking-heading h1 {
+  color: var(--guide-ink);
+}
+
+.homepage.customer-portal-shell .find-parking-heading p {
+  color: var(--guide-text);
+}
+
+.homepage.customer-portal-shell .find-parking-search {
+  border-color: var(--guide-border);
+  color: var(--guide-purple);
+  background: #fff;
+  box-shadow: var(--guide-shadow);
+}
+
+.homepage.customer-portal-shell .find-parking-search input {
+  color: var(--guide-ink);
+}
+
+.homepage.customer-portal-shell .find-parking-search input::placeholder {
+  color: var(--guide-muted);
+}
+
+.homepage.customer-portal-shell .find-parking-filter-button {
+  border: 1px solid var(--guide-border);
+  color: var(--guide-purple-deep);
+  background: var(--guide-lavender);
+  box-shadow: var(--guide-shadow);
+}
+
+.homepage.customer-portal-shell .find-parking-filter-button:hover,
+.homepage.customer-portal-shell .find-parking-filter-button.is-active {
+  border-color: var(--guide-border-strong);
+  background: var(--guide-lavender-strong);
+}
+
+.homepage.customer-portal-shell .find-parking-filter {
+  color: var(--guide-text);
+}
+
+.homepage.customer-portal-shell .find-parking-filter select {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-ink);
+  background: #fff;
+  color-scheme: light;
+}
+
+.homepage.customer-portal-shell .find-parking-card {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  border-color: var(--guide-border);
+  border-radius: 16px;
+  background: var(--guide-lavender);
+  box-shadow: var(--guide-shadow);
+}
+
+.homepage.customer-portal-shell .find-parking-card:hover {
+  border-color: var(--guide-border-strong);
+  box-shadow: var(--guide-shadow-hover);
+}
+
+.homepage.customer-portal-shell .find-parking-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.homepage.customer-portal-shell .find-parking-card-metric {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  margin: 18px 0 0;
+  color: var(--guide-purple-deep);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.homepage.customer-portal-shell .find-parking-card-metric .find-parking-capacity-track {
+  height: 10px;
+  width: 100%;
+  background: #e4dbf5;
+}
+
+.homepage.customer-portal-shell .find-parking-card-metric .find-parking-capacity-track span {
+  background: var(--guide-purple);
+}
+
+.homepage.customer-portal-shell .find-parking-card-heading h2,
+.homepage.customer-portal-shell .find-parking-individual-summary strong {
+  color: var(--guide-ink);
+}
+
+.homepage.customer-portal-shell .find-parking-mode,
+.homepage.customer-portal-shell .find-parking-individual-summary span,
+.homepage.customer-portal-shell .find-parking-capacity > p,
+.homepage.customer-portal-shell .find-parking-spot-legend span {
+  color: var(--guide-text);
+}
+
+.homepage.customer-portal-shell .find-parking-capacity {
+  border-color: var(--guide-border);
+  background: rgba(255, 255, 255, .72);
+}
+
+.homepage.customer-portal-shell .find-parking-spots {
+  border-color: var(--guide-border);
+}
+
+.homepage.customer-portal-shell .find-parking-card-button,
+.homepage.customer-portal-shell .find-parking-booking-actions button {
+  border: 1px solid var(--guide-purple-hover);
+  color: #fff;
+  background: var(--guide-purple-hover);
+}
+
+.homepage.customer-portal-shell .find-parking-card-button {
+  width: min(100%, 328px);
+  min-height: 40px;
+  flex: 0 0 40px;
+  align-self: center;
+  margin-top: 20px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.homepage.customer-portal-shell .find-parking-card-button.find-parking-reserve-button {
+  width: min(100%, 328px);
+  min-height: 40px;
+  margin-top: 20px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.homepage.customer-portal-shell .find-parking-card-button:hover,
+.homepage.customer-portal-shell .find-parking-booking-actions button:hover:not(:disabled) {
+  border-color: var(--guide-purple-deep);
+  background: var(--guide-purple-deep);
+}
+
+.homepage.customer-portal-shell .find-parking-booking-form {
+  border-color: var(--guide-border);
+  background: #fbfaff;
+}
+
+.homepage.customer-portal-shell .find-parking-booking-form label {
+  color: var(--guide-text);
+}
+
+.homepage.customer-portal-shell .find-parking-booking-form input {
+  border-color: var(--guide-border-strong);
+  color: var(--guide-ink);
+  background: #fff;
+  color-scheme: light;
+}
+
+@media (max-width: 560px) {
+  .homepage.customer-portal-shell .find-parking-card-metric {
+    margin-top: 16px;
+    font-size: 16px;
+  }
+
+  .homepage.customer-portal-shell .find-parking-card-heading h2 {
+    font-size: 15px;
+  }
+}
+
+.homepage.customer-portal-shell .pricing-card {
+  border-color: var(--guide-border);
+  border-radius: 16px;
+  background: var(--guide-lavender);
+  box-shadow: var(--guide-shadow);
+}
+
+.homepage.customer-portal-shell .pricing-card.is-featured {
+  border-color: var(--guide-border-strong);
+  background: var(--guide-lavender-strong);
+}
+
+.homepage.customer-portal-shell .pricing-card h3,
+.homepage.customer-portal-shell .pricing-card .pricing-plan-name {
+  color: var(--guide-ink);
+}
+
+.homepage.customer-portal-shell .pricing-card .pricing-description,
+.homepage.customer-portal-shell .pricing-card .pricing-amount strong {
+  color: var(--guide-text);
+}
+
+.homepage.customer-portal-shell .pricing-card .pricing-cta {
+  border: 1px solid var(--guide-purple-hover);
+  color: #fff;
+  background: var(--guide-purple-hover);
+}
+
+.homepage.customer-portal-shell .pricing-card .pricing-cta:hover:not(:disabled) {
+  border-color: var(--guide-purple-deep);
+  background: var(--guide-purple-deep);
+}
+
+@media (max-width: 860px) {
+  .homepage.customer-portal-shell.about-page .about-image-placeholder {
+    position: static;
+    min-height: min(68vw, 360px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-portal-shell .find-parking-card,
+  .customer-portal-shell .customer-reservation-card,
+  .customer-portal-shell .customer-subscription-card,
+  .customer-portal-shell .find-parking-card-button,
+  .customer-portal-shell .find-parking-filter-button {
+    transition: none;
+  }
+}

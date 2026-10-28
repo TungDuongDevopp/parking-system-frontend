@@ -55,7 +55,12 @@ export interface CheckOutResponse{
     dailyRate: number|null,
     fee: number,
     customerId: number| null,
-    checkOutStaffId: number
+    checkOutStaffId: number,
+    paymentId: number|null,
+    transactionCode: string|null,
+    paymentExpiresAt: string|null,
+    paymentStatus: number| null,
+    paymentMethod: number| null
 }
 
 export interface SessionCustomerLookUp{
@@ -87,4 +92,12 @@ export interface SessionLookUpDto{
     parkingAreas: SessionParkingAreaLookUp[],
     parkingSpots : SessionParkingSpotLookUp[]
 
+}
+export interface ActiveSessionDto{
+    id?: number | null,
+    plateNumber?: string | null
+}
+export interface  CheckOutRequest{
+    id:number,
+    paymentMethod: number
 }

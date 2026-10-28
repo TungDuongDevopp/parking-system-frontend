@@ -1,0 +1,822 @@
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscription-card {
+  border: 1px solid #e4d8ff;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #fff 0%, #fbf9ff 72%, #f5efff 100%);
+  box-shadow: 0 8px 24px -20px rgba(91, 33, 182, .5);
+}
+
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscriptions-heading h1 {
+  color: #241b35;
+  text-shadow: none;
+}
+
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscriptions-heading p,
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscription-card > header p,
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscription-card dt {
+  color: #756a87;
+}
+
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscription-card h2,
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscription-card dd {
+  color: #241b35;
+}
+
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscriptions-filters button {
+  border: 1px solid #e8e1f2;
+  color: #655b75;
+  background: #fff;
+}
+
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscriptions-filters button.is-active,
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscriptions-filters button:hover {
+  border-color: #cbb8ff;
+  color: #5b21b6;
+  background: #ede9fe;
+}
+
+.homepage.customer-portal-shell .customer-subscriptions-page .customer-subscription-card:hover {
+  border-color: #cbb8ff;
+  box-shadow: 0 14px 30px -20px rgba(91, 33, 182, .55);
+}
+
+.customer-portal-shell .customer-subscription-pay-action {
+  min-height: 42px;
+  margin-top: 20px;
+  padding: 0 19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #8b5cf6;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #9b6bff, #7c3aed);
+  box-shadow: 0 6px 14px -7px rgba(91, 33, 182, .75);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.customer-portal-shell .customer-subscription-pay-action:hover {
+  border-color: #6d28d9;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  box-shadow: 0 9px 18px -8px rgba(91, 33, 182, .8);
+  transform: translateY(-1px);
+}
+
+.customer-portal-shell .customer-subscription-pay-action:focus-visible {
+  outline: 3px solid rgba(139, 92, 246, .28);
+  outline-offset: 3px;
+}
+
+.customer-portal-shell .customer-subscription-pay-action:active {
+  transform: translateY(0);
+}
+
+.customer-portal-shell .customer-subscriptions-buy-action {
+  min-height: 44px;
+  margin-top: 18px;
+  padding: 0 22px;
+  border: 1px solid #8b5cf6;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #9b6bff, #7c3aed);
+  box-shadow: 0 6px 14px -7px rgba(91, 33, 182, .75);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.customer-portal-shell .customer-subscriptions-buy-action:hover {
+  border-color: #6d28d9;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  box-shadow: 0 9px 18px -8px rgba(91, 33, 182, .8);
+  transform: translateY(-1px);
+}
+
+.customer-portal-shell .customer-subscriptions-buy-action:focus-visible {
+  outline: 3px solid rgba(139, 92, 246, .28);
+  outline-offset: 3px;
+}
+
+.subscription-checkout-page {
+  min-height: 100vh;
+  padding: 0 20px;
+  color: #241b35;
+  background: #faf8ff;
+}
+
+.subscription-checkout-shell {
+  width: min(100%, 690px);
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.subscription-checkout-topbar {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.subscription-checkout-back,
+.subscription-checkout-secure {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #756a87;
+  font: inherit;
+  font-size: 12px;
+}
+
+.subscription-checkout-back {
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.subscription-checkout-back:hover {
+  color: #5b21b6;
+}
+
+.subscription-checkout-secure svg {
+  color: #8b5cf6;
+}
+
+.subscription-checkout-content {
+  flex: 1;
+  padding: 4px 0 18px;
+}
+
+.subscription-checkout-content h1 {
+  margin: 0;
+  color: #241b35;
+  font-size: clamp(24px, 4vw, 29px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.subscription-checkout-intro {
+  margin: 4px 0 18px;
+  color: #756a87;
+  font-size: 15px;
+}
+
+.subscription-checkout-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.subscription-checkout-summary-card {
+  min-width: 0;
+  min-height: 122px;
+  padding: 12px;
+  border: 1px solid #dfd0ff;
+  border-radius: 17px;
+  background: #fff;
+}
+
+.subscription-checkout-summary-card > svg {
+  display: block;
+  margin-bottom: 6px;
+  color: #8b5cf6;
+}
+
+.subscription-checkout-summary-card > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #756a87;
+  font-size: 11px;
+}
+
+.subscription-checkout-summary-card strong {
+  display: block;
+  overflow: hidden;
+  color: #241b35;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subscription-checkout-summary-card p {
+  margin: 6px 0 0;
+  color: #756a87;
+  font-size: 12px;
+}
+
+.subscription-checkout-summary-card.is-total {
+  background: #f0e9ff;
+}
+
+.subscription-checkout-summary-card.is-total strong {
+  color: #5b21b6;
+  font-size: 19px;
+}
+
+.subscription-checkout-methods {
+  margin-top: 18px;
+}
+
+.subscription-checkout-methods h2 {
+  margin: 0 0 14px;
+  color: #241b35;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.subscription-checkout-method-list {
+  display: grid;
+  gap: 14px;
+}
+
+.subscription-checkout-method {
+  width: 100%;
+  min-height: 68px;
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e8e1f2;
+  border-radius: 16px;
+  color: #241b35;
+  text-align: left;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.subscription-checkout-method.is-selected {
+  border-color: #8b5cf6;
+}
+
+.subscription-checkout-method-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #8b5cf6;
+  background: #f0e9ff;
+}
+
+.subscription-checkout-method-copy {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 4px;
+}
+
+.subscription-checkout-method-copy > strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.subscription-checkout-method-copy small {
+  color: #756a87;
+  font-size: 11px;
+}
+
+.subscription-checkout-card-brands {
+  display: flex;
+  gap: 7px;
+  margin-top: 3px;
+}
+
+.subscription-checkout-card-brands b {
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  color: #155eef;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.subscription-checkout-card-brands b + b {
+  color: #dc2626;
+}
+
+.subscription-checkout-radio {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #c4b5d8;
+  border-radius: 50%;
+  color: #fff;
+  background: #c4b5d8;
+}
+
+.subscription-checkout-method.is-selected .subscription-checkout-radio {
+  border-color: #8b5cf6;
+  background: #8b5cf6;
+}
+
+.subscription-checkout-card-form {
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid #e7def3;
+  border-radius: 18px;
+  background: #faf8ff;
+}
+
+.subscription-checkout-card-form-heading,
+.subscription-checkout-billing-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.subscription-checkout-card-form-heading span {
+  color: #8b5cf6;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.subscription-checkout-card-form h2,
+.subscription-checkout-billing-heading h3 {
+  margin: 3px 0 0;
+  color: #241b35;
+  font-size: 17px;
+}
+
+.subscription-checkout-card-brand {
+  padding: 9px 12px;
+  border: 1px solid #e1d9ef;
+  border-radius: 9px;
+  color: #155eef;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.subscription-checkout-card-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(210px, 0.85fr);
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.subscription-checkout-card-fields,
+.subscription-checkout-address-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.subscription-checkout-card-fields label,
+.subscription-checkout-address-grid label {
+  display: grid;
+  gap: 7px;
+  color: #4a4158;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.subscription-checkout-card-fields input,
+.subscription-checkout-address-grid input {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  border: 1px solid #ddd3ea;
+  border-radius: 10px;
+  outline: none;
+  color: #241b35;
+  background: #fff;
+  padding: 0 12px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.subscription-checkout-card-fields input:focus,
+.subscription-checkout-address-grid input:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.subscription-checkout-input-wrap {
+  position: relative;
+}
+
+.subscription-checkout-input-wrap svg {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  color: #8b5cf6;
+}
+
+.subscription-checkout-input-wrap input {
+  padding-left: 40px;
+}
+
+.subscription-checkout-field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.subscription-checkout-card-preview {
+  min-height: 190px;
+  align-self: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid #ede8ff;
+  border-radius: 18px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.16), transparent 30%),
+    linear-gradient(135deg, #8b5cf6 0%, #6941c6 55%, #3b0764 100%);
+  box-shadow: 0 16px 28px rgba(91, 33, 182, 0.18);
+}
+
+.subscription-checkout-card-preview-top,
+.subscription-checkout-card-preview > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subscription-checkout-card-preview-top span,
+.subscription-checkout-card-preview-top b {
+  font-size: 13px;
+}
+
+.subscription-checkout-card-preview-top b {
+  font-size: 18px;
+  font-style: italic;
+}
+
+.subscription-checkout-card-preview > p {
+  overflow: hidden;
+  margin: 20px 0;
+  color: #fff;
+  font-family: monospace;
+  font-size: clamp(15px, 2vw, 20px);
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subscription-checkout-card-preview div > span {
+  display: grid;
+  gap: 4px;
+}
+
+.subscription-checkout-card-preview small {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 9px;
+}
+
+.subscription-checkout-card-preview strong {
+  max-width: 130px;
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subscription-checkout-billing-heading {
+  align-items: flex-end;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid #e9e1f2;
+}
+
+.subscription-checkout-billing-heading p {
+  margin: 0;
+  color: #756a87;
+  font-size: 11px;
+  text-align: right;
+}
+
+.subscription-checkout-address-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.subscription-checkout-address-grid label:nth-child(3),
+.subscription-checkout-address-grid label:nth-child(4) {
+  grid-column: 1 / -1;
+}
+
+.subscription-checkout-save-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 13px;
+  color: #4a4158;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.subscription-checkout-save-card input {
+  accent-color: #8b5cf6;
+}
+
+.subscription-checkout-alternative-note {
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px dashed #d8cbea;
+  border-radius: 16px;
+  color: #756a87;
+  background: #faf8ff;
+  font-size: 13px;
+  text-align: center;
+}
+
+.subscription-checkout-bank-transfer {
+  margin-top: 16px;
+  overflow: hidden;
+  border: 1px solid #e7def3;
+  border-radius: 18px;
+  background: #faf8ff;
+}
+
+.subscription-checkout-bank-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #ece5f5;
+  background: #fff;
+}
+
+.subscription-checkout-bank-heading-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  flex: 0 0 42px;
+  place-items: center;
+  border-radius: 12px;
+  color: #8b5cf6;
+  background: #f0e9ff;
+}
+
+.subscription-checkout-bank-heading > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.subscription-checkout-bank-heading h2 {
+  margin: 0;
+  color: #241b35;
+  font-size: 17px;
+}
+
+.subscription-checkout-bank-heading p {
+  margin: 4px 0 0;
+  color: #756a87;
+  font-size: 12px;
+}
+
+.subscription-checkout-demo-badge {
+  align-self: flex-start;
+  padding: 6px 11px;
+  border-radius: 999px;
+  color: #7c3aed;
+  background: #ede9fe;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.subscription-checkout-bank-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 208px;
+  gap: 20px;
+  padding: 20px 16px 14px;
+}
+
+.subscription-checkout-bank-details {
+  display: grid;
+  gap: 18px;
+}
+
+.subscription-checkout-bank-details > div:not(.subscription-checkout-transfer-box) {
+  display: grid;
+  gap: 7px;
+}
+
+.subscription-checkout-bank-details span {
+  color: #756a87;
+  font-size: 13px;
+}
+
+.subscription-checkout-bank-details strong,
+.subscription-checkout-transfer-box b {
+  color: #241b35;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+}
+
+.subscription-checkout-transfer-box {
+  display: grid;
+  gap: 9px;
+  padding: 14px 16px;
+  border: 1px solid #eee9f6;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.subscription-checkout-transfer-box strong {
+  color: #7c3aed;
+  font-size: 22px;
+}
+
+.subscription-checkout-transfer-box strong + span {
+  margin-top: 5px;
+}
+
+ .subscription-checkout-bank-qr {
+  width: 208px;
+  box-sizing: border-box;
+  align-self: start;
+  padding: 12px 10px 10px;
+  border: 1px solid #e8e1f2;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+}
+
+.subscription-checkout-qr-image {
+  width: 150px;
+  height: 150px;
+  display: block;
+  object-fit: contain;
+  margin: 0 auto 9px;
+  border: 1px solid #d9d2e4;
+  border-radius: 8px;
+}
+
+.subscription-checkout-bank-qr > strong {
+  color: #756a87;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.subscription-checkout-bank-note {
+  margin: 0 16px 16px;
+  color: #756a87;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.subscription-checkout-safety {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid #e8e1f2;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.subscription-checkout-safety svg {
+  margin-right: 7px;
+  color: #8b5cf6;
+  vertical-align: middle;
+}
+
+.subscription-checkout-safety strong {
+  color: #241b35;
+  font-size: 14px;
+}
+
+.subscription-checkout-safety p {
+  margin: 8px 0 0;
+  color: #756a87;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.subscription-checkout-mockup-note {
+  margin: 12px 0 0;
+  color: #5b21b6;
+  font-size: 13px;
+  text-align: center;
+}
+
+.subscription-checkout-continue {
+  width: 100%;
+  min-height: 47px;
+  margin-top: 14px;
+  border: 0;
+  border-radius: 15px;
+  color: #fff;
+  background: #8b5cf6;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.subscription-checkout-continue:hover {
+  background: #7c3aed;
+}
+
+.subscription-checkout-footnote {
+  margin: 0 0 7px;
+  color: #958ba5;
+  font-size: 11px;
+  text-align: center;
+}
+
+.subscription-checkout-state {
+  padding: 24px 12px;
+  color: #756a87;
+  text-align: center;
+}
+
+.subscription-checkout-error {
+  color: #b4233c;
+}
+
+.subscription-checkout-error button {
+  padding: 9px 14px;
+  border: 1px solid #8b5cf6;
+  border-radius: 9px;
+  color: #fff;
+  background: #8b5cf6;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 560px) {
+  .subscription-checkout-page {
+    padding: 0 14px;
+  }
+
+  .subscription-checkout-summary {
+    gap: 9px;
+  }
+
+  .subscription-checkout-summary-card {
+    min-height: 116px;
+    padding: 10px;
+  }
+
+  .subscription-checkout-summary-card strong {
+    font-size: 14px;
+  }
+
+  .subscription-checkout-summary-card.is-total strong {
+    font-size: 16px;
+  }
+
+  .subscription-checkout-card-form {
+    padding: 14px;
+  }
+
+  .subscription-checkout-card-layout,
+  .subscription-checkout-address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-checkout-card-preview {
+    min-height: 180px;
+  }
+
+  .subscription-checkout-address-grid label:nth-child(3),
+  .subscription-checkout-address-grid label:nth-child(4) {
+    grid-column: auto;
+  }
+
+  .subscription-checkout-billing-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .subscription-checkout-billing-heading p {
+    text-align: left;
+  }
+
+  .subscription-checkout-bank-heading {
+    align-items: flex-start;
+  }
+
+  .subscription-checkout-demo-badge {
+    flex: 0 0 auto;
+  }
+
+  .subscription-checkout-bank-content {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-checkout-bank-qr {
+    justify-self: center;
+  }
+}
