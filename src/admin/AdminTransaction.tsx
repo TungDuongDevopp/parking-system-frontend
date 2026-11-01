@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import Sidebar from '../components/sidebar/Sidebar'
-import { getTransactionLookup, getTransactions } from '../services/transactionService'
+import { getTransactionLookup, getTransactions, processResult } from '../services/transactionService'
 import type { TransPaymentDto, TransactionDto } from '../types/Transaction/transaction'
 import {
   IconAdjustmentsHorizontal,
@@ -106,6 +106,8 @@ const getPaymentStatus = (status: number, statusName: string) => {
 const AdminTransaction = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [actionError, setActionError] = useState('')
+  const [processingTransactionId, setProcessingTransactionId] = useState<number | null>(null)
   const [transactions, setTransactions] = useState<TransactionDto[]>([])
   const [paymentOptions, setPaymentOptions] = useState<TransPaymentDto[]>([])
   const [isLookupLoading, setIsLookupLoading] = useState(true)
@@ -276,6 +278,25 @@ const AdminTransaction = () => {
     setFilterError('')
     setCurrentPage(1)
     setIsFilterOpen(false)
+  }
+
+  const simulateTransactionResult = async (transaction: TransactionDto, isSuccess: boolean) => {
+    if (processingTransactionId !== null) return
+
+    setProcessingTransactionId(transaction.id)
+    setActionError('')
+
+    try {
+      await processResult({
+        transactionCode: String(transaction.transactionCode),
+        isSuccess,
+      })
+      await loadTransactions()
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : 'Unable to simulate transaction result.')
+    } finally {
+      setProcessingTransactionId(null)
+    }
   }
 
   const handleSort = (field: TransactionSortField) => {
@@ -485,12 +506,13 @@ const AdminTransaction = () => {
                   {sortableHeader('type', 'Transaction Type')}
                   {sortableHeader('transactionTime', 'Transaction Time')}
                   {sortableHeader('status', 'Status')}
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {!isLoading && transactions.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="table-empty-state">No transactions found.</td>
+                    <td colSpan={8} className="table-empty-state">No transactions found.</td>
                   </tr>
                 ) : (
                   transactions.map((tran) => {
@@ -506,12 +528,35 @@ const AdminTransaction = () => {
                         <td>
                           <span className={`transaction-status ${status.className}`}>{status.label}</span>
                         </td>
+                        <td>
+                          {tran.status === 0 && (
+                            <div className="transaction-simulate-actions">
+                              <button
+                                type="button"
+                                className="simulate-result success"
+                                onClick={() => void simulateTransactionResult(tran, true)}
+                                disabled={processingTransactionId !== null}
+                              >
+                                {processingTransactionId === tran.id ? 'Đang xử lý...' : 'Thành công'}
+                              </button>
+                              <button
+                                type="button"
+                                className="simulate-result failed"
+                                onClick={() => void simulateTransactionResult(tran, false)}
+                                disabled={processingTransactionId !== null}
+                              >
+                                {processingTransactionId === tran.id ? 'Đang xử lý...' : 'Thất bại'}
+                              </button>
+                            </div>
+                          )}
+                        </td>
                       </tr>
                     )
                   })
                 )}
               </tbody>
             </table>
+            {actionError && <p className="roles-status form-error" role="alert">{actionError}</p>}
           </div>
 
           <footer className="roles-footer">
@@ -520,7 +565,7 @@ const AdminTransaction = () => {
               type="button"
               aria-label="Refresh transactions"
               onClick={() => void loadTransactions()}
-              disabled={isLoading}
+              disabled={isLoading || processingTransactionId !== null}
             >
               <IconRefresh className="action-icon" aria-hidden="true" />
             </button>

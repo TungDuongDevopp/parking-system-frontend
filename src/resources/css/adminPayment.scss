@@ -94,37 +94,83 @@
 
 .roles-table.transaction-table th:nth-child(1),
 .roles-table.transaction-table td:nth-child(1) {
-  width: 9%;
+  width: 7%;
 }
 
 .roles-table.transaction-table th:nth-child(2),
 .roles-table.transaction-table td:nth-child(2) {
-  width: 14%;
+  width: 11%;
 }
 
 .roles-table.transaction-table th:nth-child(3),
 .roles-table.transaction-table td:nth-child(3) {
-  width: 18%;
+  width: 15%;
 }
 
 .roles-table.transaction-table th:nth-child(4),
 .roles-table.transaction-table td:nth-child(4) {
-  width: 12%;
+  width: 11%;
 }
 
 .roles-table.transaction-table th:nth-child(5),
 .roles-table.transaction-table td:nth-child(5) {
-  width: 15%;
+  width: 13%;
 }
 
 .roles-table.transaction-table th:nth-child(6),
 .roles-table.transaction-table td:nth-child(6) {
-  width: 17%;
+  width: 14%;
 }
 
 .roles-table.transaction-table th:nth-child(7),
 .roles-table.transaction-table td:nth-child(7) {
-  width: 15%;
+  width: 10%;
+}
+
+.roles-table.transaction-table th:nth-child(8),
+.roles-table.transaction-table td:nth-child(8) {
+  width: 19%;
+}
+
+.transaction-simulate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.simulate-result {
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.simulate-result.success {
+  color: #187344;
+  background: #d9f6e5;
+}
+
+.simulate-result.failed {
+  color: #b42336;
+  background: #ffe0e3;
+}
+
+.simulate-result:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.dashboard-dark .simulate-result.success {
+  color: #8de0ad;
+  background: rgba(24, 115, 68, .25);
+}
+
+.dashboard-dark .simulate-result.failed {
+  color: #ff9aa5;
+  background: rgba(180, 35, 54, .25);
 }
 
 .transaction-status,
